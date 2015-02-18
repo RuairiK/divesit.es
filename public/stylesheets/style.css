@@ -47,3 +47,35 @@ a {
   color: #fff;
   background-color: #428bca;
 }
+
+/*
+ * Main content
+ */
+
+.main {
+  padding: 0px;
+}
+.main .page-header {
+  margin-top: 0;
+}
+
+
+/*
+ * Placeholder dashboard ideas
+ */
+
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.placeholders h4 {
+  margin-bottom: 0;
+}
+.placeholder {
+  margin-bottom: 20px;
+}
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}
+.angular-google-map-container { height: 600px; }
