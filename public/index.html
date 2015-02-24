@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
 
     <title>divesit.es</title>
@@ -10,21 +10,22 @@
 
     <!-- JS -->
     <script src="libs/angular/angular.min.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/test.js"></script>
+    <script src='libs/angular-google-maps/dist/angular-google-maps.min.js'></script>
 
     <!-- ANGULAR CUSTOM -->
-    <script src="javascripts/app.js"></script>
+    <!-- <script src="scripts/app.js"></script> -->
     <script src='libs/lodash/dist/lodash.min.js'></script>
-	<script src='libs/angular-google-maps/dist/angular-google-maps.min.js'></script>
-</head>
+  </head>
 
-<body ng-app="divesites-app">
-	<!-- Sidebar -->
+  <body ng-app="divesites-app">
+    <!-- Sidebar -->
     <div></div>
-	<div ng-controller="testController as test">
-		<ui-gmap-google-map center='test.map.center' zoom='test.map.zoom'>
-			<ui-gmap-markers models="test.markers" coords="'location'">
-        </ui-gmap-markers>
-		</ui-gmap-google-map>
-	</div>
-</body>
+    <div ng-controller="TestController">
+      <ui-gmap-google-map center='map.center' zoom='map.zoom'>
+      <ui-gmap-markers models="map.markers" coords="'location'"></ui-gmap-markers>
+      </ui-gmap-google-map>
+    </div>
+  </body>
 </html>
