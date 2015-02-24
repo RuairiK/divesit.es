@@ -13,7 +13,7 @@
     <script src="libs/angular/angular.min.js"></script>
     <script src='libs/angular-google-maps/dist/angular-google-maps.min.js'></script>
     <script src="scripts/app.js"></script>
-    <script src="scripts/controllers/test.js"></script>
+    <script src="scripts/controllers/map.js"></script>
     <script src="scripts/controllers/sidebar.js"></script>
     <script src="scripts/directives/sidebar.js"></script>
     <script src="scripts/controllers/nav-top.js"></script>
@@ -29,9 +29,9 @@
       <sidebar></sidebar>
       <!-- <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" -->
         <div style="overflow-y: hidden;"
-        ng-controller="TestController">
-        <ui-gmap-google-map options="options" center='map.center' zoom='map.zoom'>
-        <ui-gmap-markers models="map.markers" coords="'location'"></ui-gmap-markers>
+        ng-controller="MapController">
+        <ui-gmap-google-map events="map.events" options="map.options" center='map.center' zoom='map.zoom'>
+        <ui-gmap-markers models="map.markers" events="map.markerEvents" coords="'location'"></ui-gmap-markers>
         </ui-gmap-google-map>
       </div>
     </div>
