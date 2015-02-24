@@ -1,0 +1,4 @@
+# Dependency directory
+node_modules/
+# This is where Bower puts the scripts
+public/libs/
