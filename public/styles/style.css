@@ -1,26 +1,9 @@
-body, html {
-height: 100%;
-width: 100%;
-}
-.angular-google-map-container {
-height: 100%;
-width: 100%;
-position: absolute;
-}
-
-.middle {
-display: table;
-width: 50%;
-margin-left: auto;
-margin-right: auto;
-}
-
-/*
-Use bootstraps container w/ some overrides, nice thing about this on bootstrap is there is
-psuedo element with clearfix and display: table; , all after (which is why I know .middle works above)
-*/
-.container{
-width: 50%;
-padding-left: 0;
-padding-right: 0;
-}
+  .angular-google-map-container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+  }
+  .sidebar {
+    opacity: 0.7;
+  }
