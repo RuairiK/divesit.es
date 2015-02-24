@@ -6,26 +6,36 @@
     <title>divesit.es</title>
     <!-- CSS -->
     <link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="styles/style.css"> <!-- custom styles -->
+    
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+>>>>>>> 768bbf888cf65b23897c3cc88294e5982d8c6cd3
 
     <!-- JS -->
     <script src="libs/angular/angular.min.js"></script>
+    <script src='libs/angular-google-maps/dist/angular-google-maps.min.js'></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/test.js"></script>
-    <script src='libs/angular-google-maps/dist/angular-google-maps.min.js'></script>
+    <script src="scripts/controllers/sidebar.js"></script>
+    <script src="scripts/directives/sidebar.js"></script>
+    <script src="scripts/controllers/nav-top.js"></script>
+    <script src="scripts/directives/nav-top.js"></script>
 
     <!-- ANGULAR CUSTOM -->
-    <!-- <script src="scripts/app.js"></script> -->
     <script src='libs/lodash/dist/lodash.min.js'></script>
   </head>
 
-  <body ng-app="divesites-app">
-    <!-- Sidebar -->
-    <div></div>
-    <div ng-controller="TestController">
-      <ui-gmap-google-map center='map.center' zoom='map.zoom'>
-      <ui-gmap-markers models="map.markers" coords="'location'"></ui-gmap-markers>
-      </ui-gmap-google-map>
+  <body ng-app="divesitesApp">
+    <nav-top></nav-top>
+    <div class="row" style="height: 100%; overflow-y: hidden;">
+      <sidebar></sidebar>
+      <!-- <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" -->
+        <div style="overflow-y: hidden;"
+        ng-controller="TestController">
+        <ui-gmap-google-map options="options" center='map.center' zoom='map.zoom'>
+        <ui-gmap-markers models="map.markers" coords="'location'"></ui-gmap-markers>
+        </ui-gmap-google-map>
+      </div>
     </div>
   </body>
 </html>
