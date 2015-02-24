@@ -1,4 +1,4 @@
-var app = angular.module('divesites-app');
+var app = angular.module('divesitesApp');
 
 app.controller('TestController', function(uiGmapGoogleMapApi, $http, $scope) {
 
