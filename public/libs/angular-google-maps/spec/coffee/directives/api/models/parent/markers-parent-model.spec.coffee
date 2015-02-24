@@ -45,58 +45,58 @@ describe 'MarkersParentModel - Clusterer Event Extensions', ->
     .value('scope', @scope)
 
     module 'mockModule'
-    window['uiGmapInitiator'].initMock()
+    window['uiGmapInitiator'].initMock(@)
 
-    inject ['$rootScope', 'element', 'attrs', 'map',
-      'uiGmapMarkersParentModel', 'uiGmapGoogleMapsUtilV3','uiGmapExtendMarkerClusterer',
-      ($rootScope, element, attrs, map, MarkersParentModel, GoogleMapsUtilV3,ExtendMarkerClusterer) =>
-        GoogleMapsUtilV3.init()
-        ExtendMarkerClusterer.init()
-        scope = $rootScope.$new()
+    @injects.push (element, attrs, map, uiGmapMarkersParentModel, uiGmapGoogleMapsUtilV3,uiGmapExtendMarkerClusterer) =>
+        uiGmapGoogleMapsUtilV3.init()
+        uiGmapExtendMarkerClusterer.init()
 
-        @scope = _.extend scope, @scope
         @scope.options =
           animation: google.maps.Animation.BOUNCE
-        @testCtor = MarkersParentModel
+        @testCtor = uiGmapMarkersParentModel
 
         @subject = new @testCtor(@scope, element, attrs, map)
         @subject
-    ]
+
+    @injectAll()
 
   it 'constructor exist', ->
     expect(@testCtor).toBeDefined()
 
   it 'can be created', ->
-    expect(@subject?).toBeDefined()
+    expect(@subject).toBeDefined()
+
+  it 'has plurals', ->
+    expect(@subject.plurals).toBeDefined()
 
   describe 'clusterEvents', ->
     describe 'basic event handling', ->
       describe 'is fired', ->
         describe 'mapped extension', ->
           it 'click - ', ->
-            @subject.scope.markerModels.put 1, model: 'test1'
-            @subject.scope.markerModels.put 2, model: 'test2'
-            @subject.clusterInternalOptions.click @clusterTest
+            @subject.plurals.put 1, model: 'test1'
+            @subject.plurals.put 2, model: 'test2'
+            @subject.scope.clusterEvents.click @clusterTest
             expect(_.all(@markerModelsCluster, (entity, i)=>
-              entity == @subject.scope.markerModels.get(i+1).model
+              entity == @subject.plurals.get(i+1).model
             )).toBeTruthy()
           it 'mouseout - ', ->
-            @subject.scope.markerModels.put 1, model: 'test1'
-            @subject.scope.markerModels.put 2, model: 'test2'
-            @subject.clusterInternalOptions.mouseout @clusterTest
+            @subject.plurals.put 1, model: 'test1'
+            @subject.plurals.put 2, model: 'test2'
+            @subject.scope.clusterEvents.mouseout @clusterTest
             expect(_.all(@markerModelsCluster, (entity, i)=>
-              entity == @subject.scope.markerModels.get(i+1).model
+              entity == @subject.plurals.get(i+1).model
             )).toBeTruthy()
           it 'mouseover - ', ->
-            @subject.scope.markerModels.put 1, model: 'test1'
-            @subject.scope.markerModels.put 2, model: 'test2'
-            @subject.clusterInternalOptions.mouseover @clusterTest
+            @subject.plurals.put 1, model: 'test1'
+            @subject.plurals.put 2, model: 'test2'
+            @subject.scope.clusterEvents.mouseover @clusterTest
             expect(_.all(@markerModelsCluster, (entity, i)=>
-              entity == @subject.scope.markerModels.get(i+1).model
+              entity == @subject.plurals.get(i+1).model
             )).toBeTruthy()
         describe 'some legacy event', =>
           it 'crap - ', -> #not a real event but shows that any existing function can be fired
-            @subject.gMarkerManager.opt_events.crap()
+            @subject.gManager.opt_events.crap()
             expect(@markerModelsCluster).toBe('crap')
       describe 'not fired', ->
         it 'click - ', ->

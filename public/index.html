@@ -31,7 +31,7 @@
         <div style="overflow-y: hidden;"
         ng-controller="MapController">
         <ui-gmap-google-map events="map.events" options="map.options" center='map.center' zoom='map.zoom'>
-        <ui-gmap-markers models="map.markers" events="map.markerEvents" coords="'location'"></ui-gmap-markers>
+        <ui-gmap-markers models="map.markers" events="map.markerEvents" coords="'location'" doCluster="true"></ui-gmap-markers>
         </ui-gmap-google-map>
       </div>
     </div>

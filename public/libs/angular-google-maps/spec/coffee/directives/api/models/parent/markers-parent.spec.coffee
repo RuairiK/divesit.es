@@ -34,21 +34,17 @@ xdescribe 'uiGmapMarkersParentModel', ->
       @provide.decorator 'uiGmapMarkerChildModel', () => @markerChildModel
 
     @clickCount = 0
-    inject ['$rootScope', '$timeout', '$compile', '$http',
-    '$templateCache', '$interpolate', 'uiGmapMarkersParentModel',
-      ($rootScope, $timeout, $compile, $http, $templateCache, $interpolate, MarkersParentModel) =>
-      @rootScope = $rootScope
-      @scope = $rootScope.$new()
-      @ele = $compile('<ui-gmap-markers models="models"></ui-gmap-markers>')(@scope)
+    @html = '<ui-gmap-markers models="models"></ui-gmap-markers>'
+    @injects.push ['$http', '$templateCache', '$interpolate', 'uiGmapMarkersParentModel',
+      ($http, $templateCache, $interpolate, MarkersParentModel) =>
       @attrs = {click: @click}
       @MarkersParentModel = MarkersParentModel
-      @$timeout = $timeout
       @scope.click = () =>
         @clickCount++
     ]
 
     @map = jasmine.createSpyObj('map')
-    @subject = new @MarkersParentModel(@scope, @ele, @attrs, @map, @$timeout)
+    @subject = new @MarkersParentModel(@scope, {}, @attrs, @map, @$timeout)
 
   it 'should instantiate', ->
     expect(@subject?).toEqual(true)
@@ -115,41 +111,41 @@ xdescribe 'uiGmapMarkersParentModel', ->
     beforeEach ->
       spyOn(@subject, 'newChildMarker')
       # create a ClustererMarkerManager so that we fall into the else
-      @subject.gMarkerManager = new @clustererMarkerManager()
+      @subject.gManager = new @clustererMarkerManager()
 
     it 'should call ClustererMarkerManager', ->
       @scope.doCluster = true
       @scope.clusterOptions = {}
       @subject.createMarkersFromScratch(@scope)
-      expect(@subject.gMarkerManager.childConstructed).toEqual(true)
+      expect(@subject.gManager.childConstructed).toEqual(true)
 
     it 'should call not call ClustererMarkerManager when markerManager is set and options are the same as scope options', ->
       @scope.doCluster = true
       @scope.clusterOptions = {}
-      @subject.gMarkerManager.opt_options = @scope.clusterOptions
+      @subject.gManager.opt_options = @scope.clusterOptions
       # create a ClustererMarkerManager so that we fall into the else
       # Set mock value to false, so we can verify if it gets called or not
-      @subject.gMarkerManager.childConstructed = false
+      @subject.gManager.childConstructed = false
       @subject.createMarkersFromScratch(@scope)
-      expect(@subject.gMarkerManager.childConstructed).toEqual(false)
+      expect(@subject.gManager.childConstructed).toEqual(false)
 
     it 'should call ClustererMarkerManager when markerManager is set and options options are not the same', ->
       @scope.doCluster = true
       @scope.clusterOptions = {}
       # Set mock value to false, so we can verify if it gets called or not
-      @subject.gMarkerManager.childConstructed = false
+      @subject.gManager.childConstructed = false
       @subject.createMarkersFromScratch(@scope)
-      expect(@subject.gMarkerManager.childConstructed).toEqual(true)
+      expect(@subject.gManager.childConstructed).toEqual(true)
 
     it 'should call clustererMarkerManager when doCluster is true and no clusterOptions set', ->
       @scope.doCluster = true
       @subject.createMarkersFromScratch(@scope)
-      expect(@subject.gMarkerManager.childConstructed).toEqual(true)
-      expect(@subject.gMarkerManager.args.length).toEqual(1)
+      expect(@subject.gManager.childConstructed).toEqual(true)
+      expect(@subject.gManager.args.length).toEqual(1)
 
     it 'should call generic MarkerManager when no cluster options are set', ->
       @subject.createMarkersFromScratch(@scope)
-      expect(@subject.gMarkerManager.childConstructed).toEqual(undefined)
+      expect(@subject.gManager.childConstructed).toEqual(undefined)
 
     it 'should call newChildMarker for each model and fit should not be called', ->
       @scope.models = [
@@ -157,7 +153,7 @@ xdescribe 'uiGmapMarkersParentModel', ->
       ]
       @subject.createMarkersFromScratch(@scope)
       expect(@subject.newChildMarker.calls.length).toEqual(2)
-      expect(@subject.gMarkerManager.fitCalled).toBe(0)
+      expect(@subject.gManager.fitCalled).toBe(0)
 
       #TODO: Should flesh out these tests a bit more so that the async loop is tested, right now _async is not very testable
       # because the timeout is not able to made synchronous. Passing $timeout could fix this.
@@ -223,5 +219,5 @@ xdescribe 'uiGmapMarkersParentModel', ->
   #TODO: This needs to be fleshed out a lot once _async is testable
   describe 'fit', ->
     it 'should succeed', ->
-      @subject.gMarkerManager = new @clustererMarkerManager()
-      @subject.gMarkerManager.fit()
+      @subject.gManager = new @clustererMarkerManager()
+      @subject.gManager.fit()

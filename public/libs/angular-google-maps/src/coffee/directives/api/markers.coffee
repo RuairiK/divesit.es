@@ -7,7 +7,6 @@ angular.module("uiGmapgoogle-maps.directives.api")
         super()
         @template = '<span class="angular-google-map-markers" ng-transclude></span>'
         Plural.extend @,
-          doRebuildAll: '=dorebuildall' #root level directive attribute not a model level, should default to false
           doCluster: '=docluster'
           clusterOptions: '=clusteroptions'
           clusterEvents: '=clusterevents'
@@ -23,11 +22,6 @@ angular.module("uiGmapgoogle-maps.directives.api")
       link: (scope, element, attrs, ctrl) ->
         parentModel = undefined
         ready = ->
-          if scope.control?
-            scope.control.getGMarkers = ->
-              parentModel.gMarkerManager?.getGMarkers()
-            scope.control.getChildMarkers = ->
-              parentModel.markerModels
           scope.deferred.resolve()
 
         IMarker.mapPromise(scope, ctrl).then (map) ->
@@ -35,9 +29,17 @@ angular.module("uiGmapgoogle-maps.directives.api")
 
           #this is to deal with race conditions in how MarkerClusterer deals with drawing on idle
           mapScope.$watch 'idleAndZoomChanged', ->
-            _.defer parentModel.gMarkerManager.draw
+            _.defer parentModel.gManager.draw
 
           parentModel = new MarkersParentModel(scope, element, attrs, map)
+          Plural.link(scope, parentModel)
+          if scope.control?
+            scope.control.getGMarkers = ->
+              parentModel.gManager?.getGMarkers()
+            #deprecated use getPlurals
+            scope.control.getChildMarkers = ->
+              parentModel.plurals
+
           _.last(parentModel.existingPieces._content).then ->
             ready()
 ]

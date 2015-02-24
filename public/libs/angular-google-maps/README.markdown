@@ -29,22 +29,19 @@ _______________________
 
 These will probably be close to the last 2.0.X releases. Depending on the severity of the bugs other 2.0.X releases may be necessary.
 
-We are tying to figure out if we should just cut the coord and go full bore into 3.0 or ease in via 2.1.X . They both have some commonality in terms of Plural Directives and API clean up. This is why we are asking for [**votes**](http://goo.gl/4YDSao).
+## 2.1
 
-## What to vote on!
-_________________________
+So I guess the poll was for naught.. So develop has been pretty stable for a while now and it is mainly what I use for work. Therefore I plan on cutting a 2.1.X release soon. 3.0.X is going to take some time to flush out. So I'd rather get this out now.
 
-## 2.1.X (develop)
-This release is going to be much stricter in terms of when it will be released and allowed features. It will require more specs and will be focusing on bad bugs, unifying the API. 
+Main Changes:
+- Plural directives can evaluate expressions (new) and (old) string properties of models.
 
-Things to expect:
-- **transclusion**: Only the map will be transcluded (no more window or windows in markers). This will de-complicate the api tremendously. This will also make it much easier to have one PluralParentModel for the rest of the parents to use. This *may* be held off for 3.0.X. 
-
-- **watches**:All directives to be moved to using shallow watches (no equality) and or $watchCollection.
- 
 ## 3.0.X
-This is currently being discussed internally and will become a public discussion in the next coming weeks.
-However here are a few items known:
+This release is going to be much stricter in terms of when it will be released and allowed features. It will require more specs and will be focusing on bad bugs, unifying the API. There are more items being discussed internally as well and they will become public discussion soon.
+
+Few items known:
+- **transclusion**: Only the map will be transcluded (no more window or windows in markers). This will de-complicate the api tremendously. This will also make it much easier to have one PluralParentModel for the rest of the parents to use. This *may* be held off for 3.0.X. 
+- **watches**:All directives to be moved to using shallow watches (no equality) and or $watchCollection.
 
 - **drop singular layer directives**: Singular directives while being 'angular', are pretty useless for production and performance unless your size is small. To bring focus to the API our goal for layers (shapes, markers, windows) is to make all of the directives plural.
 
@@ -54,7 +51,7 @@ Overall we are thinking making this a more aggressive follow up to 2.1.X on watc
 
 __________________
 ## Getting started
-This is a directive for AngularJS `~1.0.7+, ~1.2.2+`.
+This is a set of directives and services for AngularJS `~1.0.7+, ^1.2.2+`.
 
 If you plan to hack on the directives or want to run the example, first thing to do is to install NPM dependencies:
 

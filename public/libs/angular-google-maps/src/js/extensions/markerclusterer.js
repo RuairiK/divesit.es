@@ -324,30 +324,59 @@ angular.module('uiGmapgoogle-maps.extensions')
               return this;
             }).apply(obj1, [obj2]);
           };
-
-          NgMapMarkerClusterer.prototype.onAdd = function() {
-            var cMarkerClusterer = this;
-
-            this.activeMap_ = this.getMap();
-            this.ready_ = true;
-
-            this.repaint();
-
-            // Add the map event listeners
-            this.listeners_ = [
-                google.maps.event.addListener(this.getMap(), 'zoom_changed', function () {
-                    cMarkerClusterer.resetViewport_(false);
-                    // Workaround for this Google bug: when map is at level 0 and '-' of
-                    // zoom slider is clicked, a 'zoom_changed' event is fired even though
-                    // the map doesn't zoom out any further. In this situation, no 'idle'
-                    // event is triggered so the cluster markers that have been removed
-                    // do not get redrawn. Same goes for a zoom in at maxZoom.
-                    if (this.getZoom() === (this.get('minZoom') || 0) || this.getZoom() === this.get('maxZoom')) {
-                        google.maps.event.trigger(this, 'idle');
-                    }
-                })
-            ];
+          ////////////////////////////////////////////////////////////////////////////////
+          /*
+          Other overrides relevant to MarkerClusterPlus
+          */
+          ////////////////////////////////////////////////////////////////////////////////
+          /**
+          * Positions and shows the icon.
+          */
+          ClusterIcon.prototype.show = function () {
+            if (this.div_) {
+              var img = "";
+              // NOTE: values must be specified in px units
+              var bp = this.backgroundPosition_.split(" ");
+              var spriteH = parseInt(bp[0].trim(), 10);
+              var spriteV = parseInt(bp[1].trim(), 10);
+              var pos = this.getPosFromLatLng_(this.center_);
+              this.div_.style.cssText = this.createCss(pos);
+              img = "<img src='" + this.url_ + "' style='position: absolute; top: " + spriteV + "px; left: " + spriteH + "px; ";
+              if (!this.cluster_.getMarkerClusterer().enableRetinaIcons_) {
+                img += "clip: rect(" + (-1 * spriteV) + "px, " + ((-1 * spriteH) + this.width_) + "px, " +
+                ((-1 * spriteV) + this.height_) + "px, " + (-1 * spriteH) + "px);";
+              }
+              // ADDED FOR RETINA SUPPORT
+              else {
+                img += "width: " + this.width_ + "px;" + "height: " + this.height_ + "px;";
+              }
+              // END ADD
+              img += "'>";
+              this.div_.innerHTML = img + "<div style='" +
+              "position: absolute;" +
+              "top: " + this.anchorText_[0] + "px;" +
+              "left: " + this.anchorText_[1] + "px;" +
+              "color: " + this.textColor_ + ";" +
+              "font-size: " + this.textSize_ + "px;" +
+              "font-family: " + this.fontFamily_ + ";" +
+              "font-weight: " + this.fontWeight_ + ";" +
+              "font-style: " + this.fontStyle_ + ";" +
+              "text-decoration: " + this.textDecoration_ + ";" +
+              "text-align: center;" +
+              "width: " + this.width_ + "px;" +
+              "line-height:" + this.height_ + "px;" +
+              "'>" + this.sums_.text + "</div>";
+              if (typeof this.sums_.title === "undefined" || this.sums_.title === "") {
+                this.div_.title = this.cluster_.getMarkerClusterer().getTitle();
+              } else {
+                this.div_.title = this.sums_.title;
+              }
+              this.div_.style.display = "";
+            }
+            this.visible_ = true;
           };
+          //END OTHER OVERRIDES
+          ////////////////////////////////////////////////////////////////////////////////
 
           return NgMapMarkerClusterer;
 

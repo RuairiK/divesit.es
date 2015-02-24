@@ -3,7 +3,7 @@ angular.module("search-box-example", ['uiGmapgoogle-maps'])
 .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApi) {
   GoogleMapApi.configure({
 //    key: 'your api key',
-    v: '3.16',
+    v: '3.17',
     libraries: 'places'
   });
 }])
@@ -23,9 +23,6 @@ angular.module("search-box-example", ['uiGmapgoogle-maps'])
 .controller("SearchBoxController",['$scope', '$timeout', 'uiGmapLogger', '$http','uiGmapGoogleMapApi'
     , function ($scope, $timeout, $log, $http, GoogleMapApi) {
   $log.doLog = true
-
-
-
 
   GoogleMapApi.then(function(maps) {
     maps.visualRefresh = true;
@@ -92,7 +89,9 @@ angular.module("search-box-example", ['uiGmapgoogle-maps'])
       //parentdiv:'searchBoxParent',
       events: {
         places_changed: function (searchBox) {
+          
           places = searchBox.getPlaces()
+
           if (places.length == 0) {
             return;
           }
@@ -143,15 +142,8 @@ angular.module("search-box-example", ['uiGmapgoogle-maps'])
           });
 
           $scope.map.markers = newMarkers;
-          //$scope.searchbox.options.visible = false;
         }
       }
-
-
     }
   });
-
-
-
-
 }]);
