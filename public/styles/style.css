@@ -1,9 +1,12 @@
-  .angular-google-map-container {
+.angular-google-map-container {
     position: absolute;
     height: 100%;
     width: 100%;
     top: 0;
-  }
-  .sidebar {
+}
+.sidebar {
     opacity: 0.7;
-  }
+}
+.branding {
+    font-family: 'Anton', sans-serif;
+}
