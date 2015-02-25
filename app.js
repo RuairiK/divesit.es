@@ -5,8 +5,16 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var passport = require('passport');
+var keys = require('./keys'); 
 
-mongoose.connect('mongodb://localhost/divesites', function(err){
+var mongodbConnString = "mongodb://"
+  + keys.mongolab.user + ":" + keys.mongolab.password + "@"
+  + keys.mongolab.host + ":" + keys.mongolab.port + "/"
+  + keys.mongolab.db
+console.log(mongodbConnString);
+
+mongoose.connect(mongodbConnString, function(err){
     if(err){
         console.log('Database connection error', err);
     }else{
@@ -34,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/divesites', divesites);
+// TODO: Add authentication routes
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
