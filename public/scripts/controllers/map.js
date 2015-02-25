@@ -27,6 +27,14 @@ app.controller('MapController', function(uiGmapGoogleMapApi, $http, $scope, $coo
     click: function (map) {
       $scope.$apply(function () { });
     },
+    // Prevent zoom level being too high, so as to avoid map tile 404 errors around
+    // offshore dive sites.
+    zoom_changed: function(map){
+        var maxZoom = 14
+        if(map.zoom > maxZoom){
+          map.setZoom(maxZoom);
+        }
+    },
     // On idle, update the cookie storing the most recent map view settings
     idle: function (map) {
       $scope.$apply(function () {
