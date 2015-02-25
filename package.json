@@ -14,5 +14,9 @@
     "mongoose": "^3.8.23",
     "morgan": "~1.5.1",
     "serve-favicon": "~2.2.0"
+  },
+  "devDependencies": {
+    "jasmine-node": "latest",
+    "frisby": "latest"
   }
 }
