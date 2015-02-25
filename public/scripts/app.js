@@ -1,5 +1,5 @@
 (function(){
-  var app = angular.module('divesitesApp', ['uiGmapgoogle-maps']).config(
+  var app = angular.module('divesitesApp', ['uiGmapgoogle-maps', 'ngCookies']).config(
     function(uiGmapGoogleMapApiProvider) {
       uiGmapGoogleMapApiProvider.configure({
         //    key: 'your api key',

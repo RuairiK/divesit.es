@@ -1,13 +1,23 @@
 var app = angular.module('divesitesApp');
 
-app.controller('MapController', function(uiGmapGoogleMapApi, $http, $scope) {
+app.controller('MapController', function(uiGmapGoogleMapApi, $http, $scope, $cookieStore) {
+  
   // Initialize controller
   console.log('initializing map controller');
-  $scope.map = { center: { latitude: 53.5, longitude: -8 }, zoom: 7 };
+  // Retrieve centre and zoom values from the cookie store, if they exist
+  $scope.map = {
+    center: {
+      latitude: ($cookieStore.get('map.center.latitude') || 53.5),
+      longitude: ($cookieStore.get('map.center.longitude') || -8)
+    },
+    zoom: ($cookieStore.get('map.zoom') || 7)
+  };
+
   $scope.map.options = {
     scrollwheel: true,
     disableDefaultUI: true,
     mapTypeId: 'satellite'
+
   };
   // stubs for future event handling
   $scope.map.events = {
@@ -16,8 +26,21 @@ app.controller('MapController', function(uiGmapGoogleMapApi, $http, $scope) {
     },
     click: function (map) {
       $scope.$apply(function () { });
+    },
+    // On idle, update the cookie storing the most recent map view settings
+    idle: function (map) {
+      $scope.$apply(function () {
+        $cookieStore.put('map.zoom', map.zoom);
+        // TODO: I don't know if calling map.center.[lat|lng]() is actually stable
+        // or documented, but storing values from $scope.map.center leaves
+        // the cookieStore out of date by exactly one drag. I think this is
+        // a fault on the angular-google-maps side but I'm not sure.
+        $cookieStore.put('map.center.latitude', map.center.lat());
+        $cookieStore.put('map.center.longitude', map.center.lng());
+      });
     }
   };
+  // Map marker events 
   $scope.map.markerEvents = {
     click: function (marker, event, model, args) {
       // Retrieve this model's record from the sites API and do something
