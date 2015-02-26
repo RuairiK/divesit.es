@@ -1,6 +1,6 @@
 var app = angular.module('divesitesApp');
 
-app.controller('MapController', function(uiGmapGoogleMapApi, $http, $scope, $cookieStore) {
+app.controller('MapController', function(uiGmapGoogleMapApi, $http, $scope, $cookieStore, $modal) {
   
   // Initialize controller
   console.log('initializing map controller');
@@ -25,7 +25,8 @@ app.controller('MapController', function(uiGmapGoogleMapApi, $http, $scope, $coo
       $scope.$apply(function () { });
     },
     click: function (map) {
-      $scope.$apply(function () { });
+      $scope.$apply(function () { 
+      });
     },
     // Prevent zoom level being too high, so as to avoid map tile 404 errors around
     // offshore dive sites.
@@ -57,7 +58,21 @@ app.controller('MapController', function(uiGmapGoogleMapApi, $http, $scope, $coo
         // For now, just log to the console to prove that things are
         // working.
         console.log(data);
-        // TODO: throw up a modal with detailed information on this site
+        $scope.siteInfo = {
+          name: data.name,
+          coordinates: {
+            longitude: data.loc.coordinates[0],
+            latitude: data.loc.coordinates[1]
+          }
+        }
+        // Open the modal 
+        $modal.open({
+          templateUrl: 'views/partials/site-info.html',
+          controller: 'SiteInfoController',
+          // TODO: rather than send the full, scope, just give the modal
+          // the site data
+          scope: $scope
+        });
       });
     }
   };
@@ -69,7 +84,9 @@ app.controller('MapController', function(uiGmapGoogleMapApi, $http, $scope, $coo
       return {
         id: e._id, 
         location: {
-          // The order of latitude and longitude is specified by GeoJSON
+          // The order of latitude and longitude is specified by GeoJSON.
+          // It's the opposite way around from how GPS coordinates are normally
+          // presented, so we need to be aware of this going forward.
           longitude: e.loc.coordinates[0],
           latitude: e.loc.coordinates[1]
         },
