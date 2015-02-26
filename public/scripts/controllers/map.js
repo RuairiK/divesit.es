@@ -63,7 +63,8 @@ app.controller('MapController', function(uiGmapGoogleMapApi, $http, $scope, $coo
           coordinates: {
             longitude: data.loc.coordinates[0],
             latitude: data.loc.coordinates[1]
-          }
+          },
+          chart_depth: data.chart_depth
         }
         // Open the modal 
         $modal.open({
