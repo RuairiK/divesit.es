@@ -20,6 +20,7 @@
     <!-- Main app -->
     <script src="scripts/app.js"></script>
     <!-- Controllers -->
+    <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/map.js"></script>
     <script src="scripts/controllers/sidebar.js"></script>
     <script src="scripts/directives/sidebar.js"></script>
@@ -41,7 +42,7 @@
     <script src='libs/lodash/dist/lodash.min.js'></script>
   </head>
 
-  <body ng-app="divesitesApp">
+  <body ng-app="divesitesApp" ng-controller="MainController" class="container-fluid">
     <nav-top></nav-top>
     <div class="row" style="height: 100%; overflow-y: hidden;">
       <sidebar></sidebar>
