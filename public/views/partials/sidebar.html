@@ -1,10 +1,27 @@
 <div class="col-sm-3 col-md-2 sidebar">
   <ul class="nav nav-sidebar">
     <li>
-    <a href>Various</a>
-    <a href>Filters</a>
-    <a href>and</a>
-    <a href>Sliders</a>
-    </li>
+    <a style="padding-bottom: 0px" href>Show dive sites:</a>
+    <ul>
+      <form class="form-horizontal">
+        <div class="checkbox">
+          <label><input ng-model="preferences.wreck"
+            ng-change="filterSites('{{WRECK}}', wreck)"
+            type="checkbox"> Wreck</label>
+        </div>
+        <div class="checkbox">
+          <label><input ng-model="preferences.scenic"
+            ng-change="filterSites('{{SCENIC}}', scenic)"
+            type="checkbox"> Scenic</label>
+        </div>
+        <div class="checkbox">
+          <label><input ng-model="preferences.drift"
+            ng-change="filterSites('{{DRIFT}}', drift)"
+            type="checkbox"> Drift</label>
+        </div>
+      </div>
+    </form>
   </ul>
+  </li>
+</ul>
 </div>
