@@ -7,6 +7,9 @@
 .sidebar {
     opacity: 0.7;
 }
+.sidebar .media-right {
+  padding-right: 10px;
+}
 .branding {
     font-family: 'Anton', sans-serif;
 }
