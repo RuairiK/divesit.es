@@ -1,4 +1,6 @@
 (function(){
+    'use strict';
+
     var app = angular.module('divesitesApp',
       [
         'uiGmapgoogle-maps', 'ngCookies', 'ui.bootstrap', 'ngRoute'

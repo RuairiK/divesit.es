@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('divesitesApp').controller('MainController',
   function($scope) {
     // This is a dummy main controller in case we need it.
