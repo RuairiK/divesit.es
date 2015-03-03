@@ -3,6 +3,36 @@ var app = angular.module('divesitesApp');
 app.controller('MapController',
   function(uiGmapGoogleMapApi, uiGmapIsReady, $http, $scope, $rootScope, $cookieStore, $modal, $timeout) {
 
+    $scope.retrieveDivesites = function () {
+      // Call the API for dive sites (currently returns everything)
+      $http.get('/divesites/').success(function (data) {
+          // On success, update the markers
+          $scope.map.markers = data.map(function (e) {
+              return {
+                id: e._id, 
+                location: {
+                  // The order of latitude and longitude is specified by GeoJSON.
+                  // It's the opposite way around from how GPS coordinates are normally
+                  // presented, so we need to be aware of this going forward.
+                  longitude: e.loc[0],
+                  latitude: e.loc[1]
+                },
+                title: e.name, // the site name
+                chart_depth: e.chart_depth, // chart depth (at lowest astronomical tide)
+                options: { // Google Maps MarkerOptions
+                  visible: false // initially false, switched on when we know preferences
+                },
+                category: e.category, // site category ('wreck', 'scenic', etc.)
+                icon: '/img/icons/' + e.category + '.png'
+              };
+            }
+          );
+        }
+      ).then(function () {
+          $rootScope.$broadcast('event:map-isready');
+        }
+      );
+    };
     // Initialize controller
     console.log('initializing map controller');
     // Retrieve centre and zoom values from the cookie store, if they exist
@@ -77,8 +107,8 @@ app.controller('MapController',
             $scope.siteInfo = {
               name: data.name,
               coordinates: {
-                longitude: data.loc.coordinates[0],
-                latitude: data.loc.coordinates[1]
+                longitude: data.loc[0],
+                latitude: data.loc[1]
               },
               chart_depth: data.chart_depth
             }
@@ -116,34 +146,7 @@ app.controller('MapController',
       // is only called when we have *everything* we need.
       function (maps) {
         $scope.mapInstance = maps[0].map;
-        // Call the API for dive sites (currently returns everything)
-        $http.get('/divesites/').success(function (data) {
-            // On success, update the markers
-            $scope.map.markers = data.map(function (e) {
-                return {
-                  id: e._id, 
-                  location: {
-                    // The order of latitude and longitude is specified by GeoJSON.
-                    // It's the opposite way around from how GPS coordinates are normally
-                    // presented, so we need to be aware of this going forward.
-                    longitude: e.loc.coordinates[0],
-                    latitude: e.loc.coordinates[1]
-                  },
-                  title: e.name, // the site name
-                  chart_depth: e.chart_depth, // chart depth (at lowest astronomical tide)
-                  options: { // Google Maps MarkerOptions
-                    visible: false // initially false, switched on when we know preferences
-                  },
-                  category: e.category, // site category ('wreck', 'scenic', etc.)
-                  icon: '/img/icons/' + e.category + '.png'
-                };
-              }
-            );
-          }
-        ).then(function () {
-            $rootScope.$broadcast('event:map-isready');
-          }
-        );
+        $scope.retrieveDivesites();
       }
     );
   });

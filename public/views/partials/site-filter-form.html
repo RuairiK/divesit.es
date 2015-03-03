@@ -1,0 +1,42 @@
+<form class="form-horizontal">
+  <ul>
+    <li class="media">
+    <div class="media-body">
+      <div class="checkbox">
+        <label><input ng-model="preferences.wreck"
+          ng-change="filterSites('{{WRECK}}', preferences.wreck)"
+          type="checkbox">
+          Wreck
+        </label>
+      </div>
+    </div>
+    <div class="media-right">
+      <img class="media-object" ng-src="/img/icons/{{WRECK}}.png">
+    </div>
+    </li>
+    <li class="media">
+    <div class="media-body">
+      <div class="checkbox">
+        <label><input ng-model="preferences.scenic"
+          ng-change="filterSites('{{SCENIC}}', preferences.scenic)"
+          type="checkbox"> Scenic</label>
+      </div>
+    </div>
+    <div class="media-right">
+      <img class="media-object" ng-src="/img/icons/{{SCENIC}}.png">
+    </div>
+    </li>
+    <li class="media">
+    <div class="media-body">
+      <div class="checkbox">
+        <label><input ng-model="preferences.drift"
+          ng-change="filterSites('{{DRIFT}}', preferences.drift)"
+          type="checkbox"> Drift</label>
+      </div>
+    </div>
+    <div class="media-right">
+      <img class="media-object" ng-src="/img/icons/{{DRIFT}}.png">
+    </div>
+    </li>
+  </ul>
+</form>

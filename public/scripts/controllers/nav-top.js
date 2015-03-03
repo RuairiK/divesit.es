@@ -9,5 +9,12 @@ app.controller('NavTopController',
     $scope.showContact = function () {
       $modal.open({ templateUrl: 'views/partials/contact.html' });
     };
+    $scope.showSubmission = function () {
+      $modal.open({
+          templateUrl: 'views/partials/add-site.html',
+          controller: 'AddSiteController'
+        }
+      );
+    };
   }
 );
