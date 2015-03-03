@@ -56,9 +56,6 @@ app.controller('AddSiteController',
       $scope.site.coords = $scope.marker.coords;
       $http.post('/divesites/', $scope.site).success(function (data ){
           console.log(data);
-          // TODO: Completely re-loading the list of divesites is probably
-          // a terrible idea, but it ensures that the model is up to date.
-          return api.retrieveDivesites();
         }
       );
     }
