@@ -128,13 +128,21 @@ app.controller('MapController',
         console.log('received event:filter-sites');
         //console.log($scope.markerControl.getPlurals());
         $scope.map.markers.forEach(function (m) {
-            if (m.category == data.category) {
-              m.options.visible = data.show;
+            if(isWithinDepthRange(m.chart_depth, data.depthRange)){
+              if (m.category == data.category) {
+                m.options.visible = data.show;
+              }
+            } else {
+              m.options.visible = false;
             }
           }
         );
       }
     );
+
+    var isWithinDepthRange= function(depth, range){
+      return depth >= range[0] && depth <= range[1]
+    }
 
     uiGmapGoogleMapApi.then(function(maps) {
       }

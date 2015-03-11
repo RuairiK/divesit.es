@@ -2,7 +2,6 @@ var app = angular.module('divesitesApp');
 
 app.controller('SidebarController',
   function (uiGmapGoogleMapApi, $http, $scope, $rootScope, $cookieStore) {
-
     // Function definitions
     
     // Broadcast a filter event for the map to handle.
@@ -13,7 +12,12 @@ app.controller('SidebarController',
       // Update preferences
       $cookieStore.put('filterPreferences', $scope.preferences);
       // Broadcast change event from rootscope to map
-      $rootScope.$broadcast('event:filter-sites', {category: category, show: show});
+      var filterEventData = {
+                              category: category, 
+                              show: show,
+                              depthRange: $scope.preferences.depthRange
+                            } 
+      $rootScope.$broadcast('event:filter-sites', filterEventData);
     };
 
     // Initialize controller
@@ -22,9 +26,12 @@ app.controller('SidebarController',
     // Retrieve stored filter preferences if they are in the cookie, otherwise
     // default to true for all categories
     $scope.preferences = $cookieStore.get('filterPreferences') || {
-      wreck: true,
-      scenic: true,
-      drift: true
+      categories:{
+        wreck: true,
+        scenic: true,
+        drift: true
+      },
+      depthRange: [0, 100]
     };
 
     // Store preferences in the cookieStore if they didn't exist already
@@ -33,19 +40,37 @@ app.controller('SidebarController',
     // on/off
     $scope.$on('event:map-isready', function (e) {
         console.log('received event:map-isready');
-        Object.keys($scope.preferences).forEach(function (k) {
-            var category = k;
-            var show = $scope.preferences[k];
-            $rootScope.$broadcast('event:filter-sites', {category: category, show: show});
-          }
-        );
+        updateAllCategories();
       }
     );
+
+    //Slider events
+    $scope.onSlide = function () {
+        updateAllCategories();
+    };
+    $scope.formatSliderTooltip = function(value) {
+      return value + "m"
+    }
 
     // String constants for site categories --- might be useful
     $scope.WRECK = 'wreck';
     $scope.SCENIC = 'scenic';
     $scope.DRIFT = 'drift';
+
+    //Helper function to fire a filter event for all categories
+    var updateAllCategories = function(){
+      Object.keys($scope.preferences.categories).forEach(function (k) {
+          var category = k;
+          var show = $scope.preferences[k];
+          var filterEventData = {
+                                  category: category, 
+                                  show: show,
+                                  depthRange: $scope.preferences.depthRange
+                                }
+          $rootScope.$broadcast('event:filter-sites', filterEventData);
+        }
+      );
+    }
 
   }
 );
