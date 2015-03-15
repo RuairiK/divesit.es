@@ -1,5 +1,7 @@
 # Dependency directory
-node_modules
+node_modules/
+#Karma test coverage reports
+coverage/
 # This is where Bower puts the scripts
 public/libs
 .*.swp
