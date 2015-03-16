@@ -1,7 +1,7 @@
 var app = angular.module('divesitesApp');
 
 app.controller('MapController',
-  function(uiGmapGoogleMapApi, uiGmapIsReady, $http, $scope, $rootScope, $cookieStore, $modal, $timeout) {
+  function(uiGmapIsReady, $http, $scope, $rootScope, $cookieStore, $modal, $timeout) {
 
     $scope.retrieveDivesites = function () {
       // Call the API for dive sites (currently returns everything)
@@ -66,13 +66,6 @@ app.controller('MapController',
 
     // stubs for future event handling
     $scope.map.events = {
-      tilesloaded: function (map) {
-        $scope.$apply(function () { });
-      },
-      click: function (map) {
-        $scope.$apply(function () { 
-          });
-      },
       // Prevent zoom level being too high, so as to avoid map tile 404 errors around
       // offshore dive sites.
       zoom_changed: function(map){
@@ -143,10 +136,6 @@ app.controller('MapController',
     var isWithinDepthRange= function(depth, range){
       return depth >= range[0] && depth <= range[1]
     }
-
-    uiGmapGoogleMapApi.then(function(maps) {
-      }
-    );
 
     uiGmapIsReady.promise().then(
       // Fires when the map is loaded. Once the map is loaded, go get the
