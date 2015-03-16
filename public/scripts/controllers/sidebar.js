@@ -1,7 +1,7 @@
 var app = angular.module('divesitesApp');
 
 app.controller('SidebarController',
-  function (uiGmapGoogleMapApi, $http, $scope, $rootScope, $cookieStore) {
+  function ($scope, $rootScope, $cookieStore) {
     // Function definitions
     
     // Broadcast a filter event for the map to handle.
@@ -40,13 +40,13 @@ app.controller('SidebarController',
     // on/off
     $scope.$on('event:map-isready', function (e) {
         console.log('received event:map-isready');
-        updateAllCategories();
+        $scope.updateAllCategories();
       }
     );
 
     //Slider events
     $scope.onSlide = function () {
-        updateAllCategories();
+        $scope.updateAllCategories();
     };
     $scope.formatSliderTooltip = function(value) {
       return value + "m"
@@ -58,7 +58,7 @@ app.controller('SidebarController',
     $scope.DRIFT = 'drift';
 
     //Helper function to fire a filter event for all categories
-    var updateAllCategories = function(){
+    $scope.updateAllCategories = function(){
       Object.keys($scope.preferences.categories).forEach(function (k) {
           var category = k;
           var show = $scope.preferences[k];
