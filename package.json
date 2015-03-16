@@ -36,5 +36,8 @@
     "karma-requirejs": "^0.2.2",
     "karma-coverage": "*",
     "karma-spec-reporter":"*"
-  }
+  },
+  "scripts": {
+   "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
+ }
 }
