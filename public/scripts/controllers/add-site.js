@@ -20,7 +20,7 @@ app.controller('AddSiteController',
       },
       NAME: 'add-site.name',
       DEPTH: 'add-site.depth',
-      CATEGORY: 'add-side.category'
+      CATEGORY: 'add-site.category'
     };
     
     // Default values (should be something more sensible)
