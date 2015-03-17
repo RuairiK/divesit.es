@@ -1,10 +1,10 @@
 <form class="form-horizontal">
-  <ul>
+  <ul class="list-unstyled">
     <li class="media">
     <div class="media-body">
       <div class="checkbox">
-        <label><input ng-model="preferences.wreck"
-          ng-change="filterSites('{{WRECK}}', preferences.wreck)"
+        <label><input ng-model="preferences.categories.wreck"
+          ng-change="filterSites('{{WRECK}}', preferences.categories.wreck)"
           type="checkbox">
           Wreck
         </label>
@@ -17,8 +17,8 @@
     <li class="media">
     <div class="media-body">
       <div class="checkbox">
-        <label><input ng-model="preferences.scenic"
-          ng-change="filterSites('{{SCENIC}}', preferences.scenic)"
+        <label><input ng-model="preferences.categories.scenic"
+          ng-change="filterSites('{{SCENIC}}', preferences.categories.scenic)"
           type="checkbox"> Scenic</label>
       </div>
     </div>
@@ -29,14 +29,30 @@
     <li class="media">
     <div class="media-body">
       <div class="checkbox">
-        <label><input ng-model="preferences.drift"
-          ng-change="filterSites('{{DRIFT}}', preferences.drift)"
+        <label><input ng-model="preferences.categories.drift"
+          ng-change="filterSites('{{DRIFT}}', preferences.categories.drift)"
           type="checkbox"> Drift</label>
       </div>
     </div>
     <div class="media-right">
       <img class="media-object" ng-src="/img/icons/{{DRIFT}}.png">
     </div>
+    </li>
+    <li>
+      <label>
+      Filter by depth:
+      <span slider
+        slider-id="rangeSlider"
+        ng-model="preferences.depthRange"
+        min="0"
+        max="100"
+        range="true"
+        tooltipseparator=":"
+        tooltipsplit="true"
+        on-slide="onSlide()"
+        formater="formatSliderTooltip"
+        ></span>
+      </label>
     </li>
   </ul>
 </form>

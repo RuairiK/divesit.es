@@ -3,7 +3,7 @@
 var app = angular.module('divesitesApp');
 
 app.controller('NavTopController',
-  function (uiGmapGoogleMapApi, $http, $scope, $modal) {
+  function ($scope, $modal) {
     console.log('initializing top navigation controller');
     $scope.showAbout = function () {
       $modal.open({ templateUrl: 'views/partials/about.html' });

@@ -17,3 +17,6 @@
 .branding {
     font-family: 'Anton', sans-serif;
 }
+.sidebar ul{
+	padding-left: 20px
+}

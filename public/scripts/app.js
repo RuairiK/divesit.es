@@ -3,7 +3,7 @@
 
     var app = angular.module('divesitesApp',
       [
-        'uiGmapgoogle-maps', 'ngCookies', 'ui.bootstrap', 'ngRoute'
+        'uiGmapgoogle-maps', 'ngCookies', 'ui.bootstrap-slider', 'ui.bootstrap', 'ngRoute'
       ]
     ).config(
       function(uiGmapGoogleMapApiProvider, $routeProvider) {
