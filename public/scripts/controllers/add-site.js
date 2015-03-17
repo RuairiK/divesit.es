@@ -16,7 +16,7 @@ app.controller('AddSiteController',
       },
       marker: {
         LAT: 'add-site.marker.latitude',
-        LON: 'add-side.marker.longitude'
+        LON: 'add-site.marker.longitude'
       },
       NAME: 'add-site.name',
       DEPTH: 'add-site.depth',
