@@ -1,7 +1,7 @@
 var app = angular.module('divesitesApp');
 
 app.controller('AddSiteController',
-  function (uiGmapGoogleMapApi, uiGmapIsReady, $http, $scope, $cookieStore) {
+  function (uiGmapIsReady, $http, $scope, $cookieStore) {
     
     ///////////////////////////////////////////////////////////////////////////
     // Constants
@@ -116,11 +116,6 @@ app.controller('AddSiteController',
     // Watch changes on name and depth and store them as cookies
     //$scope.$watch('site.name', $scope.storeChanges);
     //$scope.$watch('site.depth', $scope.storeChanges);
-
-
-    uiGmapGoogleMapApi.then(function (maps) {
-      }
-    );
 
     uiGmapIsReady.promise().then(
       function (maps) {
