@@ -7,6 +7,7 @@
     "animate.css": "latest",
     "angular": "1.3.x",
     "angular-route": "latest",
+    "angular-cookies": "latest",
     "angular-google-maps": "master",
     "angular-bootstrap": "~0.12.1",
     "angular-bootstrap-slider": "~0.1.1"
