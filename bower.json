@@ -5,10 +5,13 @@
     "bootstrap": "latest",
     "font-awesome": "latest",
     "animate.css": "latest",
-    "angular": "latest",
+    "angular": "1.3.x",
     "angular-route": "latest",
     "angular-google-maps": "master",
     "angular-bootstrap": "~0.12.1",
     "angular-bootstrap-slider": "~0.1.1"
+  },
+  "resolutions": {
+    "angular": ">=1 <1.3.0"
   }
 }
