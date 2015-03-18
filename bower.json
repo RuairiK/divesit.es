@@ -10,8 +10,5 @@
     "angular-google-maps": "master",
     "angular-bootstrap": "~0.12.1",
     "angular-bootstrap-slider": "~0.1.1"
-  },
-  "resolutions": {
-    "angular": "1.3.14"
   }
 }
