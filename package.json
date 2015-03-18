@@ -29,6 +29,7 @@
     "jasmine-core": "^2.2.0",
     "jasmine-node": "*",
     "karma": "^0.12.31",
+    "karma-cli": "*",
     "karma-phantomjs-launcher": "*",
     "karma-chrome-launcher": "^0.1.7",
     "karma-firefox-launcher": "^0.1.4",
