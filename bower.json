@@ -12,7 +12,11 @@
     "angular-bootstrap": "~0.12.1",
     "angular-bootstrap-slider": "~0.1.1"
   },
+  "devDependencies": {
+    "angular-mocks": "latest"
+   },
   "resolutions": {
-    "angular": ">=1.2.0"
+    "angular": "1.3.15"
   }
+
 }
