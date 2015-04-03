@@ -47,13 +47,12 @@ app.controller('MapController',
     };
 
     // Needs to be non-null at initialization (for some obscure reason
-    // mentioned but not explained by angular-google-maps)
+    // mentioned, but not explained, in the  angular-google-maps source)
     $scope.map.markers = [];
 
     // Object to receive marker functionality
     $scope.mapControl = {};
     $scope.markerControl = {};
-
 
     // Map options
     $scope.map.options = {
@@ -96,9 +95,8 @@ app.controller('MapController',
       // exciting with it
       click: function (marker, event, model, args) {
         $http.get('/divesites/' + model.id).success(function (data) {
-            // For now, just log to the console to prove that things are
-            // working.
             console.log(data);
+            // Pull the data we want from the returned JSON
             $scope.siteInfo = {
               name: data.name,
               coordinates: {
@@ -121,9 +119,8 @@ app.controller('MapController',
 
     $scope.$on('event:filter-sites', function (event, data) {
         console.log('received event:filter-sites');
-        //console.log($scope.markerControl.getPlurals());
         $scope.map.markers.forEach(function (m) {
-            if(isWithinDepthRange(m.chart_depth, data.depthRange)){
+            if (isWithinDepthRange(m.chart_depth, data.depthRange)) {
               if (m.category == data.category) {
                 m.options.visible = data.show;
               }
