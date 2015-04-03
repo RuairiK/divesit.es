@@ -3,7 +3,7 @@
 var app = angular.module('divesitesApp');
 
 app.controller('AddSiteController',
-  function (uiGmapGoogleMapApi, uiGmapIsReady, $http, $scope, $cookieStore) {
+  function (uiGmapIsReady, $http, $scope, $cookieStore) {
     
     ///////////////////////////////////////////////////////////////////////////
     // Constants
@@ -18,11 +18,11 @@ app.controller('AddSiteController',
       },
       marker: {
         LAT: 'add-site.marker.latitude',
-        LON: 'add-side.marker.longitude'
+        LON: 'add-site.marker.longitude'
       },
       NAME: 'add-site.name',
       DEPTH: 'add-site.depth',
-      CATEGORY: 'add-side.category'
+      CATEGORY: 'add-site.category'
     };
     
     // Default values (should be something more sensible)
@@ -118,11 +118,6 @@ app.controller('AddSiteController',
     // Watch changes on name and depth and store them as cookies
     //$scope.$watch('site.name', $scope.storeChanges);
     //$scope.$watch('site.depth', $scope.storeChanges);
-
-
-    uiGmapGoogleMapApi.then(function (maps) {
-      }
-    );
 
     uiGmapIsReady.promise().then(
       function (maps) {
