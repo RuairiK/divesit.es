@@ -1,7 +1,6 @@
 (function(){
   'use strict';
 
-<<<<<<< HEAD
   var app = angular.module('divesitesApp', [
     'uiGmapgoogle-maps', 'ngCookies', 'ui.bootstrap', 'ngRoute', 'satellizer'
   ])
@@ -10,6 +9,9 @@
 
     $authProvider.google({
       clientId: "930190391486-6pj424i3mmmvptic21rdvm2f0e9il5fl.apps.googleusercontent.com"
+    });
+    $authProvider.facebook({
+      clientId: "1542355859342321"
     });
 
     uiGmapGoogleMapApiProvider.configure({

@@ -1,15 +1,15 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var User = require('../models/User');
-//var LocalStrategy = require('passport-local');
-//var GoogleStrategy = require('passport-google-plus');
-var passport = require('passport');
 var keys = require('../keys');
 
 var app = require('../app');
+
+// Satellizer requirements
 var request = require('request');
 var jwt = require('jwt-simple');
 var moment = require('moment');
+var qs = require('querystring');
 
 var router = express.Router();
 
@@ -50,6 +50,7 @@ router.get('/auth/profile', ensureAuthenticated, function (req, res) {
   });
 });
 
+
 /* Authenticate with Google */
 
 router.post('/auth/google', function (req, res) {
@@ -68,7 +69,7 @@ router.post('/auth/google', function (req, res) {
   request.post(accessTokenUrl, {json: true, form: params}, function (err, response, token) {
     var accessToken = token.access_token;
     var headers = {Authorization: 'Bearer ' + accessToken};
-    
+
     // Retrieve profile information about the current user
     request.get({url: peopleApiUrl, headers: headers, json: true}, function (err, response, profile) {
       console.log("Received profile");
@@ -113,4 +114,80 @@ router.post('/auth/google', function (req, res) {
     });
   });
 });
+
+/* Authenticate with Facebook */
+router.post('/auth/facebook', function (req, res) {
+  var accessTokenUrl = 'https://graph.facebook.com/v2.3/oauth/access_token';
+  var graphApiUrl = 'https://graph.facebook.com/v2.3/me';
+  var params = {
+    code: req.body.code,
+    client_id: req.body.clientId,
+    client_secret: keys.facebook.secret,
+    redirect_uri: req.body.redirectUri
+  };
+
+  // Exchange auth code for access token
+  request.get({ url: accessTokenUrl, qs: params, json: true }, function(err, response, accessToken) {
+    if (response.statusCode !== 200) {
+      return res.status(500).send({ message: accessToken.error.message });
+    }
+    
+    // Retrieve profile information about the current user.
+    request.get({ url: graphApiUrl, qs: {'access_token': accessToken.access_token}, json: true }, function(err, response, profile) {
+      if (response.statusCode !== 200) {
+        return res.status(500).send({ message: profile.error.message });
+      }
+      //console.log(response);
+      if (req.headers.authorization) {
+        User.findOne({ facebook: profile.id }, function(err, existingUser) {
+          if (existingUser) {
+            return res.status(409).send({ message: 'There is already a Facebook account that belongs to you' });
+          }
+          var token = req.headers.authorization.split(' ')[1];
+          var payload = jwt.decode(token, config.TOKEN_SECRET);
+          User.findById(payload.sub, function(err, user) {
+            if (!user) {
+              return res.status(400).send({ message: 'User not found' });
+            }
+            user.facebook = profile.id;
+            user.picture = user.picture || 'https://graph.facebook.com/v2.3/' + profile.id + '/picture?type=large';
+            user.displayName = user.displayName || profile.name;
+            console.log("not step 3b");
+            console.log("USER USER USER");
+            console.log(user);
+            user.save(function() {
+              var token = createToken(user);
+              res.send({ token: token });
+            });
+          });
+        });
+      } else {
+        console.log("Step 3b");
+        // Step 3b. Create a new user account or return an existing one.
+        User.findOne({ facebook: profile.id }, function(err, existingUser) {
+          if (existingUser) {
+            var token = createToken(existingUser);
+            return res.send({ token: token });
+          }
+          var user = new User();
+          user.facebook = profile.id;
+          user.picture = 'https://graph.facebook.com/' + profile.id + '/picture?type=large';
+          user.displayName = profile.name;
+          console.log("USER USER USER");
+          console.log(user);
+          user.save(function (err) {
+            if (err) {
+              console.log("err");
+              console.log(err);
+            }
+            var token = createToken(user);
+            res.send({ token: token });
+          });
+        });
+      }
+    });
+  });
+});
+
+/* Export */
 module.exports = router;
