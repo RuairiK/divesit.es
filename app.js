@@ -23,8 +23,6 @@ mongoose.connect(mongodbConnString, function(err){
 
 });
 
-var routes = require('./routes/index');
-var divesites = require('./routes/divesites');
 
 var app = express();
 
@@ -40,9 +38,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Routing
+var routes = require('./routes/index');
+var divesites = require('./routes/divesites');
+var auth = require('./routes/auth');
 app.use('/', routes);
 app.use('/divesites', divesites);
-// TODO: Add authentication routes
+// Authentication routes
+app.use('/', auth);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

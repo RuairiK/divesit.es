@@ -10,12 +10,11 @@ router.get('/', function(req, res, next) {
         if(err) {
           return next(err);
         }
-        console.log(divesites);
         res.json(divesites);
       })
   });
 
-/* POST a new dive site*/
+/* POST a new dive site */
 router.post('/', function(req, res, next) {
     // Parse the incoming data to build a schema-compatible object
     var site = {
