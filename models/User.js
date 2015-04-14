@@ -1,6 +1,5 @@
 'use strict'; 
 var mongoose = require('mongoose');
-var Hash = require('password-hash');
 var findOrCreate = require('mongoose-findorcreate');
 var bcrypt = require('bcryptjs');
 
