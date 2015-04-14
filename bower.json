@@ -10,11 +10,8 @@
     "angular-cookies": "latest",
     "angular-google-maps": "master",
     "angular-bootstrap": "~0.12.1",
-<<<<<<< HEAD
     "satellizer": "~0.9.4"
-=======
     "angular-bootstrap-slider": "~0.1.1"
->>>>>>> master
   },
   "devDependencies": {
     "angular-mocks": "latest"

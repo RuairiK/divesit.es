@@ -10,10 +10,6 @@ router.get('/', function(req, res, next) {
         if(err) {
           return next(err);
         }
-<<<<<<< HEAD
-=======
-        //console.log(divesites);
->>>>>>> master
         res.json(divesites);
       })
   });
