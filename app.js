@@ -28,6 +28,12 @@ var divesites = require('./routes/divesites');
 
 var app = express();
 
+// "A man is not dead while his name is still spoken."
+app.use(function (req, res, next) {
+    res.set('X-Clacks-Overhead', 'GNU Terry Pratchett');
+    next();
+  });
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -50,6 +56,7 @@ app.use(function(req, res, next) {
     err.status = 404;
     next(err);
 });
+
 
 // error handlers
 

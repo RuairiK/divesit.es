@@ -1,3 +1,5 @@
+'use strict';
+
 var app = angular.module('divesitesApp');
 
 app.controller('SiteInfoController', function($scope) {

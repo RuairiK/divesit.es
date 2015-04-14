@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
         if(err) {
           return next(err);
         }
-        console.log(divesites);
+        //console.log(divesites);
         res.json(divesites);
       })
   });
