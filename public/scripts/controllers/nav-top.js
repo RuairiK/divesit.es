@@ -2,6 +2,7 @@
 
 var app = angular.module('divesitesApp');
 
+<<<<<<< HEAD
 app.controller('NavTopController', function (uiGmapGoogleMapApi, $http, $scope, $rootScope, $modal, $auth, $cookieStore) {
   console.log('initializing top navigation controller');
 
@@ -32,6 +33,24 @@ app.controller('NavTopController', function (uiGmapGoogleMapApi, $http, $scope, 
   $scope.logout = function () {
     $auth.logout();
     $cookieStore.remove('currentUser');
+=======
+app.controller('NavTopController',
+  function ($scope, $modal) {
+    console.log('initializing top navigation controller');
+    $scope.showAbout = function () {
+      $modal.open({ templateUrl: 'views/partials/about.html' });
+    };
+    $scope.showContact = function () {
+      $modal.open({ templateUrl: 'views/partials/contact.html' });
+    };
+    $scope.showSubmission = function () {
+      $modal.open({
+          templateUrl: 'views/partials/add-site.html',
+          controller: 'AddSiteController'
+        }
+      );
+    };
+>>>>>>> master
   }
 
   $scope.isAuthenticated = function () {

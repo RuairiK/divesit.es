@@ -3,7 +3,7 @@
 var app = angular.module('divesitesApp');
 
 app.controller('MapController',
-  function(uiGmapGoogleMapApi, uiGmapIsReady, $http, $scope, $rootScope, $cookieStore, $modal, $timeout) {
+  function(uiGmapIsReady, $http, $scope, $rootScope, $cookieStore, $modal, $timeout) {
 
     $scope.retrieveDivesites = function () {
       // Call the API for dive sites (currently returns everything)
@@ -47,13 +47,12 @@ app.controller('MapController',
     };
 
     // Needs to be non-null at initialization (for some obscure reason
-    // mentioned but not explained by angular-google-maps)
+    // mentioned, but not explained, in the  angular-google-maps source)
     $scope.map.markers = [];
 
     // Object to receive marker functionality
     $scope.mapControl = {};
     $scope.markerControl = {};
-
 
     // Map options
     $scope.map.options = {
@@ -68,13 +67,6 @@ app.controller('MapController',
 
     // stubs for future event handling
     $scope.map.events = {
-      tilesloaded: function (map) {
-        $scope.$apply(function () { });
-      },
-      click: function (map) {
-        $scope.$apply(function () { 
-          });
-      },
       // Prevent zoom level being too high, so as to avoid map tile 404 errors around
       // offshore dive sites.
       zoom_changed: function(map){
@@ -103,9 +95,8 @@ app.controller('MapController',
       // exciting with it
       click: function (marker, event, model, args) {
         $http.get('/divesites/' + model.id).success(function (data) {
-            // For now, just log to the console to prove that things are
-            // working.
             console.log(data);
+            // Pull the data we want from the returned JSON
             $scope.siteInfo = {
               name: data.name,
               coordinates: {
@@ -128,19 +119,22 @@ app.controller('MapController',
 
     $scope.$on('event:filter-sites', function (event, data) {
         console.log('received event:filter-sites');
-        //console.log($scope.markerControl.getPlurals());
         $scope.map.markers.forEach(function (m) {
-            if (m.category == data.category) {
-              m.options.visible = data.show;
+            if (isWithinDepthRange(m.chart_depth, data.depthRange)) {
+              if (m.category == data.category) {
+                m.options.visible = data.show;
+              }
+            } else {
+              m.options.visible = false;
             }
           }
         );
       }
     );
 
-    uiGmapGoogleMapApi.then(function(maps) {
-      }
-    );
+    var isWithinDepthRange= function(depth, range){
+      return depth >= range[0] && depth <= range[1]
+    }
 
     uiGmapIsReady.promise().then(
       // Fires when the map is loaded. Once the map is loaded, go get the
