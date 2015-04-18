@@ -23,6 +23,7 @@ module.exports = function(config) {
       'public/libs/angular-mocks/angular-mocks.js',
       'public/libs/angular-cookies/angular-cookies.js',
       'public/libs/satellizer/satellizer.min.js',
+      'public/libs/underscore/underscore.js',
       {pattern: 'public/libs/angular-google-maps/dist/*.js', included: true},
       {pattern: 'public/scripts/**/*.js', included: true},
       {pattern: 'public/scripts/*.js', included: true},
