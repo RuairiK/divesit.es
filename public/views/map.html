@@ -1,0 +1,25 @@
+<nav-top></nav-top>
+<div class="row" style="height: 100%; overflow-y: hidden;">
+  <sidebar></sidebar>
+  <!-- <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" -->
+  <div style="overflow-y: hidden;" ng-controller="MapController">
+    <ui-gmap-google-map
+    control="mapControl"
+    events="map.events"
+    options="map.options"
+    center='map.center'
+    zoom='map.zoom'>
+      <ui-gmap-markers
+      control="markerControl"
+      models="map.markers"
+      events="map.markerEvents"
+      options="'options'"
+      coords="'location'"
+      icon="'icon'"
+      doCluster="true"
+      doRebuildAll="true"
+      clusterOptions="map.clusterOptions">
+      </ui-gmap-markers>
+    </ui-gmap-google-map>
+  </div>
+</div>

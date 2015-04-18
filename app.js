@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var passport = require('passport');
 var keys = require('./keys'); 
 
 var mongodbConnString = "mongodb://"
@@ -23,10 +22,14 @@ mongoose.connect(mongodbConnString, function(err){
 
 });
 
-var routes = require('./routes/index');
-var divesites = require('./routes/divesites');
 
 var app = express();
+
+// "A man is not dead while his name is still spoken."
+app.use(function (req, res, next) {
+    res.set('X-Clacks-Overhead', 'GNU Terry Pratchett');
+    next();
+  });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -40,9 +43,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Routing
+var routes = require('./routes/index');
+var divesites = require('./routes/divesites');
+var auth = require('./routes/auth');
 app.use('/', routes);
 app.use('/divesites', divesites);
-// TODO: Add authentication routes
+// Authentication routes
+app.use('/', auth);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -50,6 +58,7 @@ app.use(function(req, res, next) {
     err.status = 404;
     next(err);
 });
+
 
 // error handlers
 

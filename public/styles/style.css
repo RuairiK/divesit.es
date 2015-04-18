@@ -4,9 +4,19 @@
     width: 100%;
     top: 0;
 }
+.modal-body .angular-google-map-container {
+  position: relative;
+  height: 300px;
+}
 .sidebar {
-    opacity: 0.7;
+    opacity: 0.8;
+}
+.sidebar .media-right {
+  padding-right: 10px;
 }
 .branding {
     font-family: 'Anton', sans-serif;
+}
+.sidebar ul{
+	padding-left: 20px
 }
