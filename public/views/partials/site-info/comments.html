@@ -1,16 +1,31 @@
 <div>
-  <h4>Comments</h4>
-  <div ng-if="!site.comments">
-    <p>
-    There are no comments for this site yet.
-    </p>
-    <form>
+  <!-- <h4>Comments</h4> -->
+  <div ng-if="site.comments">
+    <ul ng-repeat="comment in site.comments" class="list-unstyled">
+      <li class="site-comment media">
+      <div class="media-left">
+        <a href="{{comment.user._id}}">
+          <img ng-src="{{comment.user.picture}}" height="32px" width="32px" class="media-object">
+        </a>
+      </div>
+      <div class="media-body">
+        <span class="comment-date">{{ comment.updated_at | date : 'medium' }}</span>
+        <a class="text-right" href="{{comment.user._id}}">{{ comment.user.displayName }}</a>
+        <div>
+          {{ comment.text }}
+        </div>
+      </div>
+      </li>
+    </ul>
+  </div>
+  <div>
+    <form class="comment-submission">
       <div class="form-group">
-        <textarea class="form-control" rows="3"></textarea>
+        <textarea class="form-control" rows="3" ng-model="commentText"></textarea>
       </div>
       <div class="form-group">
         <div class="text-right">
-          <button type="button" class="btn btn-primary">Submit</button>
+          <button type="button" class="btn btn-primary" ng-click="submitComment(commentText)">Submit</button>
         </div>
       </div>
     </form>
