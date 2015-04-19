@@ -75,7 +75,7 @@ router.patch('/:id', auth.ensureAuthenticated, function (req, res, next) {
 });
 
 /* DELETE /divesites/:id */
-router.delete('/:id', function(req, res, next) {
+router.delete('/:id', auth.ensureAuthenticated, function(req, res, next) {
     Divesite.findByIdAndRemove(req.params.id, req.body, function (err, post) {
         if (err) return next(err);
         res.json(post);
