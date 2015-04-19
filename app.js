@@ -57,7 +57,7 @@ var auth = require('./routes/auth');
 app.use('/', routes);
 app.use('/divesites', divesites);
 // Authentication routes
-app.use('/', auth);
+app.use('/auth', auth);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
