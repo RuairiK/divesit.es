@@ -54,8 +54,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 var routes = require('./routes/index');
 var divesites = require('./routes/divesites');
 var auth = require('./routes/auth');
+var comments = require('./routes/comments');
 app.use('/', routes);
 app.use('/divesites', divesites);
+app.use('/divesites', comments);
 // Authentication routes
 app.use('/auth', auth);
 
