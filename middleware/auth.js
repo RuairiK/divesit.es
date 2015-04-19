@@ -6,6 +6,7 @@ var request = require('request');
 var User = require('../models/User');
 
 // Constants --- feel free to refactor these out of this file.
+// TOKEN_EXPIRY_DAYS: a token remains valid for this many days after it is created.
 var TOKEN_EXPIRY_DAYS = 14;
 
 /* Generate JSON web token */
@@ -27,8 +28,6 @@ var ensureAuthenticated = function (req, res, next) {
   }
   var token = req.headers.authorization.split(' ')[1];
   var payload = jwt.decode(token, keys.tokenSecret);
-  console.log("PAYLOAD!");
-  console.log(payload);
   if (payload.exp <= moment().unix()) {
     return res.status(401).send({message: 'Token has expired'});
   }
