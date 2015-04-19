@@ -1,9 +1,8 @@
 var express = require('express');
-var mongoose = require('mongoose');
-var User = require('../models/User');
-var keys = require('../keys');
+var router = express.Router();
 
-var app = require('../app');
+// User model schema
+var User = require('../models/User');
 
 // Satellizer requirements
 var request = require('request');
@@ -13,26 +12,18 @@ var qs = require('querystring');
 // Authentication middleware
 var auth = require('../middleware/auth');
 
-var router = express.Router();
-
-
-
 /* Get profile */
-
-
-router.get('/auth/profile', auth.ensureAuthenticated, function (req, res) {
+router.get('/profile', auth.ensureAuthenticated, function (req, res) {
   User.findById(req.user, function (err, user) {
     res.send(user);
   });
 });
 
-
 /* Authenticate with Google */
-
-router.post('/auth/google', auth.authenticateWithGoogle);
+router.post('/google', auth.authenticateWithGoogle);
 
 /* Authenticate with Facebook */
-router.post('/auth/facebook', auth.authenticateWithFacebook); 
+router.post('/facebook', auth.authenticateWithFacebook); 
 
 /* TODO Authenticate with email/password */
 
