@@ -16,7 +16,6 @@ router.get('/:id/comments', function (req, res, next) {
     }
     Comment.find({divesite_id: siteID}, function (err, data) {
         if (err) { return next(err); }
-        console.log(data);
         return res.json(data);
     });
 });
@@ -40,7 +39,6 @@ router.post('/:id/comments', auth.ensureAuthenticated, function (req, response, 
     // Step 1: find the user
     User.findOne({_id: userId}, function (err, user) {
         if (err) { return next(err); }
-        console.log(user);
         // Step 2: find the site
         Divesite.findOne({_id: siteId}, function (err, site) {
             if (err) { return next(err); }
@@ -54,7 +52,6 @@ router.post('/:id/comments', auth.ensureAuthenticated, function (req, response, 
                 },
                 text: text
             };
-            console.log(comment);
             Comment.create(comment, function (err, res) {
                 if (err) { return next(err); }
                 response.json(res);
