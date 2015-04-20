@@ -7,8 +7,6 @@ var ensureAuthenticated = function (req, res, next) {
     //console.log("ensureAuthenticated: request body:");
     //console.log(req.body);
     if (req.body.forceAuthenticate) {
-        //console.log("FORCING AUTHENTICATION");
-        //console.log(req.body);
         User.findOne({displayName: req.body.displayName}, function (err, user) {
             if (err) { return next(err); } 
             req.user = user._id;
@@ -24,9 +22,16 @@ var ensureAuthenticated = function (req, res, next) {
             return res.status(401).send({message: 'Token has expired'});
         }
         req.user = payload.sub;
-        console.log(req.user);
         next();
     }
 }
 
+// TODO: flesh these out for further testing
+var authenticateWithGoogle = function () {};
+var authenticateWithFacebook = function () {}; 
+var createToken = function () {}; 
+
 module.exports.ensureAuthenticated = ensureAuthenticated;
+module.exports.createToken = createToken;
+module.exports.authenticateWithGoogle = authenticateWithGoogle;
+module.exports.authenticateWithFacebook = authenticateWithFacebook;

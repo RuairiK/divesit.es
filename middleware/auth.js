@@ -55,8 +55,6 @@ var authenticateWithGoogle = function (req, res) {
 
     // Retrieve profile information about the current user
     request.get({url: peopleApiUrl, headers: headers, json: true}, function (err, response, profile) {
-      console.log("Received profile");
-      console.log(profile);
       // Link user accounts
       if (req.headers.authorization) {
         User.findOne({google: profile.sub}, function (err, existingUser) {
@@ -119,7 +117,6 @@ var authenticateWithFacebook = function (req, res) {
       if (response.statusCode !== 200) {
         return res.status(500).send({ message: profile.error.message });
       }
-      //console.log(response);
       if (req.headers.authorization) {
         User.findOne({ facebook: profile.id }, function(err, existingUser) {
           if (existingUser) {
@@ -134,9 +131,6 @@ var authenticateWithFacebook = function (req, res) {
             user.facebook = profile.id;
             user.picture = user.picture || 'https://graph.facebook.com/v2.3/' + profile.id + '/picture?type=large';
             user.displayName = user.displayName || profile.name;
-            console.log("not step 3b");
-            console.log("USER USER USER");
-            console.log(user);
             user.save(function() {
               var token = createToken(user);
               res.send({ token: token });
@@ -144,7 +138,6 @@ var authenticateWithFacebook = function (req, res) {
           });
         });
       } else {
-        console.log("Step 3b");
         // Step 3b. Create a new user account or return an existing one.
         User.findOne({ facebook: profile.id }, function(err, existingUser) {
           if (existingUser) {
@@ -155,11 +148,8 @@ var authenticateWithFacebook = function (req, res) {
           user.facebook = profile.id;
           user.picture = 'https://graph.facebook.com/' + profile.id + '/picture?type=large';
           user.displayName = profile.name;
-          console.log("USER USER USER");
-          console.log(user);
           user.save(function (err) {
             if (err) {
-              console.log("err");
               console.log(err);
             }
             var token = createToken(user);

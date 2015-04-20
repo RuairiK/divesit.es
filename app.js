@@ -9,6 +9,11 @@ var keys = require('./keys');
 
 var app = express();
 
+
+/*****************************************************************************/
+/* Environment-specific settings
+/*****************************************************************************/
+
 var mongodbConnString;
 if (app.get('env') === 'test') {
   mongodbConnString = "mongodb://"

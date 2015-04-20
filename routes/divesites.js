@@ -6,7 +6,12 @@ var Divesite = require('../models/Divesite');
 var User = require('../models/User');
 
 // Authentication middleware
-var auth = require('../middleware/auth');
+var auth;
+if (process.env.NODE_ENV == 'test') {
+    auth = require('../middleware/test-auth');
+} else {
+    auth = require('../middleware/auth');
+}
 
 /* GET dive sites listing. */
 router.get('/', function(req, res, next) {
@@ -32,7 +37,7 @@ router.post('/', auth.ensureAuthenticated, function(req, res, next) {
     // Create the object
     Divesite.create(site, function(err, post) {
         if (err) return next(err);
-        res.json(post);
+        res.status(201).json(post);
     });
 });
 
