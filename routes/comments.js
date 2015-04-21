@@ -2,11 +2,17 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-var auth = require('../middleware/auth');
 
 var Divesite = require('../models/Divesite');
 var User = require('../models/User');
 var Comment = require('../models/Comment');
+
+var auth;
+if (process.env.NODE_ENV == 'test') {
+    auth = require('../middleware/test-auth');
+} else {
+    auth = require('../middleware/auth');
+}
 
 router.get('/:id/comments', function (req, res, next) {
     var siteID = req.params.id;
