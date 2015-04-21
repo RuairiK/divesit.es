@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var keys = require('./keys'); 
 
 var app = express();
 
@@ -29,6 +28,7 @@ if (app.get('env') === 'test') {
         + keys.mongotest.host + ":" + keys.mongotest.port + "/"
         + keys.mongotest.db;
 } else {
+    var keys = require('./keys'); 
     mongodbConnString = "mongodb://"
     + keys.mongolab.user + ":" + keys.mongolab.password + "@"
     + keys.mongolab.host + ":" + keys.mongolab.port + "/"
