@@ -11,7 +11,6 @@ var routes = require('../routes/index');
 var Divesite = require('../models/Divesite');
 var User = require('../models/User');
 
-var keys = require('../keys');
 var request = require('supertest');
 
 var app = require('../app');
