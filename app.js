@@ -16,6 +16,8 @@ var app = express();
 var mongodbConnString;
 if (app.get('env') === 'test') {
     var keys = {
+        // For testing, don't require keys.js; retrieve these values
+        // from environment variables instead
         mongotest: {
             db: process.env.MONGO_TEST_DB,
             host: process.env.MONGO_TEST_HOST,
