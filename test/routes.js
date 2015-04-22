@@ -4,6 +4,7 @@ var assert = require('assert');
 var should = require('should');
 var mongoose = require('mongoose');
 var express = require('express');
+var HTTP = require('http-status-codes');
 
 var routes = require('../routes/index');
 
@@ -21,7 +22,7 @@ describe("GET /divesites", function () {
     afterEach(function () { });
 
     it("returns HTTP 200", function (done) {
-        request(app).get('/divesites').expect(200).end(done);
+        request(app).get('/divesites').expect(HTTP.OK).end(done);
     });
 
     it("returns JSON", function (done) {
@@ -49,7 +50,7 @@ describe("GET /divesites/:id", function () {
     it("returns HTTP 200 with a valid ID", function (done) {
         Divesite.find(function (err, res) {
             var validId = res[0]._id;
-            request(app).get('/divesites/' + validId).expect(200).end(done);
+            request(app).get('/divesites/' + validId).expect(HTTP.OK).end(done);
         });
     });
 
@@ -59,14 +60,14 @@ describe("GET /divesites/:id", function () {
             var id = res._id;
             Divesite.find({'_id': id}).remove(function () {
                 // At this point, the ID is no longer valid
-                request(app).get('/divesites/' + id).expect(404).end(done);
+                request(app).get('/divesites/' + id).expect(HTTP.NOT_FOUND).end(done);
             });
         });
     });
 
     it("returns HTTP 404 with an invalid ID of incorrect length", function (done) {
         var shortId = "short";
-        request(app).get('/divesites/' + shortId).expect(404).end(done);
+        request(app).get('/divesites/' + shortId).expect(HTTP.NOT_FOUND).end(done);
     });
 });
 
@@ -85,7 +86,7 @@ describe("POST /divesites", function () {
     });
 
     it("returns HTTP 401 without an authorization token", function (done) {
-        request(app).post('/divesites').send({}).expect(401).end(done);
+        request(app).post('/divesites').send({}).expect(HTTP.UNAUTHORIZED).end(done);
     });
 
     it("does not add a dive site without authorization", function (done) {
@@ -107,12 +108,11 @@ describe("POST /divesites", function () {
                 latitude: 0
             },
             chart_depth: 100
-            //description: "desc"
         };
         var body = newSite;
         body.forceAuthenticate = true;
         body.displayName = 'TEST_USER';
-        request(app).post('/divesites').send(body).expect(201).end(function (err, res) {
+        request(app).post('/divesites').send(body).expect(HTTP.CREATED).end(function (err, res) {
             if (err) {
                 return done(err);
             }
@@ -152,10 +152,7 @@ describe("PUT /divesites/:id", function () {
 
     it("returns HTTP 401 without authorization", function (done) {
         Divesite.findOne({name: "TEST_DIVESITE"}, function (err, res) {
-            request(app).put('/divesites/' + res._id).send({}).end(function (err, result) {
-                should.equal(result.status, 401);
-                done();
-            });
+            request(app).put('/divesites/' + res._id).send({}).expect(HTTP.UNAUTHORIZED).end(done);
         });
     });
 });
@@ -188,7 +185,7 @@ describe("PATCH /divesites/:id", function () {
             if (err) { done(err); }
             else {
                 request(app).patch('/divesites/' + res._id).send({name: 'CHANGED_NAME'}).end(function (err, result) {
-                    should.equal(result.status, 401);
+                    should.equal(result.status, HTTP.UNAUTHORIZED);
                     done();
                 });
             }
