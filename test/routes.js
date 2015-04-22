@@ -15,34 +15,6 @@ var request = require('supertest');
 
 var app = require('../app');
 
-describe("GET /auth/profile", function () {
-    before(function (done) {
-        User.create({displayName: 'TEST_USER'}, done);
-    });
-    after(function (done) {
-        User.findOneAndRemove({displayName: 'TEST_USER'}, done);
-    });
-
-    it('returns HTTP 401 without a valid authorization token', function (done) {
-        request(app).get('/auth/profile').expect(401).end(done);
-    });
-
-    // TODO: Test the 'happy path'. No authorization tokens are getting stored in the database (yet),
-    // so it's non-trivial to do this. What we are *expecting* is a JSON encoding of the User model
-    // with a 200 status code.
-    it('returns HTTP 200 when authentication is OK', function (done) {
-        request(app).get('/auth/profile').send({forceAuthenticate: true, displayName: 'TEST_USER'}).expect(200).end(done);
-    });
-
-    it('returns a JSON object when authentication is OK', function (done) {
-        request(app).get('/auth/profile').send({'forceAuthenticate': true, displayName: 'TEST_USER'}).end(function (err, res) {
-            if (err) { return done(err); }
-            should(res.body.displayName).equal('TEST_USER');
-            done();
-        });
-    });
-
-});
 
 describe("GET /divesites", function () {
     beforeEach(function () { });
@@ -72,7 +44,7 @@ describe("GET /divesites", function () {
 describe("GET /divesites/:id", function () {
     // Some hard-coded values that could potentially change, I guess
     //var validId = "54f5c339d65093780e3a3f2b";
-    var invalidId = "44f5c339d65093780e3a3f2b";
+    //var invalidId = "44f5c339d65093780e3a3f2b";
 
     it("returns HTTP 200 with a valid ID", function (done) {
         Divesite.find(function (err, res) {
@@ -80,6 +52,7 @@ describe("GET /divesites/:id", function () {
             request(app).get('/divesites/' + validId).expect(200).end(done);
         });
     });
+
     it("returns HTTP 404 with an invalid ID of correct length", function (done) {
         // create and delete an object, storing its ID
         Divesite.create({name: "TEST_DIVESITE"}, function (err, res) {
@@ -90,6 +63,7 @@ describe("GET /divesites/:id", function () {
             });
         });
     });
+
     it("returns HTTP 404 with an invalid ID of incorrect length", function (done) {
         var shortId = "short";
         request(app).get('/divesites/' + shortId).expect(404).end(done);
@@ -211,9 +185,7 @@ describe("PATCH /divesites/:id", function () {
 
     it("returns HTTP 401 without authorization", function (done) {
         Divesite.findOne({name: "TEST_DIVESITE"}, function (err, res) {
-            if (err) {
-                done(err);
-            }
+            if (err) { done(err); }
             else {
                 request(app).patch('/divesites/' + res._id).send({name: 'CHANGED_NAME'}).end(function (err, result) {
                     should.equal(result.status, 401);
@@ -222,5 +194,4 @@ describe("PATCH /divesites/:id", function () {
             }
         });
     });
-
 });
