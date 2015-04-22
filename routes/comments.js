@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-
+var HTTP = require('http-status-codes');
 
 var Divesite = require('../models/Divesite');
 var User = require('../models/User');
@@ -14,58 +14,30 @@ if (process.env.NODE_ENV == 'test') {
     auth = require('../middleware/auth');
 }
 
-router.get('/:id/comments', function (req, res, next) {
-    var siteID = req.params.id;
-    // Validate site ID
-    if (!siteID && Mongoose.Types.ObjectId.isValid(siteId)) {
-        return res.status(400).json({'message': 'Invalid or missing site ID'});
-    }
-    Comment.find({divesite_id: siteID}, function (err, data) {
-        if (err) { return next(err); }
-        return res.json(data);
-    });
+/* GET all comments */
+router.get('/', function (req, response, next) {
+    return response.status(HTTP.NOT_FOUND).send();
 });
 
-router.post('/:id/comments', auth.ensureAuthenticated, function (req, response, next) {
-    // Validate site ID
-    var siteId = req.params.id;
-    if (!(siteId && mongoose.Types.ObjectId.isValid(siteId))) {
-        return response.status(400).json({'message': 'Invalid or missing site ID'});
+/* GET an individual comment by ID */
+router.get('/:id', function (req, response, next) {
+    var commentId = req.params.id;
+    if (!(commentId && mongoose.Types.ObjectId.isValid(commentId))) {
+        return response.status(HTTP.NOT_FOUND).send();
     }
-    // Validate user ID
-    var userId = req.body.user_id;
-    if (!(userId && mongoose.Types.ObjectId.isValid(userId))) {
-        return response.status(400).json({'message': 'Invalid or missing user ID'});
-    }
-    // Validate text
-    var text = req.body.text;
-    if (!text) {
-        return response.status(400).json({'message': 'Empty comment'});
-    }
-    // Step 1: find the user
-    User.findOne({_id: userId}, function (err, user) {
-        if (err) { return next(err); }
-        // Step 2: find the site
-        Divesite.findOne({_id: siteId}, function (err, site) {
-            if (err) { return next(err); }
-            // User and site are valid
-            var comment = {
-                divesite_id: req.params.id,
-                user: {
-                    _id: user._id,
-                    picture: user.picture,
-                    displayName: user.displayName
-                },
-                text: text
-            };
-            Comment.create(comment, function (err, res) {
-                if (err) { return next(err); }
-                response.json(res);
-            });
-        });
+    Comment.findOne({_id: commentId}, function (err, comment) {
+        if (err) {return next(err); }
+        if (!comment) {
+            return response.status(HTTP.NOT_FOUND).send();
+        }
+        return response.json(comment);
     });
-    // We should have returned by now
-    //response.status(500).send(); // for now send not implemented
+})
+
+/* POST a new comment to no divesite */
+router.post('/', function (req, response, next) {
+    response.status(HTTP.METHOD_NOT_ALLOWED).send();
 });
+
 
 module.exports = router;
