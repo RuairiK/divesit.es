@@ -25,10 +25,8 @@ if (app.get('env') === 'test') {
             user: process.env.MONGO_TEST_USER,
             password: process.env.MONGO_TEST_PASSWORD
         }};
-        mongodbConnString = "mongodb://"
-        + keys.mongotest.user + ":" + keys.mongotest.password + "@"
-        + keys.mongotest.host + ":" + keys.mongotest.port + "/"
-        + keys.mongotest.db;
+        mongodbConnString = "mongodb://" + keys.mongotest.user + ":" + keys.mongotest.password + "@"
+        + keys.mongotest.host + ":" + keys.mongotest.port + "/" + keys.mongotest.db;
 } else {
     var keys = require('./keys'); 
     mongodbConnString = "mongodb://"
@@ -36,6 +34,7 @@ if (app.get('env') === 'test') {
     + keys.mongolab.host + ":" + keys.mongolab.port + "/"
     + keys.mongolab.db
 }
+
 console.log(mongodbConnString);
 console.log("Using environment: " + app.get('env'));
 
@@ -71,8 +70,10 @@ var divesites = require('./routes/divesites');
 var auth = require('./routes/auth');
 var comments = require('./routes/comments');
 app.use('/', routes);
+// Divesite routes, including comments on divesites
 app.use('/divesites', divesites);
-app.use('/divesites', comments);
+// Comment routes (for retrieving individual comments by ID)
+app.use('/comments', comments);
 // Authentication routes
 app.use('/auth', auth);
 
