@@ -73,35 +73,83 @@ describe("PATCH /comments/:id", function () {
   });
 
   describe("when authenticated as the comment's creator", function () {
-    it("returns HTTP 200 and the expected JSON object", function (done) {
-      request(app)
-      .patch('/comments/' + COMMENT._id)
-      .set('Force-Authenticate', true)
-      .set('Auth-ID', USER_1._id)
-      .send(body)
-      .expect(200)
-      .expect('Content-Type', /json/)
-      .end(function (err, res) {
-        if (err) return done(err);
-        //res.body.should.be.an.Object;
-        //res.body.should.not.be.empty;
-        //res.body.text.should.be.equal(newText);
-        done();
+    describe("with a valid comment ID", function () {
+      it("returns HTTP 200 and the expected JSON object", function (done) {
+        request(app)
+        .patch('/comments/' + COMMENT._id)
+        .set('Force-Authenticate', true)
+        .set('Auth-ID', USER_1._id)
+        .send(body)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end(function (err, res) {
+          if (err) return done(err);
+          //res.body.should.be.an.Object;
+          //res.body.should.not.be.empty;
+          //res.body.text.should.be.equal(newText);
+          done();
+        });
+      });
+
+
+      it("changes the comment text in the database", function (done) {
+        //var newText = 'Foo bar boz';
+        request(app)
+        .patch('/comments/' + COMMENT._id)
+        .set('Force-Authenticate', true)
+        .set('Auth-ID', USER_1._id)
+        .send(body)
+        .end(function (err, res) {
+          Comment.findOne({_id: COMMENT._id}, function (err, comment) {
+            if (err) return done(err);
+            comment.text.should.be.equal(newText);
+            done();
+          });
+        });
       });
     });
 
-
-    it("changes the comment text in the database", function (done) {
-      //var newText = 'Foo bar boz';
-      request(app)
-      .patch('/comments/' + COMMENT._id)
-      .set('Force-Authenticate', true)
-      .set('Auth-ID', USER_1._id)
-      .send(body)
-      .end(function (err, res) {
-        Comment.findOne({_id: COMMENT._id}, function (err, comment) {
+    describe("with an invalid comment ID", function () {
+      it("returns HTTP 404 and an empty object", function (done) {
+        request(app)
+        .patch("/comments/invalid_id")
+        .set('Force-Authenticate', true)
+        .set('Auth-ID', USER_1._id)
+        .send(body)
+        .expect(404)
+        .expect('Content-Type', /json/)
+        .end(function (err, res) {
           if (err) return done(err);
-          comment.text.should.be.equal(newText);
+          res.body.should.be.an.Object;
+          res.body.should.be.empty;
+          done();
+        });
+      });
+    });
+
+    describe("with a valid comment ID but no match in the database", function () {
+      var OLD_ID;
+      before(function (done) {
+        // create and destroy a comment to get its ID
+        var c = Object.create(COMMENT);
+        Comment.create(c, function (err, comment) {
+          if (err) return done(err);
+          OLD_ID = c._id;
+          Comment.remove({_id: c._id}, done);
+        });
+      });
+      it("returns HTTP 404 and an empty object", function (done) {
+        request(app)
+        .patch("/comments/" + OLD_ID)
+        .set('Force-Authenticate', true)
+        .set('Auth-ID', USER_1._id)
+        .send(body)
+        .expect(404)
+        .expect('Content-Type', /json/)
+        .end(function (err, res) {
+          if (err) return done(err);
+          res.body.should.be.an.Object;
+          res.body.should.be.empty;
           done();
         });
       });
