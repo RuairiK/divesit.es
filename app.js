@@ -35,13 +35,12 @@ if (app.get('env') === 'test') {
     + keys.mongolab.db
 }
 
-console.log(mongodbConnString);
-console.log("Using environment: " + app.get('env'));
-
 mongoose.connect(mongodbConnString, function(err){
-    if(err){
+    if (err) {
+      if (app.get('env') != 'test')
         console.log('Database connection error', err);
-    }else{
+    } else {
+      if (app.get('env') != 'test')
         console.log('Database connection successful');
     }
 });
@@ -58,7 +57,7 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(logger('dev'));
+//app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
