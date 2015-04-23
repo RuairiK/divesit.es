@@ -14,46 +14,67 @@ if (process.env.NODE_ENV == 'test') {
   auth = require('../middleware/auth');
 }
 
+function isValidObjectID(_id) {
+  return _id && mongoose.Types.ObjectId.isValid(_id);
+}
+
 /* GET all comments */
 router.get('/', function (req, response, next) {
-  return response.status(HTTP.NOT_FOUND).send();
+  // Currently not allowed; we may want to allow a feed for recent comments
+  // but we can implement that when we feel like it
+  return response.status(HTTP.NOT_FOUND).json({});
 });
+
 
 /* GET an individual comment by ID */
 router.get('/:id', function (req, response, next) {
   var commentId = req.params.id;
-  if (!(commentId && mongoose.Types.ObjectId.isValid(commentId))) {
-    return response.status(HTTP.NOT_FOUND).send();
+  // Validate comment ID before asking Mongoose to parse it
+  if (!isValidObjectID(commentId)) {
+    // Any invalid IDs return 404s
+    return response.status(HTTP.NOT_FOUND).json({});
   }
   Comment.findOne({_id: commentId}, function (err, comment) {
     if (err) {return next(err); }
     if (!comment) {
-      return response.status(HTTP.NOT_FOUND).send();
+      return response.status(HTTP.NOT_FOUND).json({});
     }
     return response.json(comment);
   });
 })
 
+
 /* POST a new comment to no divesite */
 router.post('/', function (req, response, next) {
-  response.status(HTTP.METHOD_NOT_ALLOWED).send();
+  response.status(HTTP.METHOD_NOT_ALLOWED).json({});
 });
+
+
+/* DELETE a comment */
+router.delete('/:id', function (req, response, next) {
+  if (!(commentId && mongoose.Types.ObjectId.isValid(commentId))) {
+    return response.status(HTTP.NOT_FOUND).json({});
+  }
+});
+
 
 /* PATCH an existing comment */
 router.patch('/:id', auth.ensureAuthenticated, function (req, response, next) {
   var commentId = req.params.id;
-  if (!(commentId && mongoose.Types.ObjectId.isValid(commentId))) {
-    return response.status(HTTP.NOT_FOUND).send();
+  // Validate comment ID before passing it to Mongoose
+  if (!isValidObjectID(commentId)) {
+    return response.status(HTTP.NOT_FOUND).json({});
   }
   Comment.findOne({_id: commentId}, function (err, comment) {
     if (err) {return next(err);}
+    // Users can only edit their own comments
     if (req.user != comment.user._id) {
       return response.status(HTTP.FORBIDDEN).json({});
     } 
     // The only changes allowed are to the comment text
     Comment.findByIdAndUpdate({_id: commentId}, {text: req.body.text}, function (err, numAffected, data) {
       if (err) {return next(err);}
-      return response.json(numAffected);
+      return response.status(HTTP.OK).json(numAffected);
     });
   });
 });
