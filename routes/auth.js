@@ -9,8 +9,15 @@ var request = require('request');
 var jwt = require('jwt-simple');
 var moment = require('moment');
 var qs = require('querystring');
-// Authentication middleware
-var auth = require('../middleware/auth');
+// Authentication middleware (environment-specific)
+var auth;
+
+/* Environment-specific settings */
+if (process.env.NODE_ENV == 'test') {
+    auth = require('../middleware/test-auth');
+} else {
+    auth = require('../middleware/auth');
+}
 
 /* Get profile */
 router.get('/profile', auth.ensureAuthenticated, function (req, res) {
