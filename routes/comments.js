@@ -67,6 +67,10 @@ router.patch('/:id', auth.ensureAuthenticated, function (req, response, next) {
   }
   Comment.findOne({_id: commentId}, function (err, comment) {
     if (err) {return next(err);}
+    // Return a 404 if we can't retrieve the comment
+    if (!comment) {
+      return response.status(HTTP.NOT_FOUND).json({});
+    }
     // Users can only edit their own comments
     if (req.user != comment.user._id) {
       return response.status(HTTP.FORBIDDEN).json({});
