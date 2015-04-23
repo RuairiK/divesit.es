@@ -15,20 +15,22 @@ var app = require.main.require('app');
 
 describe("POST /divesites", function () {
   var TEST_USER;
+
   before(function (done) {
     User.create({displayName: 'TEST_USER'}, function (err, user) {
       TEST_USER = user;
       done();
     });
   });
+
   after(function (done) {
     User.findOneAndRemove({_id: TEST_USER._id}, done);
   });
 
-  afterEach(function () {
+  afterEach(function (done) {
     // We have to call exec() at the end of the chain if calling remove()
     // without a callback
-    Divesite.find({name: "TEST_DIVESITE"}).remove().exec();
+    Divesite.find({name: "TEST_DIVESITE"}).remove(done);
   });
 
   describe("without authorization", function () {
@@ -61,20 +63,19 @@ describe("POST /divesites", function () {
       newSite = {
         name: "TEST_DIVESITE",
         category: "wreck",
+        depth: 100,
         coords: {
           longitude: 0,
           latitude: 0
         },
-        chart_depth: 100
       };
-      body = newSite;
     });
 
     it("returns HTTP 201 and the new site data", function (done) {
       request(app).post('/divesites')
       .set('force-authenticate', true)
       .set('auth-id', TEST_USER._id)
-      .send(body)
+      .send(newSite)
       .expect(HTTP.CREATED)
       .end(done);
     });
@@ -83,7 +84,7 @@ describe("POST /divesites", function () {
       request(app).post('/divesites')
       .set('force-authenticate', true)
       .set('auth-id', TEST_USER._id)
-      .send(body)
+      .send(newSite)
       .expect(HTTP.CREATED)
       .end(function (err, res) {
         if (err) { return done(err); }
