@@ -142,8 +142,6 @@ router.post('/:id/comments', auth.ensureAuthenticated, function (req, response, 
       });
     });
   });
-  // We should have returned by now
-  //response.status(500).send(); // for now send not implemented
 });
 
 module.exports = router;
