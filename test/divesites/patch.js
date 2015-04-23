@@ -39,9 +39,9 @@ describe("PATCH /divesites/:id", function () {
   });
 
   afterEach(function (done) {
-    Divesite.find({name: "TEST_DIVESITE"}).remove(function () {
-      done();
-    });
+    Divesite.find({name: "TEST_DIVESITE"}).remove().exec();
+    Divesite.find({name: "CHANGED_NAME"}).remove().exec();
+    done();
   });
 
   describe("without authorization", function () {

@@ -108,31 +108,31 @@ describe("PATCH /comments/:id", function () {
     });
   });
 
-    describe("when authenticated as another user", function () {
-      it("doesn't change the contents of the database", function (done) {
-        request(app)
-        .patch('/comments/' + COMMENT._id)
-        .set('Force-Authenticate', true)
-        .set('Auth-ID', USER_2._id)
-        .send(body)
-        .end(function (err, res) {
-          Comment.findOne({_id: COMMENT._id}, function (err, comment) {
-            // Comment in db
-            comment.text.should.be.equal(COMMENT.text);
-            done();
-          });
+  describe("when authenticated as another user", function () {
+    it("doesn't change the contents of the database", function (done) {
+      request(app)
+      .patch('/comments/' + COMMENT._id)
+      .set('Force-Authenticate', true)
+      .set('Auth-ID', USER_2._id)
+      .send(body)
+      .end(function (err, res) {
+        Comment.findOne({_id: COMMENT._id}, function (err, comment) {
+          // Comment in db
+          comment.text.should.be.equal(COMMENT.text);
+          done();
         });
-      });
-
-      it("returns HTTP 403", function (done) {
-        request(app)
-        .patch('/comments/' + COMMENT._id)
-        .set('Force-Authenticate', true)
-        .set('Auth-ID', USER_2._id)
-        .send(body)
-        .expect(403)
-        .end(done);
       });
     });
 
+    it("returns HTTP 403", function (done) {
+      request(app)
+      .patch('/comments/' + COMMENT._id)
+      .set('Force-Authenticate', true)
+      .set('Auth-ID', USER_2._id)
+      .send(body)
+      .expect(403)
+      .end(done);
+    });
   });
+
+});
