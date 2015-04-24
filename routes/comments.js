@@ -28,13 +28,13 @@ router.get('/', function (req, response, next) {
 
 /* GET an individual comment by ID */
 router.get('/:id', function (req, response, next) {
-  var commentId = req.params.id;
+  var commentID = req.params.id;
   // Validate comment ID before asking Mongoose to parse it
-  if (!isValidObjectID(commentId)) {
+  if (!isValidObjectID(commentID)) {
     // Any invalid IDs return 404s
     return response.status(HTTP.NOT_FOUND).json({});
   }
-  Comment.findOne({_id: commentId}, function (err, comment) {
+  Comment.findOne({_id: commentID}, function (err, comment) {
     if (err) {return next(err); }
     if (!comment) {
       return response.status(HTTP.NOT_FOUND).json({});
@@ -51,21 +51,30 @@ router.post('/', function (req, response, next) {
 
 
 /* DELETE a comment */
-router.delete('/:id', function (req, response, next) {
-  if (!(commentId && mongoose.Types.ObjectId.isValid(commentId))) {
+router.delete('/:id', auth.ensureAuthenticated, function (req, response, next) {
+  var commentID = req.params.id;
+  if (!(commentID && mongoose.Types.ObjectId.isValid(commentID))) {
     return response.status(HTTP.NOT_FOUND).json({});
   }
+  Comment.findOne({_id: commentID}, function (err, comment) {
+    if (err) return done(err);
+    if (!comment) return response.status(HTTP.NOT_FOUND).json({});
+    if (req.user != comment.user._id) return response.status(HTTP.FORBIDDEN).json({});
+    Comment.remove({_id: commentID}, function (err, comment) {
+      response.status(HTTP.NO_CONTENT).json({});
+    });
+  });
 });
 
 
 /* PATCH an existing comment */
 router.patch('/:id', auth.ensureAuthenticated, function (req, response, next) {
-  var commentId = req.params.id;
+  var commentID = req.params.id;
   // Validate comment ID before passing it to Mongoose
-  if (!isValidObjectID(commentId)) {
+  if (!isValidObjectID(commentID)) {
     return response.status(HTTP.NOT_FOUND).json({});
   }
-  Comment.findOne({_id: commentId}, function (err, comment) {
+  Comment.findOne({_id: commentID}, function (err, comment) {
     if (err) {return next(err);}
     // Return a 404 if we can't retrieve the comment
     if (!comment) {
@@ -76,7 +85,7 @@ router.patch('/:id', auth.ensureAuthenticated, function (req, response, next) {
       return response.status(HTTP.FORBIDDEN).json({});
     } 
     // The only changes allowed are to the comment text
-    Comment.findByIdAndUpdate({_id: commentId}, {text: req.body.text}, function (err, numAffected, data) {
+    Comment.findByIdAndUpdate({_id: commentID}, {text: req.body.text}, function (err, numAffected, data) {
       if (err) {return next(err);}
       return response.status(HTTP.OK).json(numAffected);
     });

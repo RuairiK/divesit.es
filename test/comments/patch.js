@@ -125,63 +125,63 @@ describe("PATCH /comments/:id", function () {
           });
         });
       });
+    });
 
-      describe("with an invalid comment ID", function () {
-        it("returns HTTP 404 and an empty object", function (done) {
+    describe("with an invalid comment ID", function () {
+      it("returns HTTP 404 and an empty object", function (done) {
+        User.findOne(function (err, user) {
+          if (err) return done(err);
+          request(app)
+          .patch("/comments/invalid_id")
+          .set('Force-Authenticate', true)
+          .set('Auth-ID', user._id)
+          .send({text: 'foo bar boz'})
+          .expect(404)
+          .expect('Content-Type', /json/)
+          .end(function (err, res) {
+            if (err) return done(err);
+            res.body.should.be.an.Object;
+            res.body.should.be.empty;
+            done();
+          });
+        });
+      });
+    });
+
+    describe("with a valid comment ID but no match in the database", function () {
+
+      var oldID;
+      before(function (done) {
+        // create and destroy a comment to get its ID
+        Divesite.findOne(function (err, site) {
+          if (err) return done(err);
           User.findOne(function (err, user) {
             if (err) return done(err);
-            request(app)
-            .patch("/comments/invalid_id")
-            .set('Force-Authenticate', true)
-            .set('Auth-ID', user._id)
-            .send({text: 'foo bar boz'})
-            .expect(404)
-            .expect('Content-Type', /json/)
-            .end(function (err, res) {
+            var userObj = { _id: user._id, picture: user.picture, displayName: user.displayName };
+            var c = { divesite_id: site._id, user: userObj, text: "blah blah blah" };
+            Comment.create(c, function (err, comment) {
               if (err) return done(err);
-              res.body.should.be.an.Object;
-              res.body.should.be.empty;
-              done();
+              oldId = c._id;
+              Comment.remove({_id: c._id}, done);
             });
           });
         });
       });
 
-      describe("with a valid comment ID but no match in the database", function () {
-
-        var oldID;
-        before(function (done) {
-          // create and destroy a comment to get its ID
-          Divesite.findOne(function (err, site) {
+      it("returns HTTP 404 and an empty object", function (done) {
+        User.findOne(function (err, user) {
+          request(app)
+          .patch("/comments/" + oldID)
+          .set('Force-Authenticate', true)
+          .set('Auth-ID', user._id)
+          .send({text: 'foo bar boz'})
+          .expect(404)
+          .expect('Content-Type', /json/)
+          .end(function (err, res) {
             if (err) return done(err);
-            User.findOne(function (err, user) {
-              if (err) return done(err);
-              var userObj = { _id: user._id, picture: user.picture, displayName: user.displayName };
-              var c = { divesite_id: site._id, user: userObj, text: "blah blah blah" };
-              Comment.create(c, function (err, comment) {
-                if (err) return done(err);
-                oldId = c._id;
-                Comment.remove({_id: c._id}, done);
-              });
-            });
-          });
-        });
-
-        it("returns HTTP 404 and an empty object", function (done) {
-          User.findOne(function (err, user) {
-            request(app)
-            .patch("/comments/" + oldID)
-            .set('Force-Authenticate', true)
-            .set('Auth-ID', user._id)
-            .send({text: 'foo bar boz'})
-            .expect(404)
-            .expect('Content-Type', /json/)
-            .end(function (err, res) {
-              if (err) return done(err);
-              res.body.should.be.an.Object;
-              res.body.should.be.empty;
-              done();
-            });
+            res.body.should.be.an.Object;
+            res.body.should.be.empty;
+            done();
           });
         });
       });
