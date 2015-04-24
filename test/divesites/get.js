@@ -10,10 +10,38 @@ var request = require('supertest');
 var routes = require.main.require('routes/index');
 var Divesite = require.main.require('models/Divesite');
 var User = require.main.require('models/User');
+var Comment = require.main.require('models/Comment');
 var app = require.main.require('app');
 
+function beforeAll () {
+  // Set up some dummy sites
+  [1, 2, 3].forEach (function (i) {
+    var newSite = {
+      name: "TEST_DIVESITE_" + i,
+      category: "wreck",
+      depth: 100,
+      loc: [i, i]
+    };
+    Divesite.create(newSite, function (err, res) {
+      if (err) {
+        console.log(err);
+        // TODO: Do something else? Fail the tests?
+      }
+    });
+  });
+}
+
+function afterAll () {
+  Divesite.find().remove().exec();
+  User.find().remove().exec();
+  Comment.find().remove().exec();
+}
 
 describe("GET /divesites", function () {
+
+  before(beforeAll);
+  after(afterAll);
+
   it("returns HTTP 200 and a list of objects", function (done) {
     request(app)
     .get('/divesites')
@@ -30,7 +58,7 @@ describe("GET /divesites", function () {
 
   it('retrieves the correct number of sites from the database', function (done) {
     Divesite.find(function (err, res) {
-      // Get the number of dive sites from the database
+      // Get the number of dive sites from the database 
       var correctLength = res.length;
       request(app)
       .get('/divesites')
@@ -43,6 +71,9 @@ describe("GET /divesites", function () {
 });
 
 describe("GET /divesites/:id", function () {
+
+  before(beforeAll);
+  after(afterAll);
 
   describe("with a valid ID", function () {
     it("returns HTTP 200 and an object with the expected properties", function (done) {
@@ -67,7 +98,14 @@ describe("GET /divesites/:id", function () {
   describe("with a valid ID with no match", function () {
     it("returns HTTP 404 and an empty object", function (done) {
       // create and delete an object, storing its ID
-      Divesite.create({name: "TEST_DIVESITE"}, function (err, res) {
+      var dummySite = {
+        name: "dummy_site",
+        category: "wreck",
+        depth: 100,
+        loc: [0, 0]
+      };
+      Divesite.create(dummySite, function (err, res) {
+        if (err) return done(err);
         var id = res._id;
         Divesite.find({'_id': id}).remove(function () {
           // At this point, the ID is no longer valid

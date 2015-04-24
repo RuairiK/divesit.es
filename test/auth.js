@@ -17,14 +17,16 @@ var app = require('../app');
 
 describe("GET /auth/profile", function () {
   var TEST_USER;
+
   before(function (done) {
     User.create({displayName: 'TEST_USER'}, function (err, user) {
       TEST_USER = user;
       done();
     });
   });
+
   after(function (done) {
-    User.findOneAndRemove({_id: TEST_USER._id}, done);
+    User.find().remove(done);
   });
 
   describe("without authorization", function () {

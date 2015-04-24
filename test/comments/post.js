@@ -13,27 +13,14 @@ var User = require.main.require('models/User');
 var Comment = require.main.require('models/Comment');
 var app = require.main.require('app');
 
+var tearDown = require('./utils').tearDown;
+var beforeAll = require('./utils').createSiteAndUser;
 
 describe("POST /divesites/:id/comments", function () {
   var TEST_USER, TEST_DIVESITE, NUM_COMMENTS;
-  before(function (done) {
-    Divesite.create({name: "TEST_DIVESITE"}, function (err, site) {
-      TEST_DIVESITE = site;
-      User.create({displayName: 'TEST_USER', picture: 'http://example.com/example.png'}, function (err, user) {
-        TEST_USER = user;
-        Comment.find(function (err, comments) {
-          NUM_COMMENTS = comments.length;
-          done();
-        });
-      });
-    });
-  });
 
-  after(function () {
-    User.find({displayName: 'TEST_USER'}).remove().exec();
-    Divesite.find({name: "TEST_DIVESITE"}).remove().exec();
-    Comment.find().remove().exec();
-  });
+  before(beforeAll);
+  after(tearDown);
 
   afterEach(function (done) {
     Comment.find().remove(done);
@@ -41,59 +28,83 @@ describe("POST /divesites/:id/comments", function () {
 
   describe("without authorization", function () {
     it("returns HTTP 401", function (done) {
-        request(app)
-        .post('/divesites/' + TEST_DIVESITE._id + '/comments')
-        .send({text: 'blah blah', user_id: TEST_USER._id})
-        .expect(HTTP.UNAUTHORIZED)
-        .end(done);
+      Divesite.findOne(function (err, site) {
+        if (err) return done(err);
+        User.findOne(function(err, user) {
+          if (err) return done(err);
+          request(app)
+          .post('/divesites/' + site._id + '/comments')
+          .send({text: 'blah blah', user_id: user._id})
+          .expect(HTTP.UNAUTHORIZED)
+          .end(done);
+        });
+      });
     });
 
     it("doesn't add a comment to the database", function (done) {
-        request(app)
-        .post('/divesites/' + TEST_DIVESITE._id + '/comments')
-        .send({text: 'blah blah', user_id: TEST_USER._id})
-        .end(function (err, res) {
+      Divesite.findOne(function (err, site) {
+        if (err) return done(err);
+        User.findOne(function(err, user) {
           if (err) return done(err);
-          Comment.find(function (err, res) {
+          request(app)
+          .post('/divesites/' + site._id + '/comments')
+          .send({text: 'blah blah', user_id: user._id})
+          .end(function (err, res) {
             if (err) return done(err);
-            res.length.should.equal(NUM_COMMENTS);
+            Comment.find(function (err, res) {
+              if (err) return done(err);
+              res.length.should.equal(0); // should be empty
+            });
+            done();
           });
-          done();
         });
+      });
     });
   });
 
   describe("with authorization", function () {
 
     it("returns HTTP 201 and an object", function (done) {
-      request(app)
-      .post('/divesites/' + TEST_DIVESITE._id + '/comments')
-      .set('force-authenticate', true)
-      .set('auth-id', TEST_USER._id)
-      .send({text: 'blah blah', user_id: TEST_USER._id})
-      .end(function (err, res) {
+      Divesite.findOne(function (err, site) {
         if (err) return done(err);
-        res.body.should.be.an.Object;
-        res.body.should.have.properties('_id', 'user', 'created_at', 'updated_at', 'text');
-        res.body.user.should.have.properties(['_id', 'displayName', 'picture']);
-        done();
+        User.findOne(function(err, user) {
+          if (err) return done(err);
+          request(app)
+          .post('/divesites/' + site._id + '/comments')
+          .set('force-authenticate', true)
+          .set('auth-id', user._id)
+          .send({text: 'blah blah'})
+          .end(function (err, res) {
+            if (err) return done(err);
+            res.body.should.be.an.Object;
+            res.body.should.have.properties('_id', 'user', 'created_at', 'updated_at', 'text');
+            res.body.user.should.have.properties(['_id', 'displayName', 'picture']);
+            done();
+          });
+        });
       });
     });
 
     it("adds a comment to the database", function (done) {
-      request(app)
-      .post('/divesites/' + TEST_DIVESITE._id + '/comments')
-      .set('force-authenticate', true)
-      .set('auth-id', TEST_USER._id)
-      .send({text: 'blah blah', user_id: TEST_USER._id})
-      .expect(HTTP.CREATED)
-      .end(function (err, res) {
+      Divesite.findOne(function (err, site) {
         if (err) return done(err);
-        Comment.find(function (err, res) {
+        User.findOne(function(err, user) {
           if (err) return done(err);
-          res.length.should.equal(NUM_COMMENTS + 1);
+          request(app)
+          .post('/divesites/' + site._id + '/comments')
+          .set('force-authenticate', true)
+          .set('auth-id', user._id)
+          .send({text: 'blah blah'})
+          .expect(HTTP.CREATED)
+          .end(function (err, res) {
+            if (err) return done(err);
+            Comment.find(function (err, res) {
+              if (err) return done(err);
+              res.length.should.equal(1);
+            });
+            done();
+          });
         });
-        done();
       });
     });
   });

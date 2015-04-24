@@ -10,19 +10,27 @@ var request = require('supertest');
 var routes = require.main.require('routes/index');
 var Divesite = require.main.require('models/Divesite');
 var User = require.main.require('models/User');
+var Comment = require.main.require('models/Comment');
 var app = require.main.require('app');
+
+function afterAll () {
+  Divesite.find().remove().exec();
+  User.find().remove().exec();
+  Comment.find().remove().exec();
+}
 
 describe("PATCH /divesites/:id", function () {
   var USER, DIVESITE;
+
   before(function (done) {
+    // Create a user
     User.create({displayName: 'TEST_USER'}, function (err, user) {
       USER = user;
       done();
     });
   });
-  after(function (done) {
-    User.findOneAndRemove({_id: USER._id}, done);
-  });
+
+  after(afterAll);
 
   beforeEach(function (done) {
     var site = {
@@ -38,9 +46,9 @@ describe("PATCH /divesites/:id", function () {
     });
   });
 
+
   afterEach(function (done) {
-    Divesite.find({name: "TEST_DIVESITE"}).remove().exec();
-    Divesite.find({name: "CHANGED_NAME"}).remove().exec();
+    Divesite.find().remove().exec();
     done();
   });
 
@@ -55,6 +63,7 @@ describe("PATCH /divesites/:id", function () {
         done();
       });
     });
+
     it("doesn't change the site in the database", function (done) {
       request(app)
       .patch('/divesites' + DIVESITE._id)
@@ -80,6 +89,7 @@ describe("PATCH /divesites/:id", function () {
       .expect(200)
       .end(done);
     });
+
     it("updates the site in the database", function (done) {
       var newName = 'CHANGED_NAME';
       request(app)
@@ -96,6 +106,5 @@ describe("PATCH /divesites/:id", function () {
         });
       });
     });
-
   });
 });
