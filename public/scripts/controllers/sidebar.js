@@ -63,7 +63,7 @@ app.controller('SidebarController',
     $scope.updateAllCategories = function(){
       Object.keys($scope.preferences.categories).forEach(function (k) {
           var category = k;
-          var show = $scope.preferences[k];
+          var show = $scope.preferences.categories[k];
           var filterEventData = {
                                   category: category, 
                                   show: show,

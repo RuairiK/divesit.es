@@ -22,6 +22,8 @@ module.exports = function(config) {
       'public/libs/angular-route/angular-route.js',
       'public/libs/angular-mocks/angular-mocks.js',
       'public/libs/angular-cookies/angular-cookies.js',
+      'public/libs/satellizer/satellizer.min.js',
+      'public/libs/underscore/underscore.js',
       {pattern: 'public/libs/angular-google-maps/dist/*.js', included: true},
       {pattern: 'public/scripts/**/*.js', included: true},
       {pattern: 'public/scripts/*.js', included: true},
@@ -45,7 +47,6 @@ module.exports = function(config) {
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['coverage', 'spec'],
-
 
     // web server port
     port: 9876,
