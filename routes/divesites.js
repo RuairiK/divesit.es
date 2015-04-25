@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
-var Divesite = require.main.require('models/Divesite');
-var User = require.main.require('models/User');
-var Comment = require.main.require('models/Comment');
-var validation = require.main.require('middleware/validation');
+var Divesite = require('../models/Divesite');
+var User = require('../models/User');
+var Comment = require('../models/Comment');
+var validation = require('../middleware/validation');
 
 // HTTP status codes
 var HTTP = require('http-status-codes');
@@ -13,9 +13,9 @@ var HTTP = require('http-status-codes');
 // Authentication middleware
 var auth;
 if (process.env.NODE_ENV == 'test') {
-  auth = require.main.require('middleware/test-auth');
+  auth = require('../middleware/test-auth');
 } else {
-  auth = require.main.require('middleware/auth');
+  auth = require('../middleware/auth');
 }
 
 /* GET dive sites listing. */
@@ -71,13 +71,28 @@ router.put('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, functio
   });
 });
 
+
 /* PATCH /divesites/:id */
 router.patch('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function (req, res, next) {
-  Divesite.findByIdAndUpdate(req.params.id, req.body, function (err, data) {
-    if (err) return next(err);
-    res.status(HTTP.OK).json(data);
+  Divesite.findById(req.params.id, function (err, site) {
+    if (!site) return res.status(HTTP.NOT_FOUND).json({}); // Handle valid IDs with no match
+    // Whitelisted fields:
+    // name, loc, depth, description, category
+    site.name = req.body.name || site.name;
+    site.loc = req.body.coords && req.body.coords.latitude && req.body.coords.longitude ?
+        [req.body.coords.latitude, req.body.coords.longitude] : site.loc;
+    site.chart_depth = req.body.depth || site.chart_depth;
+    site.description = req.body.description || site.description;
+    site.category = req.body.category || site.category;
+    site.updated_at = Date.now();
+    // Save and return the site or errors
+    site.save(function (err) {
+      if (err) return res.status(HTTP.BAD_REQUEST).json(err);
+      return res.status(HTTP.OK).json(site);
+    });
   });
 });
+
 
 /* DELETE /divesites/:id */
 router.delete('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function(req, res, next) {
