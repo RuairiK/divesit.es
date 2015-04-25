@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
 
+var mongoose = require('mongoose');
 var Divesite = require('../models/Divesite');
 var User = require('../models/User');
 var Comment = require('../models/Comment');
-var validation = require('../middleware/validation');
 
 // HTTP status codes
 var HTTP = require('http-status-codes');
@@ -47,7 +46,12 @@ router.post('/', auth.ensureAuthenticated, function(req, res, next) {
 });
 
 /* GET /divesites/id */
-router.get('/:id', validation.hasValidIdOr404, function(req, res, next) {
+router.get('/:id', function(req, res, next) {
+  // Check that the ID is a valid Mongoose ObjectID and 404 early
+  // (otherwise Mongoose tries to cast it and returns a 500 Server Error)
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(HTTP.NOT_FOUND).json({});
+  }
   Divesite.findById(req.params.id, function (err, data) {
     if (err) {
       return next(err);
@@ -64,49 +68,26 @@ router.get('/:id', validation.hasValidIdOr404, function(req, res, next) {
 /* PUT /divesites/:id */
 // TODO: This is the more appropriate HTTP verb for complete replacements.
 // HTTP PATCH more accurately reflects the behaviour of mongoose#findByIdAndUpdate
-router.put('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function(req, res, next) {
+router.put('/:id', auth.ensureAuthenticated, function(req, res, next) {
   Divesite.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
   });
 });
 
-
 /* PATCH /divesites/:id */
-router.patch('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function (req, res, next) {
-  Divesite.findById(req.params.id, function (err, site) {
-    if (!site) return res.status(HTTP.NOT_FOUND).json({}); // Handle valid IDs with no match
-    // Whitelisted fields:
-    // name, loc, depth, description, category
-    site.name = req.body.name || site.name;
-    site.loc = req.body.coords && req.body.coords.latitude && req.body.coords.longitude ?
-        [req.body.coords.latitude, req.body.coords.longitude] : site.loc;
-    site.chart_depth = req.body.depth || site.chart_depth;
-    site.description = req.body.description || site.description;
-    site.category = req.body.category || site.category;
-    site.updated_at = Date.now();
-    // Save and return the site or errors
-    site.save(function (err) {
-      if (err) return res.status(HTTP.BAD_REQUEST).json(err);
-      return res.status(HTTP.OK).json(site);
-    });
+router.patch('/:id', auth.ensureAuthenticated, function (req, res, next) {
+  Divesite.findByIdAndUpdate(req.params.id, req.body, function (err, data) {
+    if (err) return next(err);
+    res.json(data);
   });
 });
 
-
 /* DELETE /divesites/:id */
-router.delete('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function(req, res, next) {
-  Divesite.findById(req.params.id, req.body, function (err, site) {
+router.delete('/:id', auth.ensureAuthenticated, function(req, res, next) {
+  Divesite.findByIdAndRemove(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
-    if (!site) return res.status(HTTP.NOT_FOUND).json({});
-    if (req.user != site.creator_id) {
-      // Only a site's creator can delete it
-      return res.status(HTTP.FORBIDDEN).json({});
-    }
-    Divesite.findById({_id: site._id}).remove(function (err, done) {
-      if (err) return next(err);
-      res.status(HTTP.NO_CONTENT).json({});
-    });
+    res.json(post);
   });
 });
 

@@ -9,7 +9,6 @@ var request = require('request');
 var jwt = require('jwt-simple');
 var moment = require('moment');
 var qs = require('querystring');
-var HTTP = require('http-status-codes');
 // Authentication middleware (environment-specific)
 var auth;
 
@@ -25,15 +24,6 @@ router.get('/profile', auth.ensureAuthenticated, function (req, res) {
   User.findById(req.user, function (err, user) {
     res.send(user);
   });
-});
-
-/* POST profile */
-router.post('/profile', auth.ensureAuthenticated, function (req, res) {
-  // Return HTTP 405 "Method not allowed"
-  res.status(HTTP.METHOD_NOT_ALLOWED).json({});
-});
-
-router.patch('/profile', auth.ensureAuthenticated, function (req, res) {
 });
 
 /* Authenticate with Google */
