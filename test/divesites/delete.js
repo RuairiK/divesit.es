@@ -88,7 +88,7 @@ describe("DELETE /divesites/:id", function () {
                     Divesite.findById(site._id, function (err, res) {
                       if (err) return done(err);
                       should(res).not.be.null;
-                      res.be.an.Object;
+                      res.should.be.an.Object;
                       res.should.not.be.empty;
                       res._id.should.equal(site._id);
                       res.name.should.equal(site.name);
