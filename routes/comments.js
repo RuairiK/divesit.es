@@ -3,10 +3,10 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var HTTP = require('http-status-codes');
 
-var Divesite = require.main.require('models/Divesite');
-var User = require.main.require('models/User');
-var Comment = require.main.require('models/Comment');
-var validation = require.main.require('middleware/validation');
+var Divesite = require('../models/Divesite');
+var User = require('../models/User');
+var Comment = require('../models/Comment');
+var validation = require('../middleware/validation');
 
 var auth;
 if (process.env.NODE_ENV == 'test') {
@@ -71,9 +71,13 @@ router.patch('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, funct
       return response.status(HTTP.FORBIDDEN).json({});
     } 
     // The only changes allowed are to the comment text
-    Comment.findByIdAndUpdate({_id: req.params.id}, {text: req.body.text}, function (err, numAffected, data) {
-      if (err) {return next(err);}
-      return response.status(HTTP.OK).json(numAffected);
+    comment.text = req.body.text;
+    comment.updated_at = Date.now();
+    comment.save(function (err) {
+      if (err) {
+        return next(err);
+      }
+      return response.status(HTTP.OK).json(comment);
     });
   });
 });
