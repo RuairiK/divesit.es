@@ -15,10 +15,6 @@ if (process.env.NODE_ENV == 'test') {
   auth = require('../middleware/auth');
 }
 
-function isValidObjectID(_id) {
-  return _id && mongoose.Types.ObjectId.isValid(_id);
-}
-
 /* GET all comments */
 router.get('/', function (req, response, next) {
   // Currently not allowed; we may want to allow a feed for recent comments
