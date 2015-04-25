@@ -24,7 +24,7 @@
     "querystring": "^0.2.0",
     "request": "^2.55.0",
     "serve-favicon": "~2.2.0",
-    "should": "latest"
+    "should": "~6.0.1"
   },
   "devDependencies": {
     "debug": "^2.1.3",
