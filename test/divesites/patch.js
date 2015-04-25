@@ -6,7 +6,6 @@ var mongoose = require('mongoose');
 var express = require('express');
 var HTTP = require('http-status-codes');
 var request = require('supertest');
-var moment = require('moment');
 
 var routes = require.main.require('routes/index');
 var Divesite = require.main.require('models/Divesite');
@@ -39,20 +38,18 @@ describe("PATCH /divesites/:id", function () {
       category: "wreck",
       loc: [0.0, 0.0],
       chart_depth: 100,
-      description: "desc",
-      creator_id: USER._id
+      description: "desc"
     };
     Divesite.create(site, function (err, res) {
       DIVESITE = res;
       done();
-      //});
     });
   });
 
 
   afterEach(function (done) {
-    // After each test, remove all divesites
-    Divesite.find().remove(done);
+    Divesite.find().remove().exec();
+    done();
   });
 
   describe("without authorization", function () {
@@ -83,81 +80,29 @@ describe("PATCH /divesites/:id", function () {
   });
 
   describe("with authorization", function () {
+    it("returns HTTP 200", function (done) {
+      request(app)
+      .patch('/divesites/' + DIVESITE._id)
+      .set('force-authenticate', true)
+      .set('auth-id', USER._id)
+      .send({name: 'CHANGED_NAME'})
+      .expect(200)
+      .end(done);
+    });
 
-    describe("with a valid site ID", function () {
-
-      describe("as the site's creator", function () {
-
-        it("returns HTTP 200", function (done) {
-          request(app)
-          .patch('/divesites/' + DIVESITE._id)
-          .set('force-authenticate', true)
-          .set('auth-id', USER._id)
-          .send({name: 'CHANGED_NAME'})
-          .expect(200)
-          .end(function (err, res) {
-            res.body.name.should.equal('CHANGED_NAME');
-            done();
-          });
-        });
-
-        it("handles invalid data gracefully", function (done) {
-          Divesite.findById(DIVESITE._id, function (err, site) {
-            request(app)
-            .patch('/divesites/' + site._id)
-            .set('force-authenticate', true)
-            .set('auth-id', USER._id)
-            .send({
-              coords: {longitude: 'five', latitude: 'banana'},
-              depth: "real deep",
-              category: 'Some totally bogus category that will never be implemented!'
-            })
-            .expect(HTTP.BAD_REQUEST)
-            .end(function (err, res) {
-              if (err) return done(err);
-              res.body.should.be.an.Object;
-              res.body.should.have.properties(['errors']);
-              res.body.errors.should.be.an.Object;
-              res.body.errors.should.have.properties(['loc', 'chart_depth', 'category']);
-              Divesite.findById(DIVESITE._id, function (err, newSite) {
-                newSite.coords.should.be.equal(site.coords);
-                newSite.depth.should.be.equal(site.depth);
-              });
-              done();
-            });
-          });
-        });
-
-        it("updates allowed fields in the database", function (done) {
-          Divesite.findById(DIVESITE._id, function (err, site) {
-            var newName = 'CHANGED_NAME';
-            var dummyUser = new User();
-            request(app)
-            .patch('/divesites/' + DIVESITE._id)
-            .set('force-authenticate', true)
-            .set('auth-id', USER._id)
-            .expect(HTTP.OK)
-            .send({
-              name: newName,
-              created_at: moment().subtract(10, 'days').toDate(), // try to change creation date
-              updated_at: moment().add(10, 'days').toDate(), // try to change update date
-              creator_id: dummyUser._id // try to change owner
-            })
-            .end(function (err, res) {
-              if (err) return done(err);
-              Divesite.findOne({_id: DIVESITE._id}, function (err, newSite) {
-                if (err) return done(err);
-                newSite.name.should.equal(newName); // name updated
-                // Times can be a bit fuzzy, so we're allowing a delta in our comparison
-                moment(newSite.created_at).should.be.above(moment(site.updated_at) - 10000);
-                moment(newSite.updated_at).should.be.below(moment(site.updated_at) + 10000);
-                // Coerce IDs to strings because otherwise should.js attempts a deep equal
-                // AFAIK, Mongoose ids will always be strings, but...
-                should.equal("" + newSite.creator_id, "" + site.creator_id); // creator unchanged
-                done();
-              });
-            });
-          });
+    it("updates the site in the database", function (done) {
+      var newName = 'CHANGED_NAME';
+      request(app)
+      .patch('/divesites/' + DIVESITE._id)
+      .set('force-authenticate', true)
+      .set('auth-id', USER._id)
+      .send({name: newName})
+      .end(function (err, res) {
+        if (err) return done(err);
+        Divesite.findOne({_id: DIVESITE._id}, function (err, site) {
+          if (err) return done(err);
+          site.name.should.equal(newName);
+          done();
         });
       });
     });
