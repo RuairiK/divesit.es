@@ -13,10 +13,11 @@ var User = require.main.require('models/User');
 var Comment = require.main.require('models/Comment');
 var app = require.main.require('app');
 
-var utils = require('./utils');
-var tearDown = require('./utils').tearDown;
-var beforeAll = require('./utils').createSiteAndUser;
-var destroyAllComments = require('./utils').destroyAllComments;
+var utils = require('../utils');
+var beforeAll = utils.createSiteAndUser;
+var tearDown = utils.tearDown;
+var createComment = utils.createComment;
+var destroyAllComments = utils.destroyAllComments;
 
 function createComment(done) {
   // Before each test, create a comment
