@@ -13,8 +13,11 @@ var User = require.main.require('models/User');
 var Comment = require.main.require('models/Comment');
 var app = require.main.require('app');
 
-var tearDown = require('./utils').tearDown;
-var beforeAll = require('./utils').createSiteAndUser;
+var utils = require('../utils');
+var beforeAll = utils.createSiteAndUser;
+var tearDown = utils.tearDown;
+var createComment = utils.createComment;
+var destroyAllComments = utils.destroyAllComments;
 
 describe("POST /divesites/:id/comments", function () {
   var TEST_USER, TEST_DIVESITE, NUM_COMMENTS;
