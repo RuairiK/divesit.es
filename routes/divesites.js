@@ -81,9 +81,17 @@ router.patch('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, funct
 
 /* DELETE /divesites/:id */
 router.delete('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function(req, res, next) {
-  Divesite.findByIdAndRemove(req.params.id, req.body, function (err, post) {
+  Divesite.findById(req.params.id, req.body, function (err, site) {
     if (err) return next(err);
-    res.status(HTTP.NO_CONTENT).json(post);
+    if (!site) return res.status(HTTP.NOT_FOUND).json({});
+    if (req.user != site.creator_id) {
+      // Only a site's creator can delete it
+      return res.status(HTTP.FORBIDDEN).json({});
+    }
+    Divesite.findById({_id: site._id}).remove(function (err, done) {
+      if (err) return next(err);
+      res.status(HTTP.NO_CONTENT).json({});
+    });
   });
 });
 
