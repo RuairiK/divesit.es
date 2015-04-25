@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
-
 var mongoose = require('mongoose');
-var Divesite = require('../models/Divesite');
-var User = require('../models/User');
-var Comment = require('../models/Comment');
+
+var Divesite = require.main.require('models/Divesite');
+var User = require.main.require('models/User');
+var Comment = require.main.require('models/Comment');
+var validation = require.main.require('middleware/validation');
 
 // HTTP status codes
 var HTTP = require('http-status-codes');
@@ -12,9 +13,9 @@ var HTTP = require('http-status-codes');
 // Authentication middleware
 var auth;
 if (process.env.NODE_ENV == 'test') {
-  auth = require('../middleware/test-auth');
+  auth = require.main.require('middleware/test-auth');
 } else {
-  auth = require('../middleware/auth');
+  auth = require.main.require('middleware/auth');
 }
 
 /* GET dive sites listing. */
@@ -46,12 +47,7 @@ router.post('/', auth.ensureAuthenticated, function(req, res, next) {
 });
 
 /* GET /divesites/id */
-router.get('/:id', function(req, res, next) {
-  // Check that the ID is a valid Mongoose ObjectID and 404 early
-  // (otherwise Mongoose tries to cast it and returns a 500 Server Error)
-  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    return res.status(HTTP.NOT_FOUND).json({});
-  }
+router.get('/:id', validation.hasValidIdOr404, function(req, res, next) {
   Divesite.findById(req.params.id, function (err, data) {
     if (err) {
       return next(err);
@@ -68,7 +64,7 @@ router.get('/:id', function(req, res, next) {
 /* PUT /divesites/:id */
 // TODO: This is the more appropriate HTTP verb for complete replacements.
 // HTTP PATCH more accurately reflects the behaviour of mongoose#findByIdAndUpdate
-router.put('/:id', auth.ensureAuthenticated, function(req, res, next) {
+router.put('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function(req, res, next) {
   Divesite.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
     res.json(post);
@@ -76,18 +72,18 @@ router.put('/:id', auth.ensureAuthenticated, function(req, res, next) {
 });
 
 /* PATCH /divesites/:id */
-router.patch('/:id', auth.ensureAuthenticated, function (req, res, next) {
+router.patch('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function (req, res, next) {
   Divesite.findByIdAndUpdate(req.params.id, req.body, function (err, data) {
     if (err) return next(err);
-    res.json(data);
+    res.status(HTTP.OK).json(data);
   });
 });
 
 /* DELETE /divesites/:id */
-router.delete('/:id', auth.ensureAuthenticated, function(req, res, next) {
+router.delete('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function(req, res, next) {
   Divesite.findByIdAndRemove(req.params.id, req.body, function (err, post) {
     if (err) return next(err);
-    res.json(post);
+    res.status(HTTP.NO_CONTENT).json(post);
   });
 });
 
