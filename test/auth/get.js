@@ -15,8 +15,10 @@ var app = require.main.require('app');
 describe("GET /auth/profile", function () {
 
   before(function (done) {
-    User.create({displayName: 'TEST_USER'}, function (err, user) {
-      done();
+    User.find().remove(function () {
+      User.create({displayName: 'TEST_USER'}, function (err, user) {
+        done();
+      });
     });
   });
 

@@ -14,7 +14,7 @@ var app = require.main.require('app');
 
 var utils = require('../utils');
 
-describe ("POST auth/profile", function () {
+describe ("POST auth/profile", function (done) {
   describe("without authentication", function () {
     it("returns HTTP 401", function (done) {
       request(app)
@@ -24,20 +24,25 @@ describe ("POST auth/profile", function () {
     });
   });
 
-  describe("with authentication", function () {
-    before(utils.createUser);
+  describe("with authentication", function (done) {
+    before(function (done) {
+      User.find().remove(function () {
+        utils.createUser(done);
+      });
+    });
     after(function (done) {
       User.find().remove(done);
     });
+
     it("returns HTTP 405", function (done) {
       User.findOne(function (err, user) {
         if (err) return done(err);
-      request(app)
-      .post('/auth/profile')
-      .set('force-authenticate', true)
-      .set('auth-id', user._id)
-      .expect(HTTP.METHOD_NOT_ALLOWED)
-      .end(done);
+        request(app)
+        .post('/auth/profile')
+        .set('force-authenticate', true)
+        .set('auth-id', user._id)
+        .expect(HTTP.METHOD_NOT_ALLOWED)
+        .end(done);
       });
     });
   });

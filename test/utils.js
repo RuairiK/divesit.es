@@ -2,10 +2,12 @@ var Divesite = require.main.require('models/Divesite');
 var User = require.main.require('models/User');
 var Comment = require.main.require('models/Comment');
 
-function tearDown () {
-  User.find().remove().exec();
-  Divesite.find().remove().exec();
-  Comment.find().remove().exec();
+function tearDown (done) {
+  User.find().remove(function () {
+    Divesite.find().remove(function () {
+      Comment.find().remove(done);
+    });
+  });
 }
 
 var USERNAME = 'TEST_USER';
@@ -18,6 +20,7 @@ function createUser (done) {
 }
 
 function createSiteAndUser (done) {
+  tearDown(function () {
   var newSite = {
     name: "TEST_DIVESITE",
     category: "wreck",
@@ -30,6 +33,7 @@ function createSiteAndUser (done) {
       if (err) return done(err);
       done();
     });
+  });
   });
 }
 
