@@ -15,11 +15,12 @@ var Comment = require.main.require('models/Comment');
 var app = require.main.require('app');
 var utils = require.main.require('test/utils');
 
-function afterAll () {
-  Divesite.find().remove().exec();
-  User.find().remove().exec();
-  Comment.find().remove().exec();
-}
+//function afterAll () {
+  //Divesite.find().remove().exec();
+  //User.find().remove().exec();
+  //Comment.find().remove().exec();
+//}
+var afterAll = utils.tearDown;
 
 describe("PATCH /divesites/:id", function () {
 
@@ -63,10 +64,7 @@ describe("PATCH /divesites/:id", function () {
         .patch('/divesites/' + site._id)
         .send({name: 'CHANGED_NAME'})
         .expect(HTTP.UNAUTHORIZED)
-        .end(function (err, result) {
-          if (err) return done(err);
-          done();
-        });
+        .end(done);
       });
     });
 
@@ -74,12 +72,13 @@ describe("PATCH /divesites/:id", function () {
       Divesite.findOne(function (err, site) {
         request(app)
         .patch('/divesites' + site._id)
-        .send({name: 'CHANGED_NAME'})
+        .send({name: 'CHANGED_NAME', depth: 100})
         .end(function (err, res) {
           if (err) return done(err);
           Divesite.findOne(function (err, newSite) {
             if (err) return done(err);
             site.name.should.be.equal(newSite.name);
+            site.chart_depth.should.be.equal(newSite.chart_depth);
             done();
           });
         });
@@ -93,30 +92,13 @@ describe("PATCH /divesites/:id", function () {
 
       describe("as the site's creator", function () {
 
-        it("returns HTTP 200", function (done) {
-          Divesite.findOne(function (err, DIVESITE) {
-            User.findOne(function (err, USER) {
-              request(app)
-              .patch('/divesites/' + DIVESITE._id)
-              .set('force-authenticate', true)
-              .set('auth-id', USER._id)
-              .send({name: 'CHANGED_NAME'})
-              .expect(200)
-              .end(function (err, res) {
-                res.body.name.should.equal('CHANGED_NAME');
-                done();
-              });
-            });
-          });
-        });
-
         it("handles invalid data gracefully", function (done) {
           Divesite.findOne(function (err, site) {
-            User.findOne(function (err, USER) {
+            User.findOne(function (err, user) {
               request(app)
               .patch('/divesites/' + site._id)
               .set('force-authenticate', true)
-              .set('auth-id', USER._id)
+              .set('auth-id', user._id)
               .send({
                 coords: {longitude: 'five', latitude: 'banana'},
                 depth: "real deep",
@@ -131,7 +113,8 @@ describe("PATCH /divesites/:id", function () {
                 res.body.errors.should.have.properties(['loc', 'chart_depth', 'category']);
                 Divesite.findById(site._id, function (err, newSite) {
                   newSite.coords.should.be.equal(site.coords);
-                  newSite.depth.should.be.equal(site.depth);
+                  newSite.chart_depth.should.be.equal(site.chart_depth);
+                  newSite.category.should.be.equal(site.category);
                 });
                 done();
               });
@@ -143,7 +126,7 @@ describe("PATCH /divesites/:id", function () {
           Divesite.findOne(function (err, site) {
             User.findOne(function (err, USER) {
               var newName = 'CHANGED_NAME';
-              var dummyUser = new User();
+              var dummyUser = new User(); // non-existent user
               request(app)
               .patch('/divesites/' + site._id)
               .set('force-authenticate', true)
