@@ -112,7 +112,7 @@ describe("PATCH /divesites/:id", function () {
                 res.body.errors.should.be.an.Object;
                 res.body.errors.should.have.properties(['loc', 'chart_depth', 'category']);
                 Divesite.findById(site._id, function (err, newSite) {
-                  newSite.coords.should.be.equal(site.coords);
+                  newSite.loc.should.be.equal(site.loc);
                   newSite.chart_depth.should.be.equal(site.chart_depth);
                   newSite.category.should.be.equal(site.category);
                 });
