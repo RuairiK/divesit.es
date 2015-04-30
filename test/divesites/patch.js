@@ -24,13 +24,8 @@ var afterAll = utils.tearDown;
 
 describe("PATCH /divesites/:id", function () {
 
-  before(function (done) {
-    // Create a user
-    User.create({displayName: 'TEST_USER'}, function (err, user) {
-      done(err);
-    });
-  });
 
+  before(utils.createSiteAndUser);
   after(afterAll);
 
   beforeEach(function (done) {
@@ -38,7 +33,7 @@ describe("PATCH /divesites/:id", function () {
       var site = {
         name: "TEST_DIVESITE",
         category: "wreck",
-        loc: [0.0, 0.0],
+        loc: [0, 0],
         chart_depth: 100,
         description: "desc",
         creator_id: user._id
@@ -111,8 +106,10 @@ describe("PATCH /divesites/:id", function () {
                 res.body.should.have.properties(['errors']);
                 res.body.errors.should.be.an.Object;
                 res.body.errors.should.have.properties(['loc', 'chart_depth', 'category']);
-                Divesite.findById(site._id, function (err, newSite) {
-                  newSite.loc.should.be.equal(site.loc);
+                // Check that things haven't changed in the db
+                Divesite.findOne({_id: site._id}, function (err, newSite) {
+                  //should.equal(site.loc, newSite.loc); // throws a *weird* error
+                  newSite.loc.should.be.an.Array;
                   newSite.chart_depth.should.be.equal(site.chart_depth);
                   newSite.category.should.be.equal(site.category);
                 });

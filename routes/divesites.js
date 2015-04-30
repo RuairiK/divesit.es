@@ -61,16 +61,6 @@ router.get('/:id', validation.hasValidIdOr404, function(req, res, next) {
   });
 });
 
-/* PUT /divesites/:id */
-// TODO: This is the more appropriate HTTP verb for complete replacements.
-// HTTP PATCH more accurately reflects the behaviour of mongoose#findByIdAndUpdate
-router.put('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function(req, res, next) {
-  Divesite.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
-    if (err) return next(err);
-    res.json(post);
-  });
-});
-
 
 /* PATCH /divesites/:id */
 router.patch('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function (req, res, next) {
