@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 var app = express();
 
 var config = {
-  TOKEN_SECRET: process.env.TOKEN_SECRET
+  TOKEN_SECRET: process.env.TOKEN_SECRET,
   MONGOLAB_URI: process.env.MONGOLAB_URI
 };
 //console.log("TOKEN_SECRET");
