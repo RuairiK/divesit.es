@@ -10,9 +10,10 @@ var app = express();
 
 var config = {
   TOKEN_SECRET: process.env.TOKEN_SECRET
+  MONGOLAB_URI: process.env.MONGOLAB_URI
 };
-console.log("TOKEN_SECRET");
-console.log(config.TOKEN_SECRET);
+//console.log("TOKEN_SECRET");
+//console.log(config.TOKEN_SECRET);
 
 /*****************************************************************************/
 /* Environment-specific settings
@@ -23,12 +24,18 @@ if (app.get('env') === 'test') {
   // For testing, use a local mongo DB
   mongodbConnString = "mongodb://localhost:27017/divesites";
 } else {
-  var keys = require('./keys'); 
-  mongodbConnString = "mongodb://"
-  + keys.mongolab.user + ":" + keys.mongolab.password + "@"
-  + keys.mongolab.host + ":" + keys.mongolab.port + "/"
-  + keys.mongolab.db
+  mongodbConnString = config.MONGOLAB_URI
+  //var keys = require('./keys'); 
+  //mongodbConnString = "mongodb://"
+  //+ keys.mongolab.user + ":" + keys.mongolab.password + "@"
+  //+ keys.mongolab.host + ":" + keys.mongolab.port + "/"
+  //+ keys.mongolab.db
 }
+
+
+/*****************************************************************************/
+/* App 
+/*****************************************************************************/
 
 mongoose.connect(mongodbConnString, function(err){
   if (err) {
