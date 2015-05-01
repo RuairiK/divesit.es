@@ -3,7 +3,9 @@ node_modules/
 #Karma test coverage reports
 coverage/
 # This is where Bower puts the scripts
-public/libs
+public/libs/
 .*.swp
 npm-debug.log
 keys.js
+.env
+
