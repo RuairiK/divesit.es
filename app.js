@@ -8,6 +8,11 @@ var mongoose = require('mongoose');
 
 var app = express();
 
+var config = {
+  TOKEN_SECRET: process.env.TOKEN_SECRET
+};
+console.log("TOKEN_SECRET");
+console.log(config.TOKEN_SECRET);
 
 /*****************************************************************************/
 /* Environment-specific settings
