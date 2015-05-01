@@ -52,6 +52,7 @@ describe("GET /divesites", function () {
       res.body.forEach(function (o) {
         o.should.be.an.Object;
       });
+      res.body.should.have.length(3);
       done();
     });
   });

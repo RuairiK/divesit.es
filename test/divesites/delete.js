@@ -90,7 +90,8 @@ describe("DELETE /divesites/:id", function () {
                       should(res).not.be.null;
                       res.should.be.an.Object;
                       res.should.not.be.empty;
-                      res._id.should.equal(site._id);
+                      //res._id.should.equal(site._id); // watch mocha choke on this
+                      should.equal("" + res._id, "" + site._id)
                       res.name.should.equal(site.name);
                     });
                     done();

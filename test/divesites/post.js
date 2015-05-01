@@ -14,7 +14,6 @@ var app = require.main.require('app');
 
 
 describe("POST /divesites", function () {
-  var TEST_USER;
 
   before(function (done) {
     User.create({displayName: 'TEST_USER'}, function (err, user) {
