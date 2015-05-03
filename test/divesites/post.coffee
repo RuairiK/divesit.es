@@ -1,5 +1,6 @@
 process.env.NODE_ENV = 'test'
 
+async = require 'async'
 assert = require('assert')
 should = require('should')
 mongoose = require('mongoose')
@@ -23,13 +24,13 @@ siteData =
 
 
 describe "POST /divesites", () ->
-  before (done) -> User.create {displayName: 'TEST_USER'}, done
-  after (done) -> User.find().remove done
+  before utils.createUser
+  after utils.tearDown
 
   afterEach (done) -> Divesite.find().remove done
 
   describe "without authorization", () ->
-    it "returns HTTP 401", (done) ->
+    it "returns HTTP 401 and doesn't add a new site", (done) ->
       request app
         .post '/divesites'
         .expect 'Content-type', /json/
@@ -40,24 +41,28 @@ describe "POST /divesites", () ->
             res.should.be.an.Array
             res.should.be.empty
             done()
+
   describe "with authorization", () ->
-    it "adds a new dive site", (done) ->
-      User.findOne {displayName: 'TEST_USER'}, (err, user) ->
-        request app
-          .post '/divesites'
-          .set 'force-authenticate', true
-          .set 'auth-id', user._id
-          .send siteData
-          .expect HTTP.CREATED
-          .expect 'Content-type', /json/
-          .end (err, res) ->
-            # The new site is returned in the response
-            res.body.should.be.an.Object
-            res.body.should.have.properties ['_id', 'name', 'category', 'loc', 'chart_depth']
-            # Confirm that the new site is in the database
-            Divesite.findOne {name: siteData.name}, (err, newSite) ->
-              newSite.should.be.an.Object
-              newSite.should.have.properties ['_id', 'name', 'category', 'loc', 'updated_at']
-              newSite.loc.should.be.an.Array
-              newSite.loc.should.have.length 2
-              done()
+    it "adds a new dive site and returns 201", (done) ->
+      async.waterfall [
+        (cb) -> User.findOne cb
+        (user, cb) -> 
+          request app
+            .post '/divesites'
+            .set 'force-authenticate', true
+            .set 'auth-id', user._id
+            .send siteData
+            .expect HTTP.CREATED
+            .expect 'Content-type', /json/
+            .end cb
+        (res, cb) ->
+          res.body.should.be.an.Object
+          res.body.should.have.properties ['_id', 'name', 'category', 'loc', 'chart_depth']
+          Divesite.findOne {name: siteData.name}, cb
+        (site, cb) ->
+          site.should.be.an.Object
+          site.should.have.properties ['_id', 'name', 'category', 'loc', 'updated_at']
+          site.loc.should.be.an.Array
+          site.loc.should.have.length 2
+          cb()
+      ], done
