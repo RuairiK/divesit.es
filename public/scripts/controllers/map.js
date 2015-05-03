@@ -2,7 +2,7 @@
 
 var app = angular.module('divesitesApp');
 
-app.controller('MapController', function(uiGmapIsReady, $http, $scope, $rootScope, $cookieStore, $modal, $timeout) {
+app.controller('MapController', function(uiGmapIsReady, $http, $scope, $rootScope, localStorageService, $modal, $timeout) {
 
     $scope.retrieveDivesites = function () {
         // Call the API for dive sites (currently returns everything)
@@ -33,15 +33,14 @@ app.controller('MapController', function(uiGmapIsReady, $http, $scope, $rootScop
     };
 
     // Initialize controller
-    console.log('initializing map controller');
 
-    // Retrieve centre and zoom values from the cookie store, if they exist
+    // Retrieve centre and zoom values from local storage, if they exist
     $scope.map = {
         center: {
-            latitude: ($cookieStore.get('map.center.latitude') || 53.5),
-            longitude: ($cookieStore.get('map.center.longitude') || -8)
+            latitude: (localStorageService.get('map.center.latitude') || 53.5),
+            longitude: (localStorageService.get('map.center.longitude') || -8)
         },
-        zoom: ($cookieStore.get('map.zoom') || 7)
+        zoom: (localStorageService.get('map.zoom') || 7)
     };
 
     // Needs to be non-null at initialization (for some obscure reason
@@ -73,16 +72,16 @@ app.controller('MapController', function(uiGmapIsReady, $http, $scope, $rootScop
                 map.setZoom(maxZoom);
             }
         },
-        // On idle, update the cookie storing the most recent map view settings
+        // On idle, update the local storage storing the most recent map view settings
         idle: function (map) {
             $scope.$apply(function () {
-                $cookieStore.put('map.zoom', map.zoom);
+                localStorageService.set('map.zoom', map.zoom);
                 // TODO: I don't know if calling map.center.[lat|lng]() is actually stable
                 // or documented, but storing values from $scope.map.center leaves
-                // the cookieStore out of date by exactly one drag. I think this is
+                // the local storage out of date by exactly one drag. I think this is
                 // a fault on the angular-google-maps side but I'm not sure.
-                $cookieStore.put('map.center.latitude', map.center.lat());
-                $cookieStore.put('map.center.longitude', map.center.lng());
+                localStorageService.set('map.center.latitude', map.center.lat());
+                localStorageService.set('map.center.longitude', map.center.lng());
             });
         }
     };
@@ -93,7 +92,6 @@ app.controller('MapController', function(uiGmapIsReady, $http, $scope, $rootScop
         // exciting with it
         click: function (marker, event, model, args) {
             $http.get('/divesites/' + model.id).success(function (data) {
-                console.log(data);
                 // Pull the data we want from the returned JSON
                 $scope.siteInfo = {
                     "_id": data._id,
@@ -117,7 +115,6 @@ app.controller('MapController', function(uiGmapIsReady, $http, $scope, $rootScop
     };
 
     $scope.$on('event:filter-sites', function (event, data) {
-        console.log('received event:filter-sites');
         $scope.map.markers.forEach(function (m) {
             if (isWithinDepthRange(m.chart_depth, data.depthRange)) {
                 if (m.category == data.category) {

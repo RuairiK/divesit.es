@@ -25,7 +25,6 @@ app.controller('SidebarController', function ($scope, $rootScope, localStorageSe
 
   // Initialize controller
 
-  console.log('initializing sidebar controller');
   // Retrieve stored filter preferences if they are in local storage, otherwise
   // default to true for all categories
   $scope.preferences = localStorageService.get('filterPreferences') || {
@@ -42,7 +41,6 @@ app.controller('SidebarController', function ($scope, $rootScope, localStorageSe
   // Fire a filter-sites event for each preference to switch visibility
   // on/off
   $scope.$on('event:map-isready', function (e) {
-    console.log('received event:map-isready');
     $scope.updateAllCategories();
   });
 
