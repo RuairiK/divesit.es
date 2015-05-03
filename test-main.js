@@ -1,5 +1,8 @@
+/* Er...
+ * WTF is the dealio here?
+ */
 var allTestFiles = [];
-var TEST_REGEXP = /(spec|test)\.js$/i;
+var TEST_REGEXP = /(spec|test)\.(coffee|js)$/i; // WHY WHY WHY?
 
 var pathToModule = function(path) {
   return path.replace(/^\/base\//, '').replace(/\.js$/, '');
