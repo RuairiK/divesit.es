@@ -36,7 +36,7 @@ router.get('/:id', validation.hasValidIdOr404, function (req, response, next) {
 
 
 /* POST a new comment to no divesite */
-router.post('/', function (req, response, next) {
+router.post('/', auth.ensureAuthenticated, function (req, response, next) {
   response.status(HTTP.METHOD_NOT_ALLOWED).json({});
 });
 
