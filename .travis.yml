@@ -9,4 +9,4 @@ before_script:
   - npm install -g istanbul
   - npm install -g coffee-script
 after_success:
-  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+  - cat ./coverage/lcov.info ./coverage/jasmine/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage

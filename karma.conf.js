@@ -50,7 +50,8 @@ module.exports = function(config) {
     reporters: ['coverage', 'spec'],
 
     coverageReporter: {
-      type: 'lcovonly'
+      type: 'lcovonly',
+      subdir: 'jasmine'
     },
 
     // web server port
