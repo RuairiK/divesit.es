@@ -1,0 +1,21 @@
+@border-radius: 8px;
+.sidebar {
+  display: none; /* hide for mobile; show later */
+  /*top: auto; */
+  border-top-right-radius: @border-radius;
+  border-bottom-right-radius: @border-radius;
+  box-shadow: 2px -2px 8px rgba(0, 0, 0, 0.4);
+  .media-right {
+    padding-right: 10px;
+  }
+  @media (min-width: 768px) {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+}
