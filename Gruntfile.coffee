@@ -21,14 +21,7 @@ module.exports = (grunt) ->
           $: false
 
     less: # Compile LESS files
-      options:
-        paths: ['public/styles']
-      src:
-        expand: true
-        cwd: 'public/styles'
-        src: '*.less'
-        dest: 'public/styles'
-        ext: '.css'
+      "public/styles/style.css": "public/less/style.less"
 
     ###
     # Test config
@@ -50,7 +43,7 @@ module.exports = (grunt) ->
 
     watch:
       styles: # watch for LESS changes and compile
-        files: ['public/styles/*.less']
+        files: ['public/less/*.less']
         tasks: ['less']
 
 
