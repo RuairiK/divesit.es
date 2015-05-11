@@ -1,4 +1,3 @@
--C
 --recursive
 --compilers coffee:coffee-script
 --require coffee-script/register

@@ -4,9 +4,7 @@ node_js:
 services:
   - mongodb
 before_script:
-  - npm install -g bower
+  - npm install -g bower less grunt-cli istanbul coffee-script
   - bower install
-  - npm install -g istanbul
-  - npm install -g coffee-script
 after_success:
   - cat ./coverage/lcov.info ./coverage/jasmine/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
