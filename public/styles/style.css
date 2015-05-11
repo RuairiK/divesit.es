@@ -1,0 +1,232 @@
+.custom-infowindow {
+  position: relative;
+}
+/*
+ * Base structure
+ */
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+}
+/* Hide for mobile, show later */
+.sidebar {
+  display: none;
+}
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+}
+/*
+ * Global add-ons
+ */
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+  border: 0;
+}
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px;
+  /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: #428bca;
+}
+/*
+ * Main content
+ */
+.main {
+  padding: 20px;
+}
+@media (min-width: 768px) {
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+.main .page-header {
+  margin-top: 0;
+}
+/*
+ * Placeholder dashboard ideas
+ */
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.placeholders h4 {
+  margin-bottom: 0;
+}
+.placeholder {
+  margin-bottom: 20px;
+}
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}
+#dropdown-login-list .dropdown-menu {
+  min-width: 300px;
+  padding: 15px;
+}
+#dropdown-login-list input {
+  margin: 0px;
+  border-radius: 0px;
+}
+#dropdown-login-list input:first-of-type {
+  margin-top: 0px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+#dropdown-login-list input:last-of-type {
+  margin-top: 0px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+#dropdown-login-list .btn {
+  margin-top: 5px;
+}
+#dropdown-login-list .btn-social {
+  position: relative;
+  padding-left: 44px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#dropdown-login-list .btn-social > :first-child {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  width: 32px;
+  line-height: 34px;
+  font-size: 1.6em;
+  text-align: center;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+#dropdown-login-list .btn-google {
+  color: white;
+  background-color: #dd4b39;
+}
+#dropdown-login-list .btn-facebook {
+  color: white;
+  background-color: #3b5998;
+}
+#dropdown-login-list .or {
+  text-align: center;
+}
+#dropdown-login-list #forgot-password-link,
+#dropdown-login-list #signup-link {
+  margin-top: 10px;
+}
+.site-comment {
+  margin-left: 12px;
+  margin-right: 12px;
+  border-top: 1px solid #e5e5e5;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 12px;
+}
+.site-comment .media-body {
+  line-height: -1.34;
+}
+.site-comment .comment-date {
+  color: #555;
+  display: inline-block;
+  float: right;
+  position: relative;
+}
+.modal-content {
+  border-radius: 0;
+}
+.modal-body.site-info table.table td {
+  border-top: none;
+}
+.modal-body.site-info table.table {
+  /* border-bottom: 1px solid #e5e5e5; */
+}
+.modal-content button {
+  border-radius: 0;
+}
+.sidebar {
+  display: none;
+  /* hide for mobile; show later */
+  /*top: auto; */
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: 2px -2px 8px rgba(0, 0, 0, 0.4);
+}
+.sidebar .media-right {
+  padding-right: 10px;
+}
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+}
+body {
+  /*font-family: 'Lato', sans-serif;*/
+  padding-top: 50px;
+}
+.angular-google-map-container {
+  position: absolute;
+  /*height: 100%;*/
+  height: calc(100% - 50px);
+  width: 100%;
+  top: 50px;
+}
+.branding {
+  font-family: 'Anton', sans-serif;
+}
+#infobox {
+  display: none;
+  position: absolute;
+  width: 400px;
+  opacity: 0.8;
+  background-color: #fff;
+  z-index: 100;
+}
+#infobox .close-button {
+  font-size: 20px;
+}
+#infobox .content {
+  max-height: 80%;
+  overflow-y: auto;
+  position: relative;
+  top: 8px;
+}
