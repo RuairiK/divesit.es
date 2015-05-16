@@ -8,10 +8,10 @@ express = require('express')
 HTTP = require('http-status-codes')
 request = require('supertest')
 
-routes = require.main.require('routes/index')
-Divesite = require.main.require('models/Divesite')
-User = require.main.require('models/User')
-app = require.main.require('app')
+routes = require('../../../routes/index')
+Divesite = require('../../../models/Divesite')
+User = require('../../../models/User')
+app = require('../../../app')
 utils = require('../utils')
 
 describe "GET /divesites", () ->

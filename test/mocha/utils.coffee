@@ -1,8 +1,8 @@
 async = require 'async'
 
-Divesite = require.main.require 'models/Divesite'
-User = require.main.require 'models/User'
-Comment = require.main.require 'models/Comment'
+Divesite = require '../../models/Divesite'
+User = require '../../models/User'
+Comment = require '../../models/Comment'
 
 USERNAME = 'TEST_USER'
 
