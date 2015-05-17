@@ -4,7 +4,6 @@ describe "AddSiteController", () ->
   $scope = {}
   localStorageService = {}
 
-  #beforeEach inject (uiGmapIsReady, $httpBackend, $controller, $rootScope, _localStorageService_) ->
   beforeEach inject ($rootScope, $controller, _localStorageService_) ->
     $scope = $rootScope.$new()
     $scope.site =

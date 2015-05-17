@@ -30,6 +30,7 @@ module.exports = (grunt) ->
     karma:
       unit:
         configFile: 'karma.conf.js'
+        singleRun: true
   
     mochaTest:
       test:
