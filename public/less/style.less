@@ -1,9 +1,9 @@
 @import 'custom-infowindow.less';
-@import 'dashboard.less';
 @import 'dropdown-login.less';
 @import 'site-comments.less';
 @import 'site-info-modal.less';
 @import 'sidebar.less';
+@import 'infobox.less';
 body {
   /*font-family: 'Lato', sans-serif;*/
   padding-top: 50px;
@@ -18,20 +18,7 @@ body {
 .branding {
   font-family: 'Anton', sans-serif;
 }
-#infobox {
-  display: none;
-  position: absolute;
-  width: 400px;
-  opacity: 0.8;
-  background-color: #fff;
-  z-index: 100;
-  .close-button {
-    font-size: 20px;
-  }
-  .content {
-    max-height: 80%;
-    overflow-y: auto;
-    position: relative;
-    top: 8px;
-  }
+.ui-element {
+  box-shadow: 0 1px 6px #808080;
+  border-radius: 4px;
 }

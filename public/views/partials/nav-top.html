@@ -10,14 +10,13 @@
         <span class="icon-bar"></span>
       </button>
       <!-- Home button or similar -->
-      <a href class="navbar-brand branding"><span class="glyphicon glyphicon-home"></span> DIVESIT.ES</a>
+      <a href class="navbar-brand branding">DIVESIT.ES</a>
       <!-- RH top navbar stuff -->
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li><a href ng-click="showSubmission()">New site</a></li>
-        <li><a href ng-click="showAbout()">About</a></li>
-        <li><a href ng-click="showContact()">Contact</a></li>
+        <li><a href>About</a></li>
+        <li><a href>Contact</a></li>
       </ul>
 
       <!-- display if user is authenticated -->
@@ -25,8 +24,6 @@
         <li>
         <a href="#" tooltip="Map" tooltip-placement="bottom"><i class="fa fa-fw fa-globe"></i></a>
         </li>
-        <li>
-        <a href tooltip="New site" tooltip-placement="left"><i class="fa fa-map-marker"></i><i class="fa fa-plus"></i></a>
         <li class="dropdown">
         <a href class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
           <img ng-src="{{ currentUser.picture }}" width="18px" height="18px" />

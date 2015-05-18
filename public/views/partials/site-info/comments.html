@@ -1,4 +1,4 @@
-<div>
+<div class="col-xs-12">
   <!-- <h4>Comments</h4> -->
   <div ng-if="site.comments">
     <ul ng-repeat="comment in site.comments" class="list-unstyled">
@@ -30,6 +30,20 @@
       </div>
     </form>
   </div>
+
+  <div ng-if="!isAuthenticated()">
+    <p>Sign in to leave a comment!</p>
+    <ul class="login-menu list-unstyled" role="menu">
+      <li><button type="button" class="btn btn-block btn-default btn-social btn-google" ng-click="authenticate('google')">
+        <i class="fa fa-fw fa-google-plus"></i>
+        Sign in with Google</button></li>
+      <li><button type="button" class="btn btn-block btn-default btn-social btn-facebook" ng-click="authenticate('facebook')">
+        <i class="fa fa-fw fa-facebook"></i>
+        Sign in with Facebook</button></li>
+    </ul>
+  </div>
+
+  <!--
   <div ng-if="!isAuthenticated()" id="dropdown-login-list">
     <div class="dropup">
       <a href class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -52,4 +66,5 @@
       </ul>
     </div>
   </div>
+  -->
 </div>

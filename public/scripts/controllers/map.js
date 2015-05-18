@@ -15,7 +15,6 @@ app.controller('MapController', function(uiGmapIsReady, $http, $scope, $rootScop
     // Call the API for dive sites (currently returns everything)
     $http.get('/divesites/').success(function (data) {
       // On success, update the markers
-      console.log(data);
       $scope.map.markers = data.map(function (e) {
         return {
           id: e._id, 
@@ -69,15 +68,14 @@ app.controller('MapController', function(uiGmapIsReady, $http, $scope, $rootScop
   $scope.map.options = {
     scrollwheel: true,
     disableDefaultUI: true,
-    mapTypeId: 'satellite'
+    mapTypeId: 'roadmap'
   };
 
   // Map marker options
   $scope.map.markerOptions = { };
 
-  $scope.siteInfo = {
-    name: "Hello world"
-  };
+  //$scope.siteInfo = { name: "Hello world" };
+  $scope.siteInfo = {};
 
   // Handle map events
   $scope.map.events = {
@@ -114,14 +112,6 @@ app.controller('MapController', function(uiGmapIsReady, $http, $scope, $rootScop
     click: function (marker, event, model, args) {
       $http.get('/divesites/' + model.id).success(function (data) {
         // Pull the data we want from the returned JSON
-        console.log(data);
-        var pixel = getPixelPosition(marker);
-        /* show infobox */
-        $('#infobox').css({
-          display: 'block',
-          top: 60,
-          left: parseInt(pixel.y)
-        });
         $scope.siteInfo = {
           "_id": data._id,
           name: data.name,
@@ -131,7 +121,10 @@ app.controller('MapController', function(uiGmapIsReady, $http, $scope, $rootScop
           },
           chart_depth: data.chart_depth
         };
-        console.log($scope.siteInfo.name);
+        // Get the mouse click event position
+        var pixel = getPixelPosition(marker);
+        // Send it to listening scopes
+        $rootScope.$broadcast('event:site-select', {pos: pixel, site: $scope.siteInfo}); // broadcast event to all scopes
       });
     }
   };

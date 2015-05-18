@@ -2,7 +2,7 @@
 
 var app = angular.module('divesitesApp');
 
-app.controller('SidebarController', function ($scope, $rootScope, localStorageService, $cookieStore) {
+app.controller('SidebarController', function (api, $scope, $rootScope, localStorageService) {
   // Function definitions
 
   // Broadcast a filter event for the map to handle.
@@ -23,7 +23,37 @@ app.controller('SidebarController', function ($scope, $rootScope, localStorageSe
     $rootScope.$broadcast('event:filter-sites', filterEventData);
   };
 
+  $scope.loadSiteNamesAsync = function (val) {
+    console.log("calling lSNA");
+    return api.retrieveDivesites({name: val}).then(function (response) {
+      //console.log(response.data);
+      var names = response.data.map(
+        function (s) {
+          return s.name;
+        }
+      );
+      console.log(names);
+      return names;
+    });
+  };
+
+  // UI display toggles
+  $scope.toggleMenu = function (menu) {
+    // Switch off all other visibilities and toggle states and switch this menu on/off
+    Object.keys($scope.uiVisibility).forEach(function (k) {
+      if (k != menu) $scope.uiVisibility[k] = false;
+      else $scope.uiVisibility[k] = !$scope.uiVisibility[k];
+    });
+  };
   // Initialize controller
+
+  // Initial GUI settings
+  $scope.uiVisibility = {
+    filter: false,
+    search: false,
+    profile: false,
+    add: false
+  };
 
   // Retrieve stored filter preferences if they are in local storage, otherwise
   // default to true for all categories

@@ -1,21 +1,81 @@
+@bg: #f5f5f5;
 @border-radius: 8px;
+@sb-li-bg: darken(@bg, 20%);
+@sb-top-offset: 100px;
+@sb-left-offset: 20px;
+@sb-z-index: 1000;
+
 .sidebar {
   display: none; /* hide for mobile; show later */
-  /*top: auto; */
-  border-top-right-radius: @border-radius;
-  border-bottom-right-radius: @border-radius;
-  box-shadow: 2px -2px 8px rgba(0, 0, 0, 0.4);
-  .media-right {
-    padding-right: 10px;
-  }
   @media (min-width: 768px) {
     position: fixed;
-    top: 100px;
-    left: 0;
-    z-index: 1000;
+    top: @sb-top-offset;
+    left: @sb-left-offset;
+    z-index: @sb-z-index;
     display: block;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f5f5f5;
-    border-right: 1px solid #eee;
+    background-color: transparent;
+    /* border-right: 1px solid #eee; */
   }
+  .sidebar-icon-list {
+    margin-bottom: 0;
+    li {
+      padding: 0px;
+      font-size: 30px;
+    }
+    a {
+      .ui-element;
+      border-radius: 0px;
+      margin: 6px;
+      display: block;
+      background-color: @sb-li-bg;
+      @col: #ffffff;
+      color: @col;
+      &:hover {
+        background-color: darken(@sb-li-bg, 10%);
+      }
+      &.active {
+        color: #000066;
+      }
+      margin: 6px; /* for box-shadow */
+    }
+  }
+}
+.sidebar-extra-box {
+  display: none; /* hide unless active */
+  position: absolute;
+  background-color: @bg;
+  top: @sb-top-offset;
+  left: @sb-left-offset + 39px + 16px;
+  z-index: @sb-z-index;
+  width: 350px;
+  /* max-width: 350px; */
+  /*max-height: 350px;*/
+  overflow-y: auto;
+  border: solid black 1px;
+  &.active {
+    display: block;
+  }
+  .header-container {
+    border-bottom: solid 1px #c2c2c2;
+    margin-bottom: 10px;
+    background-color: #101010;
+    color: #9d9d9d;
+  }
+  h2 {
+    font-size: 24px;
+    margin-top: 0;
+  }
+  .header, .content {
+    padding: 8px;
+  }
+  .header {
+    padding-bottom: 4px;
+    margin-bottom: 0;
+  }
+  &.search {
+    overflow-y: visible;
+  }
+  margin-top: 6px;
+  .ui-element;
 }

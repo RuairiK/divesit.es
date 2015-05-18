@@ -1,0 +1,42 @@
+#infobox {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  width: 400px;
+  background-color: #fff;
+  z-index: 100;
+  border: solid black 1px;
+  .ui-element;
+  .close-button {
+    font-size: 12px;
+    position: absolute;
+    right: 4px;
+    top: 0;
+    .fa-times {
+      color: white;
+    }
+  }
+  .content {
+    /*max-height: 80%;*/
+    overflow-y: auto;
+  }
+  h4 {
+    padding-left: 8px;
+  }
+  .content {
+    padding: 8px;
+  }
+  .drag-handle {
+    position: relative;
+    height: 24px;
+    width: 100%;
+    background-color: rgb(34,34,34);
+    opacity: 1;
+  }
+}
+.ui-draggable .drag-handle {
+  cursor: -webkit-grab;
+}
+.ui-draggable-dragging .drag-handle {
+  cursor: -webkit-grabbing;
+}
