@@ -20,13 +20,20 @@ if (process.env.NODE_ENV == 'test') {
 
 /* GET dive sites listing. */
 router.get('/', function(req, res, next) {
-
-  Divesite.find( function(err, divesites) {
+  // If we receive a querystring with a 'name' parameter, find a list
+  // of matches
+  if (req.query.name) {
+    return Divesite.find({name: {$regex: req.query.name, $options: 'i'}}, function (err, divesites) {
+      if(err) return next(err);
+      return res.status(HTTP.OK).json(divesites);
+    });
+  }
+  Divesite.find(function(err, divesites) {
     if(err) {
       return next(err);
     }
-    return res.json(divesites);
-  })
+    return res.status(HTTP.OK).json(divesites);
+  });
 });
 
 /* POST a new dive site */
