@@ -43,7 +43,8 @@ router.post('/', auth.ensureAuthenticated, function(req, res, next) {
     name: req.body.name,
     category: req.body.category,
     loc: [parseFloat(req.body.coords.longitude), parseFloat(req.body.coords.latitude)],
-    chart_depth: req.body.depth
+    chart_depth: req.body.depth,
+    creator_id: req.user
   };
 
   // Create the object
