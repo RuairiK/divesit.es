@@ -1,8 +1,4 @@
 <div id="infobox" ng-show="visible">
-  <div class="drag-handle"></div>
-  <h4>
-    {{ siteInfo.name }}
-  </h4>
   <div class="close-button">
     <a href="#" ng-click="hide()">
       <span class="fa-stack">
@@ -10,6 +6,11 @@
         <i class="fa fa-fw fa-times fa-stack-1x"></i>
       </span>
     </a>
+  </div>
+  <div class="header-container">
+    <h2 class="header">
+      {{ siteInfo.name }}
+    </h2>
   </div>
   <div class="content fluid-container">
     <div class="col-xs-4">

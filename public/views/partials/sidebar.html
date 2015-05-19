@@ -1,12 +1,26 @@
+<script type="text/ng-template" id="typeahead-template.html">
+<a>
+{{match.model.name}}
+</a>
+</script>
 <div class="sidebar">
   <ul class="list-unstyled sidebar-icon-list">
     <li><a ng-click="toggleMenu('filter')" ng-class="{'active': uiVisibility.filter}" href><i class="fa fa-fw fa-filter"></i></a></li>
     <li><a ng-click="toggleMenu('search')" ng-class="{'active': uiVisibility.search}" href><i class="fa fa-fw fa-search"></i></a></li>
-    <li><a ng-click="toggleMenu('add')" ng-class="{'active': uiVisibility.add}" href><i class="fa fa-fw fa-plus"></i></a></li>
+    <li><a ng-if="isAuthenticated()" ng-click="toggleMenu('add')" ng-class="{'active': uiVisibility.add}" href><i class="fa fa-fw fa-plus"></i></a></li>
   </ul>
 </div>
 <!-- extra boxes for content -->
 <div class="sidebar-extra-box filter" ng-class="{'active': uiVisibility.filter}">
+
+  <div class="close-button">
+    <a href="#" ng-click="toggleMenu('filter')">
+      <span class="fa-stack">
+        <i class="fa fa-fw fa-circle fa-stack-2x"></i>
+        <i class="fa fa-fw fa-times fa-stack-1x"></i>
+      </span>
+    </a>
+  </div>
   <div class="fluid-container">
     <div class="header-container">
       <h2 class="header">Filter sites</h2>
@@ -14,55 +28,33 @@
     <site-filter-form></site-filter-form>
   </div>
 </div>
+
 <div class="sidebar-extra-box search" ng-class="{'active': uiVisibility.search}">
+  <div class="close-button">
+    <a href="#" ng-click="toggleMenu('search')">
+      <span class="fa-stack">
+        <i class="fa fa-fw fa-circle fa-stack-2x"></i>
+        <i class="fa fa-fw fa-times fa-stack-1x"></i>
+      </span>
+    </a>
+  </div>
   <div class="fluid-container">
     <div class="header-container">
       <h2 class="header">Search</h2>
     </div>
       <div class="col-xs-12 content">
-        <input type="text" style="z-index: 2000"
+        <input type="text" 
         ng-model="asyncSelected"
         typeahead="site for site in loadSiteNamesAsync($viewValue)"
         typeahead-loading="loadingLocations"
+        typeahead-on-select="typeaheadOnSelect($item, $model, $label)"
+        typeahead-template-url="typeahead-template.html"
         class="form-control">
         <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
       </div>
   </div>
 </div>
-<div class="sidebar-extra-box filter" ng-class="{'active': uiVisibility.add}">
+
+<div ng-if="isAuthenticated()" class="sidebar-extra-box filter" ng-class="{'active': uiVisibility.add}">
   ADD ADD ADD
 </div>
-<!--
-<div id="sidebar-extra-box">
-  <p>
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam
-  lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra
-  nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-  libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta
-  lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non
-  tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut
-  gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor.
-  Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim
-  sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in
-  urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam
-  pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis
-  parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris
-  vitae nisi at sem facilisis semper ac in est. 
-  </p>
-  <p>
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam
-  lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra
-  nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget
-  libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta
-  lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non
-  tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut
-  gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor.
-  Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim
-  sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in
-  urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam
-  pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis
-  parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris
-  vitae nisi at sem facilisis semper ac in est. 
-  </p>
-</div>
--->

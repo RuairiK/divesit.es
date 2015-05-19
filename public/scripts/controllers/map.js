@@ -141,6 +141,11 @@ app.controller('MapController', function(uiGmapIsReady, $http, $scope, $rootScop
     });
   });
 
+  $scope.$on('event:search-result-selected', function (event, data) {
+    console.log(data);
+    $scope.mapInstance.panTo({lat: data[1], lng: data[0]});
+  });
+
   var isWithinDepthRange = function(depth, range){
     return depth >= range[0] && depth <= range[1]
   }

@@ -2,7 +2,7 @@
 
 var app = angular.module('divesitesApp');
 
-app.controller('SidebarController', function (api, $scope, $rootScope, localStorageService) {
+app.controller('SidebarController', function (api, $scope, $rootScope, localStorageService, $auth) {
   // Function definitions
 
   // Broadcast a filter event for the map to handle.
@@ -23,18 +23,17 @@ app.controller('SidebarController', function (api, $scope, $rootScope, localStor
     $rootScope.$broadcast('event:filter-sites', filterEventData);
   };
 
+  // Load sites on typeahead
   $scope.loadSiteNamesAsync = function (val) {
-    console.log("calling lSNA");
     return api.retrieveDivesites({name: val}).then(function (response) {
-      //console.log(response.data);
-      var names = response.data.map(
-        function (s) {
-          return s.name;
-        }
-      );
-      console.log(names);
-      return names;
+      return response.data;
     });
+  };
+  // When the user selects a site from the search drop-down,
+  // broadcast an event to tell the map to pan to the site's
+  // location
+  $scope.typeaheadOnSelect = function (item, model, label) {
+    $rootScope.$broadcast('event:search-result-selected', item.loc);
   };
 
   // UI display toggles
@@ -45,6 +44,12 @@ app.controller('SidebarController', function (api, $scope, $rootScope, localStor
       else $scope.uiVisibility[k] = !$scope.uiVisibility[k];
     });
   };
+
+  $scope.isAuthenticated = function () {
+    return $auth.isAuthenticated();
+  }
+
+
   // Initialize controller
 
   // Initial GUI settings
