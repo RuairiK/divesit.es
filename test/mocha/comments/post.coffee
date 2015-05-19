@@ -46,7 +46,7 @@ describe "POST/divesites/:id/comments", () ->
   describe "without authorization", () ->
     it "returns HTTP 401 and doesn't add a comment", (done) ->
       async.waterfall [
-        (cb) -> Divesite.findOne cb 
+        (cb) -> Divesite.findOne cb
         (site, cb) ->
           request app
             .post "/divesites/#{site._id}/comments"
@@ -60,7 +60,7 @@ describe "POST/divesites/:id/comments", () ->
       ], done
 
   describe "with authorization", () ->
-    it "returns HTTP 400 if given an invalid site ID", (done) ->
+    it "returns HTTP 404 if given an invalid site ID", (done) ->
       async.waterfall [
         (cb) -> User.findOne cb
         (user, cb) ->
@@ -68,10 +68,10 @@ describe "POST/divesites/:id/comments", () ->
             .post "/divesites/invalid/comments"
             .set 'force-authenticate', true
             .set 'auth-id', user._id
-            .expect HTTP.BAD_REQUEST
+            .expect HTTP.NOT_FOUND
             .end done
       ], done
-    it "returns HTTP 400 if given a valid but unmatchable site ID", (done) ->
+    it "returns HTTP 404 if given a valid but unmatchable site ID", (done) ->
       async.waterfall [
         (cb) -> User.findOne cb
         (user, cb) ->
@@ -80,11 +80,25 @@ describe "POST/divesites/:id/comments", () ->
             .post "/divesites/#{s._id}/comments"
             .set 'force-authenticate', true
             .set 'auth-id', user._id
-            .expect HTTP.BAD_REQUEST
+            .expect HTTP.NOT_FOUND
             .end cb
       ], done
       
     describe "with a valid site ID", () ->
+      it "returns HTTP 400 if a comment is empty", (done) ->
+        async.waterfall [
+          (cb) -> User.findOne cb
+          (user, cb) -> Divesite.findOne (err, site) -> cb(err, site, user)
+          (site, user, cb) ->
+            request app
+              .post "/divesites/#{site._id}/comments"
+              .set 'force-authenticate', true
+              .set 'auth-id', user._id
+              .send {text: ''}
+              .expect HTTP.BAD_REQUEST
+              .end cb
+        ], done
+
       it "adds a comment to the database and returns HTTP 201 and the new comment", (done) ->
         async.waterfall [
           (cb) -> User.findOne cb
