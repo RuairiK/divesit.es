@@ -2,8 +2,7 @@
 
 var app = angular.module('divesitesApp');
 
-app.controller('NavTopController', function (uiGmapGoogleMapApi, $http, $scope, $rootScope, $modal, $auth, $cookieStore) {
-  console.log('initializing top navigation controller');
+app.controller('NavTopController', function (uiGmapGoogleMapApi, localStorageService, $http, $scope, $rootScope, $modal, $auth) {
 
   $scope.showAbout = function () {
     $modal.open({ templateUrl: 'views/partials/about.html' });
@@ -21,17 +20,22 @@ app.controller('NavTopController', function (uiGmapGoogleMapApi, $http, $scope, 
   };
 
   $scope.authenticate = function (provider) {
+    // Authenticate the user
     $auth.authenticate(provider).then(function (response) {
-      $http.get('/auth/profile').then(function (response) {
-        $cookieStore.put('currentUser', response.data);
-        $rootScope.currentUser = response.data;
+      // Retrieve the profile
+      $http.get('/auth/profile').success(function (res) {
+        // Cookies seem to be broken in this v. of Angular, so let's
+        // use local storage instead.
+        var user = {displayName: res.displayName, picture: res.picture};
+        $rootScope.currentUser = user;
+        localStorageService.set('currentUser', user);
       });
     });
   };
 
   $scope.logout = function () {
+    localStorageService.remove('currentUser');
     $auth.logout();
-    $cookieStore.remove('currentUser');
   }
 
   $scope.isAuthenticated = function () {
@@ -39,9 +43,15 @@ app.controller('NavTopController', function (uiGmapGoogleMapApi, $http, $scope, 
   }
 
   // Initialization
-  if ($cookieStore.get('currentUser')) {
-    // Pull stored user details from cookie store
-    $rootScope.currentUser = $cookieStore.get('currentUser');
+  if (localStorageService.get('currentUser')) {
+    // Pull stored user details from local storage
+    $rootScope.currentUser = localStorageService.get('currentUser');
+  } else if ($auth.isAuthenticated()) {
+    $http.get('/auth/profile').success(function (res) {
+      var user = {displayName: res.displayName, picture: res.picture};
+      $rootScope.currentUser = user;
+      localStorageService.set('currentUser', user);
+    });
   }
 
 });

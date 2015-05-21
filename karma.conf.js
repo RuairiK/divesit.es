@@ -24,10 +24,11 @@ module.exports = function(config) {
       'public/libs/angular-cookies/angular-cookies.js',
       'public/libs/satellizer/satellizer.min.js',
       'public/libs/underscore/underscore.js',
+      'public/libs/angular-local-storage/dist/angular-local-storage.js',
       {pattern: 'public/libs/angular-google-maps/dist/*.js', included: true},
       {pattern: 'public/scripts/**/*.js', included: true},
       {pattern: 'public/scripts/*.js', included: true},
-      {pattern: 'tests/frontend_tests/**/*.js', included: false}
+      {pattern: 'test/jasmine/**/*.coffee', included: false}
     ],
 
 
@@ -39,21 +40,26 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        "public/scripts/**/*.js": 'coverage'
+        "public/scripts/**/*.js": 'coverage',
+        "**/*.coffee": "coffee"
     },
-
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['coverage', 'spec'],
 
+    coverageReporter: {
+      type: 'lcovonly',
+      subdir: 'jasmine'
+    },
+
     // web server port
     port: 9876,
 
 
     // enable / disable colors in the output (reporters and logs)
-    colors: true,
+    colors: false,
 
 
     // level of logging
@@ -71,6 +77,6 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false
+    singleRun: true
   });
 };

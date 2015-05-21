@@ -3,12 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "postinstall": "bower install",
     "start": "node ./bin/www",
-    "test": "mocha test/ && ./node_modules/.bin/karma start --single-run --browsers PhantomJS"
+    "test": "mocha test/mocha/ && ./node_modules/.bin/karma start --single-run --browsers PhantomJS && istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/mocha/"
   },
   "dependencies": {
+    "async": "^0.9.0",
     "bcryptjs": "^2.1.0",
     "body-parser": "~1.10.2",
+    "bower": "^1.4.1",
+    "coffee-script": "^1.9.2",
     "cookie-parser": "~1.3.3",
     "coveralls": "^2.11.2",
     "debug": "~2.1.1",
@@ -21,12 +25,12 @@
     "mongoose": "~4",
     "mongoose-findorcreate": "^0.1.2",
     "morgan": "~1.5.1",
-    "querystring": "^0.2.0",
     "request": "^2.55.0",
     "serve-favicon": "~2.2.0",
-    "should": "latest"
+    "should": "~6.0.1"
   },
   "devDependencies": {
+    "async": "^0.9.0",
     "debug": "^2.1.3",
     "ejs": "^2.3.1",
     "frisby": "*",
@@ -35,14 +39,17 @@
     "karma": "^0.12.31",
     "karma-chrome-launcher": "^0.1.7",
     "karma-cli": "*",
+    "karma-coffee-preprocessor": "^0.2.1",
     "karma-coverage": "*",
     "karma-firefox-launcher": "^0.1.4",
     "karma-ie-launcher": "^0.1.5",
     "karma-jasmine": "^0.3.5",
+    "karma-mocha": "^0.1.10",
     "karma-phantomjs-launcher": "*",
     "karma-requirejs": "^0.2.2",
     "karma-spec-reporter": "*",
     "mocha": "^2.2.4",
+    "sinon": "^1.14.1",
     "supertest": "^0.15.0"
   }
 }

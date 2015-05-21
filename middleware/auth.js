@@ -1,9 +1,9 @@
 var jwt = require('jwt-simple');
-var keys = require('../keys');
 var moment = require('moment');
 var request = require('request');
 
 var User = require('../models/User');
+var config = require('../config');
 
 // Constants --- feel free to refactor these out of this file.
 // TOKEN_EXPIRY_DAYS: a token remains valid for this many days after it is created.
@@ -17,7 +17,7 @@ var createToken = function (user) {
     iat: moment().unix(),
     exp: moment().add(TOKEN_EXPIRY_DAYS, 'days').unix()
   };
-  return jwt.encode(payload, keys.tokenSecret);
+  return jwt.encode(payload, config.TOKEN_SECRET);
 }
 
 // Middleware: ensure that user is authenticated
@@ -27,7 +27,7 @@ var ensureAuthenticated = function (req, res, next) {
     return res.status(401).send({message: 'No Authorization token'});
   }
   var token = req.headers.authorization.split(' ')[1];
-  var payload = jwt.decode(token, keys.tokenSecret);
+  var payload = jwt.decode(token, config.TOKEN_SECRET);
   if (payload.exp <= moment().unix()) {
     return res.status(401).send({message: 'Token has expired'});
   }
@@ -43,7 +43,7 @@ var authenticateWithGoogle = function (req, res) {
   var params = {
     code: req.body.code,
     client_id: req.body.clientId,
-    client_secret: keys.google.clientSecret,
+    client_secret: config.google.clientSecret,
     redirect_uri: req.body.redirectUri,
     grant_type: 'authorization_code'
   };
@@ -62,7 +62,7 @@ var authenticateWithGoogle = function (req, res) {
             return res.status(409).send({message: 'There is already a Google account that belongs to you'});
           }
           var token = req.headers.authorization.split(' ')[1];
-          var payload = jwt.decode(token, keys.tokenSecret);
+          var payload = jwt.decode(token, config.TOKEN_SECRET);
           User.findById(payload.sub, function (err, user) {
             if (!user) {
               return res.status(400).send({message: 'User not found'});
@@ -102,7 +102,7 @@ var authenticateWithFacebook = function (req, res) {
   var params = {
     code: req.body.code,
     client_id: req.body.clientId,
-    client_secret: keys.facebook.secret,
+    client_secret: config.facebook.secret,
     redirect_uri: req.body.redirectUri
   };
 

@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 
 var app = express();
 
+var config = require('./config');
 
 /*****************************************************************************/
 /* Environment-specific settings
@@ -18,12 +19,13 @@ if (app.get('env') === 'test') {
   // For testing, use a local mongo DB
   mongodbConnString = "mongodb://localhost:27017/divesites";
 } else {
-  var keys = require('./keys'); 
-  mongodbConnString = "mongodb://"
-  + keys.mongolab.user + ":" + keys.mongolab.password + "@"
-  + keys.mongolab.host + ":" + keys.mongolab.port + "/"
-  + keys.mongolab.db
+  mongodbConnString = config.MONGOLAB_URI
 }
+
+
+/*****************************************************************************/
+/* App 
+/*****************************************************************************/
 
 mongoose.connect(mongodbConnString, function(err){
   if (err) {
@@ -65,6 +67,8 @@ app.use('/divesites', divesites);
 app.use('/comments', comments);
 // Authentication routes
 app.use('/auth', auth);
+// Catch-all for Angular html5mode
+app.use('*', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -61,16 +61,6 @@ router.get('/:id', validation.hasValidIdOr404, function(req, res, next) {
   });
 });
 
-/* PUT /divesites/:id */
-// TODO: This is the more appropriate HTTP verb for complete replacements.
-// HTTP PATCH more accurately reflects the behaviour of mongoose#findByIdAndUpdate
-router.put('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function(req, res, next) {
-  Divesite.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
-    if (err) return next(err);
-    res.json(post);
-  });
-});
-
 
 /* PATCH /divesites/:id */
 router.patch('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function (req, res, next) {
@@ -80,7 +70,7 @@ router.patch('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, funct
     // name, loc, depth, description, category
     site.name = req.body.name || site.name;
     site.loc = req.body.coords && req.body.coords.latitude && req.body.coords.longitude ?
-        [req.body.coords.latitude, req.body.coords.longitude] : site.loc;
+      [req.body.coords.latitude, req.body.coords.longitude] : site.loc;
     site.chart_depth = req.body.depth || site.chart_depth;
     site.description = req.body.description || site.description;
     site.category = req.body.category || site.category;
@@ -110,6 +100,9 @@ router.delete('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, func
   });
 });
 
+
+
+
 /* Divesite comments */
 
 /* GET comments for a divesite */
@@ -117,11 +110,16 @@ router.get('/:id/comments', function (req, res, next) {
   var siteId = req.params.id;
   // Validate site ID
   if (!(siteId && mongoose.Types.ObjectId.isValid(siteId))) {
-    return res.status(HTTP.NOT_FOUND).send();
+    return res.status(HTTP.NOT_FOUND).json({});
   }
-  Comment.find({divesite_id: siteId}, function (err, data) {
-    if (err) { return next(err); }
-    return res.json(data);
+  Divesite.find({_id: siteId}, function (err, site) {
+    // If the site isn't in the db, return 404
+    if (!site) return res.status(HTTP.NOT_FOUND).json({});
+    // Return comments
+    Comment.find({divesite_id: siteId}, function (err, data) {
+      if (err) { return next(err); }
+      return res.status(HTTP.OK).json(data);
+    });
   });
 });
 
@@ -145,6 +143,7 @@ router.post('/:id/comments', auth.ensureAuthenticated, function (req, response, 
     // Step 2: find the site
     Divesite.findOne({_id: siteId}, function (err, site) {
       if (err) { return next(err); }
+      if (!site) return response.status(400).json({'message': 'Invalid or missing site ID'});
       // User and site are valid
       var comment = {
         divesite_id: req.params.id,

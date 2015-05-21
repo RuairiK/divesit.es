@@ -19,10 +19,15 @@
         <li><a href ng-click="showAbout()">About</a></li>
         <li><a href ng-click="showContact()">Contact</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
 
-        <!-- display if user is authenticated -->
-        <li ng-if="isAuthenticated()" class="dropdown">
+      <!-- display if user is authenticated -->
+      <ul class="nav navbar-nav navbar-right" ng-if="isAuthenticated()">
+        <li>
+        <a href="#" tooltip="Map" tooltip-placement="bottom"><i class="fa fa-fw fa-globe"></i></a>
+        </li>
+        <li>
+        <a href tooltip="New site" tooltip-placement="left"><i class="fa fa-map-marker"></i><i class="fa fa-plus"></i></a>
+        <li class="dropdown">
         <a href class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
           <img ng-src="{{ currentUser.picture }}" width="18px" height="18px" />
           {{ currentUser.displayName }}
@@ -33,8 +38,11 @@
           <li><a href ng-click="logout()">Sign out</a></li>
         </ul>
         </li>
-        <!-- display if user is not authenticated -->
-        <li ng-if="!isAuthenticated()" class="dropdown" id="dropdown-login-list">
+      </ul>
+
+      <!-- display if user is not authenticated -->
+      <ul class="nav navbar-nav navbar-right" ng-if="!isAuthenticated()">
+        <li class="dropdown" id="dropdown-login-list">
         <a href class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
           Sign in
           <span class="caret"></span>

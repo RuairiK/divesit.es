@@ -15,10 +15,6 @@ if (process.env.NODE_ENV == 'test') {
   auth = require('../middleware/auth');
 }
 
-function isValidObjectID(_id) {
-  return _id && mongoose.Types.ObjectId.isValid(_id);
-}
-
 /* GET all comments */
 router.get('/', function (req, response, next) {
   // Currently not allowed; we may want to allow a feed for recent comments
@@ -40,7 +36,7 @@ router.get('/:id', validation.hasValidIdOr404, function (req, response, next) {
 
 
 /* POST a new comment to no divesite */
-router.post('/', function (req, response, next) {
+router.post('/', auth.ensureAuthenticated, function (req, response, next) {
   response.status(HTTP.METHOD_NOT_ALLOWED).json({});
 });
 
