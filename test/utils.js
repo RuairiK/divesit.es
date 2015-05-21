@@ -10,6 +10,13 @@ function tearDown () {
 
 var USERNAME = 'TEST_USER';
 
+function createUser (done) {
+    User.create({displayName: USERNAME, picture: 'http://example.com/example.png'}, function (err, user) {
+      if (err) return done(err);
+      done();
+    });
+}
+
 function createSiteAndUser (done) {
   var newSite = {
     name: "TEST_DIVESITE",
@@ -19,10 +26,8 @@ function createSiteAndUser (done) {
   };
   Divesite.create(newSite, function (err, site) {
     if (err) return done(err);
-    //console.log("created a site");
     User.create({displayName: USERNAME, picture: 'http://example.com/example.png'}, function (err, user) {
       if (err) return done(err);
-      //console.log("created a user");
       done();
     });
   });
@@ -52,5 +57,6 @@ module.exports = {
   createSiteAndUser: createSiteAndUser,
   createComment: createComment,
   destroyAllComments: destroyAllComments,
+  createUser: createUser,
   USERNAME: USERNAME
 };

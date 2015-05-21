@@ -6,6 +6,7 @@ var HTTP = require('http-status-codes');
 var Divesite = require('../models/Divesite');
 var User = require('../models/User');
 var Comment = require('../models/Comment');
+var validation = require('../middleware/validation');
 
 var auth;
 if (process.env.NODE_ENV == 'test') {
@@ -27,14 +28,8 @@ router.get('/', function (req, response, next) {
 
 
 /* GET an individual comment by ID */
-router.get('/:id', function (req, response, next) {
-  var commentID = req.params.id;
-  // Validate comment ID before asking Mongoose to parse it
-  if (!isValidObjectID(commentID)) {
-    // Any invalid IDs return 404s
-    return response.status(HTTP.NOT_FOUND).json({});
-  }
-  Comment.findOne({_id: commentID}, function (err, comment) {
+router.get('/:id', validation.hasValidIdOr404, function (req, response, next) {
+  Comment.findOne({_id: req.params.id}, function (err, comment) {
     if (err) {return next(err); }
     if (!comment) {
       return response.status(HTTP.NOT_FOUND).json({});
@@ -51,16 +46,12 @@ router.post('/', function (req, response, next) {
 
 
 /* DELETE a comment */
-router.delete('/:id', auth.ensureAuthenticated, function (req, response, next) {
-  var commentID = req.params.id;
-  if (!(commentID && mongoose.Types.ObjectId.isValid(commentID))) {
-    return response.status(HTTP.NOT_FOUND).json({});
-  }
-  Comment.findOne({_id: commentID}, function (err, comment) {
+router.delete('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function (req, response, next) {
+  Comment.findOne({_id: req.params.id}, function (err, comment) {
     if (err) return done(err);
     if (!comment) return response.status(HTTP.NOT_FOUND).json({});
     if (req.user != comment.user._id) return response.status(HTTP.FORBIDDEN).json({});
-    Comment.remove({_id: commentID}, function (err, comment) {
+    Comment.remove({_id: req.params.id}, function (err, comment) {
       response.status(HTTP.NO_CONTENT).json({});
     });
   });
@@ -68,13 +59,8 @@ router.delete('/:id', auth.ensureAuthenticated, function (req, response, next) {
 
 
 /* PATCH an existing comment */
-router.patch('/:id', auth.ensureAuthenticated, function (req, response, next) {
-  var commentID = req.params.id;
-  // Validate comment ID before passing it to Mongoose
-  if (!isValidObjectID(commentID)) {
-    return response.status(HTTP.NOT_FOUND).json({});
-  }
-  Comment.findOne({_id: commentID}, function (err, comment) {
+router.patch('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function (req, response, next) {
+  Comment.findOne({_id: req.params.id}, function (err, comment) {
     if (err) {return next(err);}
     // Return a 404 if we can't retrieve the comment
     if (!comment) {
@@ -85,9 +71,13 @@ router.patch('/:id', auth.ensureAuthenticated, function (req, response, next) {
       return response.status(HTTP.FORBIDDEN).json({});
     } 
     // The only changes allowed are to the comment text
-    Comment.findByIdAndUpdate({_id: commentID}, {text: req.body.text}, function (err, numAffected, data) {
-      if (err) {return next(err);}
-      return response.status(HTTP.OK).json(numAffected);
+    comment.text = req.body.text;
+    comment.updated_at = Date.now();
+    comment.save(function (err) {
+      if (err) {
+        return next(err);
+      }
+      return response.status(HTTP.OK).json(comment);
     });
   });
 });
