@@ -1,8 +1,8 @@
-<script type="text/ng-template" id="typeahead-template.html">
+<!-- <script type="text/ng-template" id="typeahead-template.html">
 <a>
 {{match.model.name}}
 </a>
-</script>
+</script> -->
 <div class="sidebar">
   <ul class="list-unstyled sidebar-icon-list">
     <li><a ng-click="toggleMenu('filter')" ng-class="{'active': uiVisibility.filter}" href><i class="fa fa-fw fa-filter"></i></a></li>
@@ -45,10 +45,9 @@
       <div class="col-xs-12 content">
         <input type="text" 
         ng-model="asyncSelected"
-        typeahead="site for site in loadSiteNamesAsync($viewValue)"
+        typeahead="site.name for site in loadSiteNamesAsync($viewValue)"
         typeahead-loading="loadingLocations"
         typeahead-on-select="typeaheadOnSelect($item, $model, $label)"
-        typeahead-template-url="typeahead-template.html"
         class="form-control">
         <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
       </div>
