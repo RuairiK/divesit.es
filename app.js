@@ -17,11 +17,10 @@ var config = require('./config');
 var mongodbConnString;
 if (app.get('env') === 'test') {
   // For testing, use a local mongo DB
-  mongodbConnString = "mongodb://localhost:27017/divesites";
+  mongodbConnString = "mongodb://localhost:27017/test-divesites";
 } else {
   mongodbConnString = config.MONGOLAB_URI
 }
-
 
 /*****************************************************************************/
 /* App 

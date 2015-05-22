@@ -8,13 +8,56 @@ express = require('express')
 HTTP = require('http-status-codes')
 request = require('supertest')
 
-routes = require.main.require('routes/index')
-Divesite = require.main.require('models/Divesite')
-User = require.main.require('models/User')
-Comment = require.main.require('models/Comment')
-app = require.main.require('app')
+routes = require('../../../routes/index')
+Divesite = require('../../../models/Divesite')
+User = require('../../../models/User')
+Comment = require('../../../models/Comment')
+app = require('../../../app')
 
 utils = require('../utils')
+
+describe "GET /comments/", ->
+  it "returns HTTP 404", (done) ->
+    request app
+      .get '/comments/'
+      .expect HTTP.NOT_FOUND
+      .end done
+
+describe "GET /comments/:id", ->
+  beforeEach (done) ->
+    async.series [
+      (cb) -> utils.createSiteAndUser cb
+      (cb) -> utils.createComment cb
+    ], done
+  afterEach utils.tearDown
+
+  it "returns HTTP 200 and a comment if given a valid comment ID", (done) ->
+    async.waterfall [
+      (cb) -> Comment.findOne(cb)
+      (comment, cb) ->
+        request app
+          .get "/comments/#{comment._id}/"
+          .expect HTTP.OK
+          .end (e, res) -> cb(e, comment, res)
+      (comment, res, cb) ->
+        res.body.should.be.an.Object
+        res.body.should.have.properties ['_id', 'user', 'text']
+        should.equal "" + res.body._id, "" + comment._id
+        res.body.text.should.equal comment.text
+        should.equal "" + res.body.user._id, "" + comment.user._id
+        cb()
+    ], done
+  it "returns HTTP 404 if given an invalid comment ID", (done) ->
+    request app
+      .get '/comments/bogus/'
+      .expect HTTP.NOT_FOUND
+      .end done
+  it "returns HTTP 404 if given a valid comment ID with no match", (done) ->
+    s = new Comment()
+    request app
+      .get "/comments/#{s._id}"
+      .expect HTTP.NOT_FOUND
+      .end done
 
 describe "GET /divesites/:id/comments", () ->
   beforeEach (done) ->

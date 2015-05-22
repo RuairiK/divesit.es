@@ -8,11 +8,11 @@ express = require('express')
 request = require('supertest')
 HTTP = require('http-status-codes')
 
-routes = require.main.require('routes/index')
-Divesite = require.main.require('models/Divesite')
-User = require.main.require('models/User')
-app = require.main.require('app')
-utils = require('../utils')
+routes = require '../../../routes/index'
+Divesite = require '../../../models/Divesite'
+User = require '../../../models/User'
+app = require '../../../app'
+utils = require '../utils'
 
 describe "POST /auth/profile", () -> 
   describe "without authorization", () ->
