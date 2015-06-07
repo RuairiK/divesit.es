@@ -18,6 +18,7 @@ if (process.env.NODE_ENV == 'test') {
   auth = require('../middleware/auth');
 }
 
+
 /* GET dive sites listing. */
 router.get('/', function(req, res, next) {
   // If we receive a querystring with a 'name' parameter, find a list
@@ -28,12 +29,30 @@ router.get('/', function(req, res, next) {
       return res.status(HTTP.OK).json(divesites);
     });
   }
-  Divesite.find(function(err, divesites) {
-    if(err) {
-      return next(err);
+  // If we get a 'bounds' parameter, find divesites within the polygon
+  if (req.query.bounds) {
+    if (!validation.validateBounds(req.query.bounds)) {
+      return res.status(HTTP.BAD_REQUEST).json({});
     }
+    //var bounds = req.query.bounds.split(',').map(function (x) {return parseFloat(x)});
+    var bounds = req.query.bounds.map(function (x) {return parseFloat(x)});
+    var n = bounds[0],
+      w = bounds[1],
+      s = bounds[2],
+      e = bounds[3];
+    // We need to pass Mongo [lng, lat] rather than [lat, lng] pairs
+    var coords = [ [w, n], [e, n], [e, s], [w, s], [w, n] ];
+    var polygon = {type: "Polygon", coordinates: [coords]};
+    Divesite.find({loc: {$geoWithin: {$geometry: polygon}}}, function (err, divesites) {
+      if (err) return next(err);
+      return res.status(HTTP.OK).json(divesites);
+    });
+  } else {Divesite.find(function(err, divesites) {
+    // Otherwise, return a list of all the divesites in the db
+    if (err) return next(err);
     return res.status(HTTP.OK).json(divesites);
   });
+  }
 });
 
 /* POST a new dive site */
