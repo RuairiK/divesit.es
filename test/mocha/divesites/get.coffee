@@ -87,15 +87,6 @@ describe 'GET /divesites/:id', () ->
       (cb) -> Divesite.create {name: 'SITE_2', category: 'wreck', chart_depth: 20, loc: [2, 2]}, cb
       (cb) -> Divesite.create {name: 'SITE_3', category: 'wreck', chart_depth: 30, loc: [3, 3]}, cb
     ], done
-    ###
-  before (done) ->
-    [1, 2, 3].forEach (i) -> Divesite.create {
-      name: 'TEST_SITE_' + i
-      category: 'wreck'
-      chart_depth: 100
-      loc: [i, i]
-    }
-    ###
 
   after (done) -> utils.tearDown done
 
