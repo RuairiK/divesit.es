@@ -1,5 +1,11 @@
+'use strict';
+
 var mongoose = require('mongoose');
 var HTTP = require('http-status-codes');
+
+// We're setting these constraints arbitrarily
+var MAX_ZOOM = 14;
+var MIN_ZOOM = 3;
 
 // Check that _id is defined and that it's a valid Mongoose
 // ID (26 char alphanumeric)
@@ -11,8 +17,15 @@ function validateBounds(_bounds) {
   if (!_bounds) return false; // validate existence
   var bounds = _bounds.toString().split(',');
   if (bounds.length != 4) return false; // validate length
-  if (bounds[0] == bounds[2] && bounds[1] == bounds[3]) return false;
-  return bounds.every(function (b) {return !isNaN(b)});
+  if (bounds[0] == bounds[2] && bounds[1] == bounds[3]) return false; // validate size is non-zero
+  return bounds.every(function (b) {return !isNaN(b)}); // ensure that all the bounding values are numeric
+}
+
+function validateMapZoomLevel(_zoom) {
+  if (!_zoom) return false;
+  var zoom = parseInt(_zoom); // Needs to be numeric, and fractional values are ignored
+  if (isNaN(zoom)) return false;
+  return zoom >= MIN_ZOOM && zoom <= MAX_ZOOM; // check that it's in bounds
 }
 
 
@@ -44,6 +57,7 @@ function findObjectOr404(model) {
 module.exports = {
   hasValidIdOr404: hasValidIdOr404,
   findObjectOr404: findObjectOr404,
-  validateBounds: validateBounds
+  validateBounds: validateBounds,
+  validateMapZoomLevel: validateMapZoomLevel
 };
 
