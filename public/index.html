@@ -2,8 +2,31 @@
 <html lang="en">
 <head>
 <title>divesit.es</title>
-<link href="" rel="stylesheet" type="text/css">
+<!-- External CSS -->
+<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+<!-- CSS -->
+<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="libs/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css">
+<link rel="stylesheet" href="styles/style.css">
+<!-- JS -->
+<!-- JQuery needs to be loaded first due to some weird bug in the slider plugin -->
+<script src="libs/jquery/dist/jquery.min.js"></script>
+<script src="libs/jqueryui/jquery-ui.js"></script>
+<!-- Angular dependencies -->
+<script src="libs/angular/angular.js"></script>
+<script src='libs/angular-google-maps/dist/angular-google-maps.min.js'></script>
+<script src="libs/angular-route/angular-route.js"></script>
+<script src="libs/angular-local-storage/dist/angular-local-storage.js"></script>
+<!-- Main app -->
+<script src="scripts/app.js"></script>
+<!-- Controllers -->
+<script src="scripts/controllers/main.js"></script>
+<script src="scripts/controllers/map.js"></script>
+<!-- Angular custom -->
+<script src="libs/lodash/lodash.min.js"></script>
 </head>
-<body>
+<body ng-app="divesitesApp" controller="MainController" class="container-fluid">
+<div ng-view>
+</div>
 </body>
 </html>
