@@ -60,10 +60,12 @@ router.post('/', auth.ensureAuthenticated, function(req, res, next) {
   // Parse the incoming data to build a schema-compatible object
   var site = {
     name: req.body.name,
-    category: req.body.category,
+    boat_entry: req.body.boat_entry,
+    shore_entry: req.body.shore_entry,
     loc: [parseFloat(req.body.coords.longitude), parseFloat(req.body.coords.latitude)],
-    chart_depth: req.body.depth,
-    creator_id: req.user
+    depth: req.body.depth,
+    creator_id: req.user,
+    description: req.body.description
   };
 
   // Create the object

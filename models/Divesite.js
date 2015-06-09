@@ -1,17 +1,15 @@
-var mongoose = require('mongoose'),
-    ObjectId = mongoose.Schema.Types.ObjectId;
-
-/* valid categories */
-var categories = ['wreck', 'scenic', 'drift'];  
+var mongoose = require('mongoose');
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var DivesiteSchema = new mongoose.Schema({
-	name: {type: String, index: 'text'},
-  loc: {type: [Number], index: '2dsphere'},
-	chart_depth: {type: Number, min: 0, max: 200},
+  name: {type: String, index: 'text', required: true },
+  loc: {type: [Number], index: '2dsphere', required: true },
+  depth: {type: Number, min: 0, max: 200, required: true },
   created_at: { type: Date, default: Date.now },
-	updated_at: { type: Date, default: Date.now },
-  description: String,
-  category: {type: String, enum: categories},
+  updated_at: { type: Date, default: Date.now },
+  boat_entry: { type: Boolean, required: true },
+  shore_entry: { type: Boolean, required: true },
+  description: { type: String, required: true },
   creator_id: ObjectId
 });
 

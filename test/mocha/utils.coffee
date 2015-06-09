@@ -18,7 +18,12 @@ createUser = (done) -> User.create {
 }, done
 
 createSite = (done) -> Divesite.create {
-  name: "TEST_DIVESITE", category: "wreck", chart_depth: 100, loc: [0, 0]
+  name: "TEST_DIVESITE"
+  boat_entry: true
+  shore_entry: true
+  depth: 100
+  loc: [0, 0]
+  description: 'TEST_DIVESITE DESCRIPTION'
 }, done
 
 createSiteAndUser = (done) -> async.parallel [

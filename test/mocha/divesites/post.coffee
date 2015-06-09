@@ -17,7 +17,10 @@ utils = require('../utils')
 siteData =
   name: "TEST_SITE"
   category: "wreck"
-  depth: 100
+  depth: 50
+  description: 'TEST_SITE description'
+  boat_entry: true
+  shore_entry: true
   coords:
     longitude: 0
     latitude: 0
@@ -78,7 +81,9 @@ describe "POST /divesites", () ->
       (user, cb) -> Divesite.findOne {name: siteData.name}, (e, site) -> cb(e, user, site)
       (user, site, cb) ->
         site.should.be.an.Object
-        site.should.have.properties ['creator_id', '_id', 'name', 'category', 'loc', 'updated_at']
+        site.should.have.properties ['creator_id', '_id', 'name', 'shore_entry',
+        'loc', 'updated_at', 'boat_entry', 'description'
+        ]
         site.loc.should.be.an.Array
         site.loc.should.have.length 2
         should.equal site.name, siteData.name

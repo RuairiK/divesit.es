@@ -18,9 +18,30 @@ describe "GET /divesites", () ->
 
   before (done) ->
     async.parallel [
-      (cb) -> Divesite.create {name: 'SITE_1', category: 'wreck', chart_depth: 10, loc: [1, 1]}, cb
-      (cb) -> Divesite.create {name: 'SITE_2', category: 'wreck', chart_depth: 20, loc: [2, 2]}, cb
-      (cb) -> Divesite.create {name: 'SITE_3', category: 'wreck', chart_depth: 30, loc: [3, 3]}, cb
+      (cb) -> Divesite.create {
+        name: 'SITE_1',
+        boat_entry: true,
+        shore_entry: false,
+        depth: 10,
+        loc: [1, 1]
+        description: 'SITE_1 DESCRIPTION'
+      }, cb
+      (cb) -> Divesite.create {
+        name: 'SITE_2',
+        boat_entry: false,
+        shore_entry: true,
+        depth: 20,
+        loc: [2, 2]
+        description: 'SITE_2 DESCRIPTION'
+      }, cb
+      (cb) -> Divesite.create {
+        name: 'SITE_3',
+        boat_entry: true,
+        shore_entry: true,
+        depth: 30,
+        loc: [3, 3]
+        description: 'SITE_3 DESCRIPTION'
+      }, cb
     ], done
 
   after (done) -> utils.tearDown done
@@ -35,7 +56,7 @@ describe "GET /divesites", () ->
         res.body.length.should.equal 3 # correct length
         res.body.forEach (o) -> # check each element
           o.should.be.an.Object 
-          o.should.have.properties ['name', '_id', 'category', 'loc', 'chart_depth']
+          o.should.have.properties ['name', '_id', 'boat_entry', 'shore_entry', 'loc', 'depth']
         done()
 
   describe "when sent a pair of bounds", ->
@@ -81,11 +102,33 @@ describe "GET /divesites", () ->
           done err
 
 describe 'GET /divesites/:id', () ->
+
   before (done) ->
     async.parallel [
-      (cb) -> Divesite.create {name: 'SITE_1', category: 'wreck', chart_depth: 10, loc: [1, 1]}, cb
-      (cb) -> Divesite.create {name: 'SITE_2', category: 'wreck', chart_depth: 20, loc: [2, 2]}, cb
-      (cb) -> Divesite.create {name: 'SITE_3', category: 'wreck', chart_depth: 30, loc: [3, 3]}, cb
+      (cb) -> Divesite.create {
+        name: 'SITE_1',
+        boat_entry: true,
+        shore_entry: false,
+        depth: 10,
+        loc: [1, 1]
+        description: 'SITE_1 DESCRIPTION'
+      }, cb
+      (cb) -> Divesite.create {
+        name: 'SITE_2',
+        boat_entry: false,
+        shore_entry: true,
+        depth: 20,
+        loc: [2, 2]
+        description: 'SITE_2 DESCRIPTION'
+      }, cb
+      (cb) -> Divesite.create {
+        name: 'SITE_3',
+        boat_entry: true,
+        shore_entry: true,
+        depth: 30,
+        loc: [3, 3]
+        description: 'SITE_3 DESCRIPTION'
+      }, cb
     ], done
 
   after (done) -> utils.tearDown done
@@ -102,7 +145,7 @@ describe 'GET /divesites/:id', () ->
             .end cb
         (res, cb) ->
           res.body.should.be.an.Object
-          res.body.should.have.properties ['name', '_id', 'loc', 'category', 'chart_depth']
+          res.body.should.have.properties ['name', '_id', 'boat_entry', 'shore_entry', 'loc', 'depth']
           res.body.loc.should.be.an.Array
           res.body.loc.length.should.equal 2
           res.body.loc[0].should.be.a.Number
