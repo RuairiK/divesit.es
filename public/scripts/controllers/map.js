@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('divesitesApp').controller('MapController', function ($scope, localStorageService) {
+angular.module('divesitesApp').controller('MapController', function ($scope, $rootScope, localStorageService, $http) {
 
   /////////////////////////////////////////////////////////////////////////////
   // Constants
@@ -23,11 +23,17 @@ angular.module('divesitesApp').controller('MapController', function ($scope, loc
   }
 
   function mapZoomChangedEventHandler (map) {
+    // Constrain the zoom level
     if (map.zoom > MAX_ZOOM) {
       map.setZoom(MAX_ZOOM);
     } else if (map.zoom < MIN_ZOOM) {
       map.setZoom(MIN_ZOOM);
     }
+  }
+
+  function updateVisibilityOnFilter (marker) {
+    var shouldBeVisible = Object.keys(marker.filterVisibility).every(function (x) {return marker.filterVisibility[x];});
+    marker.options.visible = shouldBeVisible;
   }
 
   function filterDepthRangeEventHandler (event, data) {
@@ -39,44 +45,62 @@ angular.module('divesitesApp').controller('MapController', function ($scope, loc
     $scope.map.markers.forEach(function (m) {
       // Determine whether this marker should be hidden because
       // the user's selected a depth range.
-      m.options.visible = m.options.visible && isWithinDepthRange(m.depth, data.depthRange);
+      m.filterVisibility.depthRange = isWithinDepthRange(m.depth, data.depthRange);
+      updateVisibilityOnFilter(m);
     });
   }
 
   function filterEntryTypeEventHandler (event, data) {
-    // Expects data to have keys:
-    // * 'type', with value 'boat' or 'shore'
-    // * 'visible', with value true/false
+    // Expects data to have either or both of the following keys:
+    // * 'boatEntry', with value true/false
+    // * 'shoreEntry', with value true/false
     $scope.map.markers.forEach(function (m) {
-      if (m.entryType == data.type) {
-        m.options.visible = m.options.visible && data.visible;
-      }
+      Object.keys(data).forEach (function (k) {
+        if (k == 'boatEntry' || k == 'shoreEntry') {
+          if (m[k] && !data[k]) m.filterVisibility[k] = false;
+        }
+      });
+      updateVisibilityOnFilter(m);
     });
   }
 
-  function filterMaxDifficultyEventHandler (event, data) {
-    // Expects data to have key 'maxDifficulty' with value in [0, 1, 2]
+  function filterMinimumLevelEventHandler (event, data) {
+    // Expects data to have key 'minimumLevel' with value in [0, 1, 2]
     $scope.map.markers.forEach(function (m) {
-      m.options.visible = m.options.visible && m.difficulty <= data.maxDifficulty;
+      m.filterVisibility.minimumLevel = m.minimumLevel >= data.minimumLevel;
+      updateVisibilityOnFilter(m);
     });
   }
 
-  function retrieveDivesites () {
+  $scope.retrieveDivesites = function () {
     $http.get('/divesites/')
     .success(function (data) {
-      return {
-        id: e._id,
-        loc: e.loc,
-        title: e.name,
-        depth: e.depth,
-        entryType: e.entryType,
-        options: { // Google Maps MarkerOptions
-          visible: false // initially false, switched on when filtered
+      $scope.map.markers = data.map(function (e) {
+        return {
+          id: e._id,
+          title: e.name,
+          loc: e.loc,
+          depth: e.depth,
+          createdAt: e.createdAt,
+          updatedAt: e.updatedAt,
+          boatEntry: e.boatEntry,
+          shoreEntry: e.shoreEntry,
+          minimumLevel: e.minimumLevel,
+          description: e.description,
+          options: { // Google Maps MarkerOptions
+            visible: false // initially false, switched on when filtered
+          },
+          filterVisibility: {
+            boatEntry: false,
+            shoreEntry: false,
+            depthRange: false,
+            minimumLevel: false
+          }
         }
-      }
+      });
     }).then(function () {
-      $rootScope.broadcast('event:divesites-loaded');
-    });;
+      $rootScope.$broadcast('event:divesites-loaded');
+    });
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -85,7 +109,8 @@ angular.module('divesitesApp').controller('MapController', function ($scope, loc
 
   $scope.map = {
     events: {
-      idle: mapIdleEventHandler
+      idle: mapIdleEventHandler,
+      zoom_changed: mapZoomChangedEventHandler
     },
     center: {
       latitude: localStorageService.get('map.center.latitude') || 53.5,
@@ -107,6 +132,7 @@ angular.module('divesitesApp').controller('MapController', function ($scope, loc
   // Listen for entry type filter changes
   $scope.$on('event:filter-entry-type', filterEntryTypeEventHandler);
   // Listen for maximum difficulty filter changes
-  $scope.$on('event:filter-max-difficulty', filterMaxDifficultyEventHandler);
+
+  $scope.$on('event:filter-minimum-level', filterMinimumLevelEventHandler);
 
 });

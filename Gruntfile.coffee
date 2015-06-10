@@ -53,7 +53,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', ['js', 'less']
   grunt.registerTask 'test', [
     #'mochaTest'
-    #'karma'
+    'karma'
     'mocha_istanbul:coverage'
   ]
   grunt.registerTask 'default', [

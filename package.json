@@ -5,8 +5,7 @@
   "scripts": {
     "postinstall": "bower install",
     "start": "node ./bin/www",
-    "test": "grunt test",
-    "oldtest": "mocha test/mocha/ && ./node_modules/.bin/karma start --single-run --browsers PhantomJS && istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/mocha/"
+    "test": "grunt test"
   },
   "dependencies": {
     "async": "^0.9.0",
