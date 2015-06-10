@@ -39,14 +39,17 @@ describe "FilterMenuController", ->
         expect(localStorageService.get).toHaveBeenCalledWith 'filterPreferences.boatEntry'
       it "calls $scope.filterEntryType('boat', show)", ->
         expect($scope.filterEntryType).toHaveBeenCalledWith 'boat', true
+
       it "retrieves filterPreferences.shoreEntry from local storage", ->
         expect(localStorageService.get).toHaveBeenCalledWith 'filterPreferences.shoreEntry'
       it "calls $scope.filterEntryType('shore', show)", ->
         expect($scope.filterEntryType).toHaveBeenCalledWith 'shore', false
+
       it "retrieves filterPreferences.depthRange from local storage", ->
         expect(localStorageService.get).toHaveBeenCalledWith 'filterPreferences.depthRange'
       it "calls $scope.filterDepthRange([0, 50])", ->
         expect($scope.filterDepthRange).toHaveBeenCalledWith [0, 50]
+
       it "retrieves filterPreferences.minimumLevel from local storage", ->
         expect(localStorageService.get).toHaveBeenCalledWith "filterPreferences.minimumLevel"
       it "calls $scope.filterMinimumLevel(1)", ->
