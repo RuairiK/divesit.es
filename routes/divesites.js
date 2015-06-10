@@ -18,6 +18,21 @@ if (process.env.NODE_ENV == 'test') {
   auth = require('../middleware/auth');
 }
 
+var formatSite = function (site) {
+  var formattedSite = {
+    id: site._id,
+    name: site.name,
+    boatEntry: site.boat_entry,
+    shoreEntry: site.shore_entry,
+    depth: site.depth,
+    loc: {longitude: site.loc[0], latitude: site.loc[1]},
+    description: site.description,
+    updatedAt: site.updated_at,
+    createdAt: site.created_at
+  };
+  return formattedSite;
+};
+
 
 /* GET dive sites listing. */
 router.get('/', function(req, res, next) {
@@ -45,12 +60,12 @@ router.get('/', function(req, res, next) {
     var polygon = {type: "Polygon", coordinates: [coords]};
     Divesite.find({loc: {$geoWithin: {$geometry: polygon}}}, function (err, divesites) {
       if (err) return next(err);
-      return res.status(HTTP.OK).json(divesites);
+      return res.status(HTTP.OK).json(divesites.map(formatSite));
     });
   } else {Divesite.find(function(err, divesites) {
     // Otherwise, return a list of all the divesites in the db
     if (err) return next(err);
-    return res.status(HTTP.OK).json(divesites);
+    return res.status(HTTP.OK).json(divesites.map(formatSite));
   });
   }
 });
@@ -78,7 +93,7 @@ router.post('/', auth.ensureAuthenticated, function(req, res, next) {
 /* GET /divesites/id */
 router.get('/:id', validation.hasValidIdOr404, validation.findObjectOr404(Divesite), function(req, res, next) {
   var site = req.obj;
-  res.status(HTTP.OK).json(req.obj);
+  res.status(HTTP.OK).json(formatSite(site));
 });
 
 

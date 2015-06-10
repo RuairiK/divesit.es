@@ -46,18 +46,25 @@ describe "GET /divesites", () ->
 
   after (done) -> utils.tearDown done
 
-  it "returns HTTP 200 and a list of objects", (done) ->
+  it "returns HTTP 200 and a list of JSON Objects", (done) ->
     request app
       .get '/divesites'
       .expect HTTP.OK
       .expect 'Content-Type', /json/
+      .end done
+  it "returns a list of objects, each of which has the correct properties", (done) ->
+    request app
+      .get '/divesites'
       .end (err, res) ->
         res.body.should.be.an.Array # response type ok
         res.body.length.should.equal 3 # correct length
         res.body.forEach (o) -> # check each element
           o.should.be.an.Object 
-          o.should.have.properties ['name', '_id', 'boat_entry', 'shore_entry', 'loc', 'depth']
+          o.should.have.properties [
+            'name', 'id', 'boatEntry', 'shoreEntry', 'loc', 'depth', 'description'
+          ]
         done()
+
 
   describe "when sent a pair of bounds", ->
     it "returns HTTP 200", (done) ->
@@ -134,7 +141,7 @@ describe 'GET /divesites/:id', () ->
   after (done) -> utils.tearDown done
 
   describe "with a valid site ID", () ->
-    it "returns HTTP 200 and a JSON object", (done) ->
+    it "returns HTTP 200 and JSON", (done) ->
       async.waterfall [
         (cb) -> Divesite.findOne cb
         (site, cb) ->
@@ -143,13 +150,23 @@ describe 'GET /divesites/:id', () ->
             .expect HTTP.OK
             .expect 'Content-Type', /json/
             .end cb
+      ], done
+    it "returns an object with the correct properties", (done) ->
+      async.waterfall [
+        (cb) -> Divesite.findOne cb
+        (site, cb) ->
+          request app
+            .get "/divesites/#{site._id}"
+            .end cb
         (res, cb) ->
           res.body.should.be.an.Object
-          res.body.should.have.properties ['name', '_id', 'boat_entry', 'shore_entry', 'loc', 'depth']
-          res.body.loc.should.be.an.Array
-          res.body.loc.length.should.equal 2
-          res.body.loc[0].should.be.a.Number
-          res.body.loc[1].should.be.a.Number
+          res.body.should.have.properties [
+            'name', 'id', 'boatEntry', 'shoreEntry', 'loc', 'depth', 'description'
+          ]
+          res.body.loc.should.be.an.Object
+          res.body.loc.should.have.properties ['longitude', 'latitude']
+          res.body.loc.latitude.should.be.a.Number
+          res.body.loc.longitude.should.be.a.Number
           cb()
       ], done
   describe "with a valid site ID that matches nothing", () ->
