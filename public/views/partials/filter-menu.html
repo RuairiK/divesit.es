@@ -1,7 +1,25 @@
 <div>
-  <ul>
-    <li>Entries</li>
-    <li>Difficulty</li>
+  <h1 class="header">SHOW SITES</h1>
+  <ul class="list-unstyled">
+    <!-- <li>Entries</li> -->
+    <li>
+      <label class="checkbox-inline">
+        <input type="checkbox" ng-checked="filterPreferences.boatEntry">
+        <span class="checkbox-material">
+          Boat
+        </span>
+      </label>
+      <label class="checkbox-inline">
+        <input type="checkbox" ng-checked="filterPreferences.shoreEntry">
+        <span class="checkbox-material">
+          Shore
+        </span>
+      </label>
+    </li>
+    <li>
+    <div>Minimum level</div>
+    <slider ng-model="filterPreferences.minimumLevel" range="true" min="-1" max="10" step="1"></slider>
+    </li>
     <li>Depth range</li>
   </ul>
 </div>
