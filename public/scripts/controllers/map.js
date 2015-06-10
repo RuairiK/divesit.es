@@ -107,32 +107,41 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
   // Controller initialization
   /////////////////////////////////////////////////////////////////////////////
 
-  $scope.map = {
-    events: {
-      idle: mapIdleEventHandler,
-      zoom_changed: mapZoomChangedEventHandler
-    },
-    center: {
-      latitude: localStorageService.get('map.center.latitude') || 53.5,
-      longitude: localStorageService.get('map.center.longitude') || -8
-    },
-    zoom: 7,
-    markers: [],
-    options: {
-      scrollwheel: true,
-      disableDefaultUI: true,
-      mapTypeId: 'roadmap'
-    }
+  $scope.initialize = function () {
+    $scope.map = {
+      events: {
+        idle: mapIdleEventHandler,
+        zoom_changed: mapZoomChangedEventHandler
+      },
+      center: {
+        latitude: localStorageService.get('map.center.latitude') || 53.5,
+        longitude: localStorageService.get('map.center.longitude') || -8
+      },
+      zoom: 7,
+      markers: [],
+      options: {
+        scrollwheel: true,
+        disableDefaultUI: true,
+        mapTypeId: 'roadmap'
+      }
+    };
+
+    $scope.events = {
+      filterDepthRange: filterDepthRangeEventHandler,
+      filterEntryType: filterEntryTypeEventHandler,
+      filterMinimumLevel: filterMinimumLevelEventHandler
+    };
+
+    // Listen for depth range filter changes
+    $scope.$on('event:filter-depth-range', $scope.events.filterDepthRange);
+    // Listen for entry type filter changes
+    $scope.$on('event:filter-entry-type', $scope.events.filterEntryType);
+    // Listen for maximum difficulty filter changes
+    $scope.$on('event:filter-minimum-level', $scope.events.filterMinimumLevel);
+
+    // Retrieve divesites
+    $scope.retrieveDivesites();
   };
 
-  // Event listeners
-
-  // Listen for depth range filter changes
-  $scope.$on('event:filter-depth-range', filterDepthRangeEventHandler);
-  // Listen for entry type filter changes
-  $scope.$on('event:filter-entry-type', filterEntryTypeEventHandler);
-  // Listen for maximum difficulty filter changes
-
-  $scope.$on('event:filter-minimum-level', filterMinimumLevelEventHandler);
-
+  $scope.initialize();
 });

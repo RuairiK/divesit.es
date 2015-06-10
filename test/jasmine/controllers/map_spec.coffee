@@ -42,6 +42,19 @@ describe "MapController", ->
       $rootScope: $rootScope
       localStorageService: localStorageService
     }
+  describe "$scope.initialize()", ->
+    beforeEach ->
+      spyOn $scope, 'retrieveDivesites'
+      spyOn $scope, '$on'
+      $scope.initialize()
+    it "calls $scope.retrieveDivesites()", ->
+      expect($scope.retrieveDivesites).toHaveBeenCalled()
+    it "registers an event listener for 'event:filter-depth-range'", ->
+      expect($scope.$on).toHaveBeenCalledWith 'event:filter-depth-range', $scope.events.filterDepthRange
+    it "registers an event listener for 'event:filter-entry-type'", ->
+      expect($scope.$on).toHaveBeenCalledWith 'event:filter-entry-type', $scope.events.filterEntryType
+    it "registers an event listener for 'event:filter-minimum-level'", ->
+      expect($scope.$on).toHaveBeenCalledWith 'event:filter-minimum-level', $scope.events.filterMinimumLevel
 
   describe "$scope.retrieveDivesites", ->
     it "populates $scope.map.markers", ->
@@ -166,3 +179,4 @@ describe "MapController", ->
         visibleMarkers = $scope.map.markers.filter isShown
         expect visibleMarkers.length
           .toBe 2
+
