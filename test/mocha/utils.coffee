@@ -23,6 +23,8 @@ createSite = (done) -> Divesite.create {
   shore_entry: true
   depth: 100
   loc: [0, 0]
+  boatEntry: true
+  shoreEntry: true
   description: 'TEST_DIVESITE DESCRIPTION'
 }, done
 

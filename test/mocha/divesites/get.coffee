@@ -14,35 +14,40 @@ User = require('../../../models/User')
 app = require('../../../app')
 utils = require('../utils')
 
+setupSites = (done) ->
+  async.parallel [
+    (cb) -> Divesite.create {
+      name: 'SITE_1',
+      boatEntry: true,
+      shoreEntry: false,
+      depth: 10,
+      loc: [1, 1],
+      minimumLevel: 0
+      description: 'SITE_1 DESCRIPTION'
+    }, cb
+    (cb) -> Divesite.create {
+      name: 'SITE_2',
+      boatEntry: false,
+      shoreEntry: true,
+      depth: 20,
+      loc: [2, 2]
+      minimumLevel: 1
+      description: 'SITE_2 DESCRIPTION'
+    }, cb
+    (cb) -> Divesite.create {
+      name: 'SITE_3',
+      boatEntry: true,
+      shoreEntry: true,
+      depth: 30,
+      loc: [3, 3]
+      minimumLevel: 2
+      description: 'SITE_3 DESCRIPTION'
+    }, cb
+  ], done
+
 describe "GET /divesites", () ->
 
-  before (done) ->
-    async.parallel [
-      (cb) -> Divesite.create {
-        name: 'SITE_1',
-        boat_entry: true,
-        shore_entry: false,
-        depth: 10,
-        loc: [1, 1]
-        description: 'SITE_1 DESCRIPTION'
-      }, cb
-      (cb) -> Divesite.create {
-        name: 'SITE_2',
-        boat_entry: false,
-        shore_entry: true,
-        depth: 20,
-        loc: [2, 2]
-        description: 'SITE_2 DESCRIPTION'
-      }, cb
-      (cb) -> Divesite.create {
-        name: 'SITE_3',
-        boat_entry: true,
-        shore_entry: true,
-        depth: 30,
-        loc: [3, 3]
-        description: 'SITE_3 DESCRIPTION'
-      }, cb
-    ], done
+  before (done) -> setupSites done
 
   after (done) -> utils.tearDown done
 
@@ -59,9 +64,9 @@ describe "GET /divesites", () ->
         res.body.should.be.an.Array # response type ok
         res.body.length.should.equal 3 # correct length
         res.body.forEach (o) -> # check each element
-          o.should.be.an.Object 
+          o.should.be.an.Object
           o.should.have.properties [
-            'name', 'id', 'boatEntry', 'shoreEntry', 'loc', 'depth', 'description'
+            'name', 'id', 'boatEntry', 'shoreEntry', 'loc', 'depth', 'description', 'minimumLevel'
           ]
         done()
 
@@ -110,33 +115,7 @@ describe "GET /divesites", () ->
 
 describe 'GET /divesites/:id', () ->
 
-  before (done) ->
-    async.parallel [
-      (cb) -> Divesite.create {
-        name: 'SITE_1',
-        boat_entry: true,
-        shore_entry: false,
-        depth: 10,
-        loc: [1, 1]
-        description: 'SITE_1 DESCRIPTION'
-      }, cb
-      (cb) -> Divesite.create {
-        name: 'SITE_2',
-        boat_entry: false,
-        shore_entry: true,
-        depth: 20,
-        loc: [2, 2]
-        description: 'SITE_2 DESCRIPTION'
-      }, cb
-      (cb) -> Divesite.create {
-        name: 'SITE_3',
-        boat_entry: true,
-        shore_entry: true,
-        depth: 30,
-        loc: [3, 3]
-        description: 'SITE_3 DESCRIPTION'
-      }, cb
-    ], done
+  before (done) -> setupSites done
 
   after (done) -> utils.tearDown done
 
@@ -161,7 +140,7 @@ describe 'GET /divesites/:id', () ->
         (res, cb) ->
           res.body.should.be.an.Object
           res.body.should.have.properties [
-            'name', 'id', 'boatEntry', 'shoreEntry', 'loc', 'depth', 'description'
+            'name', 'id', 'boatEntry', 'shoreEntry', 'loc', 'depth', 'description', 'minimumLevel'
           ]
           res.body.loc.should.be.an.Object
           res.body.loc.should.have.properties ['longitude', 'latitude']

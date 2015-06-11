@@ -55,8 +55,8 @@ describe "PATCH /divesites/:id", () ->
                   name: [1, 2, 3]
                   coords: {longitude: 'five', latitude: 'banana'}
                   depth: "real deep"
-                  boat_entry: 'banana'
-                  shore_entry: 4
+                  boatEntry: 'banana'
+                  shoreEntry: 4
                   description: 'whatever'
                 }
                 .expect HTTP.BAD_REQUEST
@@ -70,7 +70,7 @@ describe "PATCH /divesites/:id", () ->
             (original, updated, cb) ->
               updated.loc.should.be.an.Array
               updated.depth.should.equal original.depth
-              updated.boat_entry.should.equal original.boat_entry
+              updated.boatEntry.should.equal original.boatEntry
               cb()
           ], done
         it "updates only allowed fields", (done) ->

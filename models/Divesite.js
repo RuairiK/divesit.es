@@ -7,9 +7,10 @@ var DivesiteSchema = new mongoose.Schema({
   depth: {type: Number, min: 0, max: 200, required: true },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
-  boat_entry: { type: Boolean, required: true },
-  shore_entry: { type: Boolean, required: true },
+  boatEntry: { type: Boolean, required: true },
+  shoreEntry: { type: Boolean, required: true },
   description: { type: String, required: true },
+  minimumLevel: Number,
   creator_id: ObjectId
 });
 

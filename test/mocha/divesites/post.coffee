@@ -19,9 +19,9 @@ siteData =
   category: "wreck"
   depth: 50
   description: 'TEST_SITE description'
-  boat_entry: true
-  shore_entry: true
-  coords:
+  boatEntry: true
+  shoreEntry: true
+  loc:
     longitude: 0
     latitude: 0
 
@@ -68,7 +68,9 @@ describe "POST /divesites", () ->
           .set 'auth-id', user._id
           .send siteData
           .expect 'Content-Type', /json/
-          .end cb
+          .end (e, res) ->
+            console.log e
+            cb()
     ], done
 
     it "adds a dive site to the database", (done) -> async.waterfall [
@@ -81,8 +83,8 @@ describe "POST /divesites", () ->
       (user, cb) -> Divesite.findOne {name: siteData.name}, (e, site) -> cb(e, user, site)
       (user, site, cb) ->
         site.should.be.an.Object
-        site.should.have.properties ['creator_id', '_id', 'name', 'shore_entry',
-        'loc', 'updated_at', 'boat_entry', 'description'
+        site.should.have.properties ['creator_id', '_id', 'name', 'shoreEntry',
+        'loc', 'updated_at', 'boatEntry', 'description'
         ]
         site.loc.should.be.an.Array
         site.loc.should.have.length 2

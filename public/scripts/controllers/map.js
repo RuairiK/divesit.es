@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('divesitesApp').controller('MapController', function ($scope, $rootScope, localStorageService, $http) {
+angular.module('divesitesApp').controller('MapController', function ($scope, $rootScope, localStorageService, $http, uiGmapIsReady) {
 
   /////////////////////////////////////////////////////////////////////////////
   // Constants
@@ -31,45 +31,31 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     }
   }
 
+  $scope.checkMinimumLevel = function (marker, data) {
+    return marker.minimumLevel >= data.minimumLevel;
+  }
+
+  $scope.checkEntryTypes = function (m, data) {
+    return (m.boatEntry && data.boatEntry) || (m.shoreEntry && data.shoreEntry);
+  }
+
   function updateVisibilityOnFilter (marker) {
     var shouldBeVisible = Object.keys(marker.filterVisibility).every(function (x) {return marker.filterVisibility[x];});
     marker.options.visible = shouldBeVisible;
   }
 
-  function filterDepthRangeEventHandler (event, data) {
-    // Expects data to have key 'depthRange' with value [a, b]
-    // where a and b are numeric
+  $scope.filterMarker = function (m, data) {
     function isWithinDepthRange (depth, range) {
       return depth >= range[0] && depth <= range[1];
     }
-    $scope.map.markers.forEach(function (m) {
-      // Determine whether this marker should be hidden because
-      // the user's selected a depth range.
-      m.filterVisibility.depthRange = isWithinDepthRange(m.depth, data.depthRange);
-      updateVisibilityOnFilter(m);
-    });
-  }
+    m.filterVisibility.minimumLevel = $scope.checkMinimumLevel(m, data);
+    m.filterVisibility.depthRange = isWithinDepthRange(m.depth, data.depthRange);
+    m.filterVisibility.entryType = $scope.checkEntryTypes(m, data);
+    updateVisibilityOnFilter(m);
+  };
 
-  function filterEntryTypeEventHandler (event, data) {
-    // Expects data to have either or both of the following keys:
-    // * 'boatEntry', with value true/false
-    // * 'shoreEntry', with value true/false
-    $scope.map.markers.forEach(function (m) {
-      Object.keys(data).forEach (function (k) {
-        if (k == 'boatEntry' || k == 'shoreEntry') {
-          if (m[k] && !data[k]) m.filterVisibility[k] = false;
-        }
-      });
-      updateVisibilityOnFilter(m);
-    });
-  }
-
-  function filterMinimumLevelEventHandler (event, data) {
-    // Expects data to have key 'minimumLevel' with value in [0, 1, 2]
-    $scope.map.markers.forEach(function (m) {
-      m.filterVisibility.minimumLevel = m.minimumLevel >= data.minimumLevel;
-      updateVisibilityOnFilter(m);
-    });
+  $scope.filterPreferences = function (event, data) {
+    $scope.map.markers.forEach(function (m) {$scope.filterMarker(m, data)});
   }
 
   $scope.retrieveDivesites = function () {
@@ -77,7 +63,7 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     .success(function (data) {
       $scope.map.markers = data.map(function (e) {
         return {
-          id: e._id,
+          id: e.id,
           title: e.name,
           loc: e.loc,
           depth: e.depth,
@@ -90,9 +76,9 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
           options: { // Google Maps MarkerOptions
             visible: false // initially false, switched on when filtered
           },
+          icon: 'public/libs/material-design-icons/maps/1x_web/ic_place_black_24dp.png',
           filterVisibility: {
-            boatEntry: false,
-            shoreEntry: false,
+            entryType: false,
             depthRange: false,
             minimumLevel: false
           }
@@ -101,6 +87,10 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     }).then(function () {
       $rootScope.$broadcast('event:divesites-loaded');
     });
+  }
+
+  $scope.uiGmapIsReady = function (maps) {
+    $rootScope.$broadcast('event:map-is-ready');
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -117,30 +107,40 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
         latitude: localStorageService.get('map.center.latitude') || 53.5,
         longitude: localStorageService.get('map.center.longitude') || -8
       },
-      zoom: 7,
+      zoom: localStorageService.get('map.zoom') || 7,
       markers: [],
       options: {
         scrollwheel: true,
         disableDefaultUI: true,
         mapTypeId: 'roadmap'
+      },
+      markerEvents: {
+        click: function (marker, event, model, args) {
+          console.log(model.shoreEntry);
+        }
       }
     };
+    $scope.mapControl = {};
+    $scope.markerControl = {};
 
     $scope.events = {
-      filterDepthRange: filterDepthRangeEventHandler,
-      filterEntryType: filterEntryTypeEventHandler,
-      filterMinimumLevel: filterMinimumLevelEventHandler
+      filterPreferences: $scope.filterPreferences,
+      mapIsReady: $scope.retrieveDivesites
     };
 
-    // Listen for depth range filter changes
-    $scope.$on('event:filter-depth-range', $scope.events.filterDepthRange);
-    // Listen for entry type filter changes
-    $scope.$on('event:filter-entry-type', $scope.events.filterEntryType);
-    // Listen for maximum difficulty filter changes
-    $scope.$on('event:filter-minimum-level', $scope.events.filterMinimumLevel);
 
-    // Retrieve divesites
-    $scope.retrieveDivesites();
+    // Listen for filter events
+    $scope.$on('event:filter-preferences', $scope.events.filterPreferences);
+    // Listen for depth range filter changes
+    //$scope.$on('event:filter-depth-range', $scope.events.filterDepthRange);
+    // Listen for entry type filter changes
+    //$scope.$on('event:filter-entry-type', $scope.events.filterEntryType);
+    // Listen for maximum difficulty filter changes
+    //$scope.$on('event:filter-minimum-level', $scope.events.filterMinimumLevel);
+    // Listen for map-ready events (to load divesites)
+    $scope.$on('event:map-is-ready', $scope.events.mapIsReady);
+
+    uiGmapIsReady.promise().then($scope.uiGmapIsReady);
   };
 
   $scope.initialize();

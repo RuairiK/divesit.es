@@ -22,13 +22,14 @@ var formatSite = function (site) {
   var formattedSite = {
     id: site._id,
     name: site.name,
-    boatEntry: site.boat_entry,
-    shoreEntry: site.shore_entry,
+    boatEntry: site.boatEntry,
+    shoreEntry: site.shoreEntry,
     depth: site.depth,
     loc: {longitude: site.loc[0], latitude: site.loc[1]},
     description: site.description,
     updatedAt: site.updated_at,
-    createdAt: site.created_at
+    createdAt: site.created_at,
+    minimumLevel: site.minimumLevel
   };
   return formattedSite;
 };
@@ -65,6 +66,7 @@ router.get('/', function(req, res, next) {
   } else {Divesite.find(function(err, divesites) {
     // Otherwise, return a list of all the divesites in the db
     if (err) return next(err);
+    //divesites.map(formatSite).forEach(function (s) {console.log(s)});
     return res.status(HTTP.OK).json(divesites.map(formatSite));
   });
   }
@@ -75,9 +77,9 @@ router.post('/', auth.ensureAuthenticated, function(req, res, next) {
   // Parse the incoming data to build a schema-compatible object
   var site = {
     name: req.body.name,
-    boat_entry: req.body.boat_entry,
-    shore_entry: req.body.shore_entry,
-    loc: [parseFloat(req.body.coords.longitude), parseFloat(req.body.coords.latitude)],
+    boatEntry: req.body.boatEntry,
+    shoreEntry: req.body.shoreEntry,
+    loc: [parseFloat(req.body.loc.longitude), parseFloat(req.body.loc.latitude)],
     depth: req.body.depth,
     creator_id: req.user,
     description: req.body.description
@@ -85,8 +87,11 @@ router.post('/', auth.ensureAuthenticated, function(req, res, next) {
 
   // Create the object
   Divesite.create(site, function(err, post) {
-    if (err) return next(err);
-    res.status(HTTP.CREATED).json(post);
+    if (err) {
+      console.log(err);
+      return next(err);
+    }
+    return res.status(HTTP.CREATED).json(post);
   });
 });
 

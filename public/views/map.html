@@ -11,6 +11,16 @@
     options="map.options"
     center="map.center"
     zoom="map.zoom">
+    <ui-gmap-markers
+    control="markerControl"
+    models="map.markers"
+    events="map.markerEvents"
+    options="'options'"
+    coords="'loc'"
+    icons="'icon'"
+    doCluster="false"
+    >
+    </ui-gmap-markers>
     </ui-gmap-google-map>
   </div>
 </div>

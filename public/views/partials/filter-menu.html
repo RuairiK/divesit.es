@@ -4,13 +4,15 @@
     <!-- <li>Entries</li> -->
     <li>
       <label class="checkbox-inline">
-        <input type="checkbox" ng-checked="filterPreferences.boatEntry">
+        <input type="checkbox" ng-model="filterPreferences.boatEntry"
+        ng-change="sendFilterPreferences()" >
         <span class="checkbox-material">
           Boat
         </span>
       </label>
       <label class="checkbox-inline">
-        <input type="checkbox" ng-checked="filterPreferences.shoreEntry">
+        <input type="checkbox" ng-model="filterPreferences.shoreEntry"
+        ng-change="sendFilterPreferences()">
         <span class="checkbox-material">
           Shore
         </span>
