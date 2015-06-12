@@ -42,11 +42,11 @@ describe "FilterMenuController", ->
       it "returns false if passed [-1, 100]", -> expect(depthRange [-1, 100]).toBe false
       it "returns false if passed [0, 101]", -> expect(depthRange [0, 101]).toBe false
     describe "minimumLevel", ->
-      minimumLevel = {}
-      beforeEach -> minimumLevel = $scope.filterValidators.minimumLevel
-      it "returns true if passed 0", -> expect(minimumLevel 0).toBe true
-      it "returns true if passed 1", -> expect(minimumLevel 1).toBe true
-      it "returns true if passed 2", -> expect(minimumLevel 2).toBe true
+      maximumLevel = {}
+      beforeEach -> maximumLevel = $scope.filterValidators.maximumLevel
+      it "returns true if passed 0", -> expect(maximumLevel 0).toBe true
+      it "returns true if passed 1", -> expect(maximumLevel 1).toBe true
+      it "returns true if passed 2", -> expect(maximumLevel 2).toBe true
 
   describe "$scope.sendFilterPreferences", ->
     beforeEach ->
@@ -64,23 +64,22 @@ describe "FilterMenuController", ->
   describe "$scope.retrieveFilterPreferences", ->
     beforeEach ->
       localStorageService.clearAll()
-      localStorageService.set('filterPreferences.boatEntry', true)
-      localStorageService.set('filterPreferences.shoreEntry', false)
-      localStorageService.set('filterPreferences.depthRange', [0, 50])
-      localStorageService.set('filterPreferences.minimumLevel', 1)
+      #localStorageService.set('filterPreferences.boatEntry', true)
+      #localStorageService.set('filterPreferences.shoreEntry', false)
+      #localStorageService.set('filterPreferences.depthRange', [0, 50])
+      #localStorageService.set('filterPreferences.maximumLevel', 1)
 
     describe "with valid stored preferences", ->
       beforeEach ->
+        localStorageService.clearAll()
         localStorageService.set('filterPreferences.boatEntry', true)
         localStorageService.set('filterPreferences.shoreEntry', false)
         localStorageService.set('filterPreferences.depthRange', [0, 50])
-        localStorageService.set('filterPreferences.minimumLevel', 1)
+        localStorageService.set('filterPreferences.maximumLevel', 1)
         spyOn localStorageService, 'get'
           .and.callThrough()
         spyOn $scope, 'sendFilterPreferences'
         $scope.retrieveFilterPreferences()
-      afterEach ->
-        localStorageService.clearAll()
       it "calls $scope.sendFilterPreferences", ->
         expect($scope.sendFilterPreferences).toHaveBeenCalled()
       it "retrieves filterPreferences.boatEntry from local storage", ->
@@ -89,16 +88,16 @@ describe "FilterMenuController", ->
         expect(localStorageService.get).toHaveBeenCalledWith 'filterPreferences.shoreEntry'
       it "retrieves filterPreferences.depthRange from local storage", ->
         expect(localStorageService.get).toHaveBeenCalledWith 'filterPreferences.depthRange'
-      it "retrieves filterPreferences.minimumLevel from local storage", ->
-        expect(localStorageService.get).toHaveBeenCalledWith "filterPreferences.minimumLevel"
+      it "retrieves filterPreferences.maximumLevel from local storage", ->
+        expect(localStorageService.get).toHaveBeenCalledWith "filterPreferences.maximumLevel"
       it "sets $scope.filterPreferences.boatEntry", ->
         expect($scope.filterPreferences.boatEntry).toBe true
       it "sets $scope.filterPreferences.shoreEntry", ->
         expect($scope.filterPreferences.shoreEntry).toBe false
       it "sets $scope.filterPreferences.depthRange", ->
         expect($scope.filterPreferences.depthRange).toEqual [0, 50]
-      it "sets $scope.filterPreferences.minimumLevel", ->
-        expect($scope.filterPreferences.minimumLevel).toBe 1
+      it "sets $scope.filterPreferences.maximumLevel", ->
+        expect($scope.filterPreferences.maximumLevel).toBe 1
     
     describe "with invalid stored preferences", ->
       beforeEach ->
@@ -106,7 +105,7 @@ describe "FilterMenuController", ->
         localStorageService.set 'filterPreferences.boatEntry', 5
         localStorageService.set 'filterPreferences.shoreEntry', [6, 5]
         localStorageService.set 'filterPreferences.depthRange', "nope"
-        localStorageService.set 'filterPreferences.minimumLevel', {foo: 5}
+        localStorageService.set 'filterPreferences.maximumLevel', {foo: 5}
         spyOn localStorageService, 'get'
         spyOn $scope, 'sendFilterPreferences'
         $scope.retrieveFilterPreferences()
@@ -118,16 +117,16 @@ describe "FilterMenuController", ->
         expect(localStorageService.get).toHaveBeenCalledWith 'filterPreferences.shoreEntry'
       it "retrieves filterPreferences.depthRange from local storage", ->
         expect(localStorageService.get).toHaveBeenCalledWith 'filterPreferences.depthRange'
-      it "retrieves filterPreferences.minimumLevel from local storage", ->
-        expect(localStorageService.get).toHaveBeenCalledWith "filterPreferences.minimumLevel"
+      it "retrieves filterPreferences.maximumLevel from local storage", ->
+        expect(localStorageService.get).toHaveBeenCalledWith "filterPreferences.maximumLevel"
       it "sets $scope.filterPreferences.boatEntry to true", ->
         expect($scope.filterPreferences.boatEntry).toBe true
       it "sets $scope.filterPreferences.shoreEntry to true", ->
         expect($scope.filterPreferences.shoreEntry).toBe true
       it "sets $scope.filterPreferences.depthRange to [0, 100]", ->
         expect($scope.filterPreferences.depthRange).toEqual [0, 100]
-      it "sets $scope.filterPreferences.minimumLevel to 0", ->
-        expect($scope.filterPreferences.minimumLevel).toBe 0
+      it "sets $scope.filterPreferences.maximumLevel to 2", ->
+        expect($scope.filterPreferences.maximumLevel).toBe 2
 
     describe "without stored preferences", ->
       beforeEach ->
@@ -137,8 +136,8 @@ describe "FilterMenuController", ->
         $scope.retrieveFilterPreferences()
       it "calls $scope.sendFilterPreferences", ->
         expect($scope.sendFilterPreferences).toHaveBeenCalled()
-      it "doesn't try to retrieve filterPreferences.minimumLevel", ->
-        expect(localStorageService.get).not.toHaveBeenCalledWith 'filterPreferences.minimumLevel'
+      it "doesn't try to retrieve filterPreferences.maximumLevel", ->
+        expect(localStorageService.get).not.toHaveBeenCalledWith 'filterPreferences.maximumLevel'
       it "doesn't try to retrieve filterPreferences.boatEntry", ->
         expect(localStorageService.get).not.toHaveBeenCalledWith 'filterPreferences.boatEntry'
       it "doesn't try to retrieve filterPreferences.shoreEntry", ->
@@ -151,5 +150,5 @@ describe "FilterMenuController", ->
         expect($scope.filterPreferences.shoreEntry).toBe true
       it "sets $scope.filterPreferences.depthRange to [0, 100]", ->
         expect($scope.filterPreferences.depthRange).toEqual [0, 100]
-      it "sets $scope.filterPreferences.minimumLevel to 0", ->
-        expect($scope.filterPreferences.minimumLevel).toBe 0
+      it "sets $scope.filterPreferences.maximumLevel to 2", ->
+        expect($scope.filterPreferences.maximumLevel).toBe 2

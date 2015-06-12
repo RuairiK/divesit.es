@@ -32,17 +32,17 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
   }
 
   $scope.checkMinimumLevel = function (marker, data) {
-    return marker.minimumLevel >= data.minimumLevel;
-  }
+    return marker.minimumLevel <= data.maximumLevel;
+  };
 
   $scope.checkEntryTypes = function (m, data) {
     return (m.boatEntry && data.boatEntry) || (m.shoreEntry && data.shoreEntry);
-  }
+  };
 
   function updateVisibilityOnFilter (marker) {
     var shouldBeVisible = Object.keys(marker.filterVisibility).every(function (x) {return marker.filterVisibility[x];});
     marker.options.visible = shouldBeVisible;
-  }
+  };
 
   $scope.filterMarker = function (m, data) {
     function isWithinDepthRange (depth, range) {
@@ -56,7 +56,7 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
 
   $scope.filterPreferences = function (event, data) {
     $scope.map.markers.forEach(function (m) {$scope.filterMarker(m, data)});
-  }
+  };
 
   $scope.retrieveDivesites = function () {
     $http.get('/divesites/')
@@ -87,11 +87,11 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     }).then(function () {
       $rootScope.$broadcast('event:divesites-loaded');
     });
-  }
+  };
 
   $scope.uiGmapIsReady = function (maps) {
     $rootScope.$broadcast('event:map-is-ready');
-  }
+  };
 
   /////////////////////////////////////////////////////////////////////////////
   // Controller initialization
@@ -131,12 +131,6 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
 
     // Listen for filter events
     $scope.$on('event:filter-preferences', $scope.events.filterPreferences);
-    // Listen for depth range filter changes
-    //$scope.$on('event:filter-depth-range', $scope.events.filterDepthRange);
-    // Listen for entry type filter changes
-    //$scope.$on('event:filter-entry-type', $scope.events.filterEntryType);
-    // Listen for maximum difficulty filter changes
-    //$scope.$on('event:filter-minimum-level', $scope.events.filterMinimumLevel);
     // Listen for map-ready events (to load divesites)
     $scope.$on('event:map-is-ready', $scope.events.mapIsReady);
 

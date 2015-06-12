@@ -81,26 +81,31 @@ describe "MapController", ->
   describe "$scope.checkMinimumLevel(marker, data)", ->
     f = {}
     beforeEach -> f = $scope.checkMinimumLevel
+    # Marker is at the same difficulty level as the filter pref
     it "(0, 0) -> true", ->
       m = {minimumLevel: 0}
-      d = {minimumLevel: 0}
+      d = {maximumLevel: 0}
       expect(f m, d).toBe true
-    it "(1, 0) -> true", ->
+    # Marker is more difficult than the filter pref
+    it "(1, 0) -> false", ->
       m = {minimumLevel: 1}
-      d = {minimumLevel: 0}
-      expect(f m, d).toBe true
-    it "(2, 0) -> true", ->
+      d = {maximumLevel: 0}
+      expect(f m, d).toBe false
+    # Marker is more difficult than the filter pref
+    it "(2, 0) -> false", ->
       m = {minimumLevel: 2}
-      d = {minimumLevel: 0}
+      d = {maximumLevel: 0}
+      expect(f m, d).toBe false
+    # Marker is less difficult than the filter pref
+    it "(0, 1) -> true", ->
+      m = {minimumLevel: 0}
+      d = {maximumLevel: 1}
       expect(f m, d).toBe true
-    it "(0, 1) -> false", ->
+    # Marker is less difficult than the filter pref
+    it "(0, 2) -> true", ->
       m = {minimumLevel: 0}
-      d = {minimumLevel: 1}
-      expect(f m, d).toBe false
-    it "(0, 2) -> false", ->
-      m = {minimumLevel: 0}
-      d = {minimumLevel: 2}
-      expect(f m, d).toBe false
+      d = {maximumLevel: 2}
+      expect(f m, d).toBe true
 
   describe "$scope.checkEntryTypes", ->
     f = {}
@@ -215,6 +220,8 @@ describe "MapController", ->
         expect localStorageService.set
           .toHaveBeenCalledWith 'map.center.longitude', -8
 
+  describe "$scope.map.markerEvents", ->
+
   describe "filtering [starting from all shown]", ->
     isShown = (m) -> m.options.visible
     isNotShown = (m) -> !m.options.visible
@@ -232,7 +239,7 @@ describe "MapController", ->
         filterData =
           boatEntry: true
           shoreEntry: true
-          minimumLevel: 0
+          maximumLevel: 2
       it "excludes sites that are too shallow", ->
         filterData.depthRange = [10, 100]
         $rootScope.$broadcast 'event:filter-preferences', filterData
@@ -258,7 +265,7 @@ describe "MapController", ->
         filterData =
           boatEntry: true
           shoreEntry: true
-          minimumLevel: 0
+          maximumLevel: 2
           depthRange: [0, 100]
       it "shows only sites with the desired entry type", ->
         filterData.shoreEntry = false
@@ -281,22 +288,28 @@ describe "MapController", ->
         expect visibleMarkers.length
           .toBe 2
 
-    describe "filtering minimum level", ->
+    describe "filtering on level", ->
       filterData = {}
       beforeEach ->
         filterData =
           boatEntry: true
           shoreEntry: true
           depthRange: [0, 100]
-          minimumLevel: 1
-      it "shows only sites that meet the minimum level requirement", ->
-        filterData.minimumLevel = 1
+          maximumLevel: 1
+      it "shows only sites that meet the maximum level requirement (maximumLevel: 0)", ->
+        filterData.maximumLevel = 0
         $rootScope.$broadcast 'event:filter-preferences', filterData
         visibleMarkers = $scope.map.markers.filter isShown
         expect visibleMarkers.length
           .toBe 1
-      it "shows all sites that meet the minimum level requirement", ->
-        filterData.minimumLevel = 0
+      it "shows only sites that meet the maximum level requirement (maximumLevel: 1)", ->
+        filterData.maximumLevel = 0
+        $rootScope.$broadcast 'event:filter-preferences', filterData
+        visibleMarkers = $scope.map.markers.filter isShown
+        expect visibleMarkers.length
+          .toBe 1
+      it "shows only sites that meet the maximum level requirement (maximumLevel: 2)", ->
+        filterData.maximumLevel = 2
         $rootScope.$broadcast 'event:filter-preferences', filterData
         visibleMarkers = $scope.map.markers.filter isShown
         expect visibleMarkers.length
