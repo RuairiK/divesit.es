@@ -7,24 +7,6 @@
 @lightbg-secondary: rgba(0, 0, 0, 0.54);
 @lightbg-hint: rgba(0, 0, 0, 0.26);
 
-/*
-.logo {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  box-shadow: 1px 1px 4px;
-  padding-left: 8px;
-  padding-right: 8px;
-  z-index: 1; 
-  span {
-    font-family: 'Monserrat', sans-serif;
-    color: #fff;
-    font-size: 30px;
-    opacity: 1;
-  }
-}
-*/
 body {
   font-family: 'Montserrat', sans-serif;
 }
@@ -54,6 +36,13 @@ body {
     margin-top: 12px;
     margin-bottom: 8px;
     margin-left: 8px;
+    font-weight: normal;
+  }
+  h2 {
+    margin: 0;
+    color: @lightbg-secondary;
+    font-size: 14px;
+    font-weight: normal;
   }
   li {
     height: 48px;
@@ -64,6 +53,11 @@ body {
   left: 32px;
   background-color: @indigo-50;
   .BoxShadowHelper(2);
+  padding: 8px;
+}
+.slider-container {
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .infoBox {
@@ -76,4 +70,41 @@ body {
   width: 100%;
   top: 0;
   left: 0;
+  border-width: 0;
+}
+.ui-slider-horizontal  {
+  height: 16px;
+  color: rgba(0, 0, 0, 0.26);
+  /* This is the invisible slider track (but it responds to clicks) */
+  background-color: rgba(0, 0, 0, 0);
+  border-width: 0;
+  cursor: pointer;
+  .ui-slider-handle {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    top: 0;
+    background-color: @indigo-500;
+    border-color: @indigo-500;
+    cursor: pointer;
+  }
+  .ui-slider-range {
+    background-color: @indigo-500;
+    height: 2px;
+    top: 7px;
+  }
+}
+.ui-slider-track {
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.26);
+  position: relative;
+  top: 7px;
+  width: 100%;
+}
+.ui-slider-track-on {
+  height: 2px;
+  background-color: @indigo-500;
+  position: absolute;
+  top: 7px;
+  width: 0;
 }

@@ -22,6 +22,7 @@ module.exports = function(config) {
       'public/libs/angular-route/angular-route.js',
       {pattern: 'public/libs/angular-google-maps/dist/*.js', included: true},
       'public/libs/angular-local-storage/dist/angular-local-storage.js',
+      'public/libs/angular-ui-slider/src/slider.js',
       //'public/libs/jquery/dist/jquery.min.js',
       //'public/libs/jqueryui/jquery-ui.js',
       //'public/libs/angular-bootstrap-slider/slider.js',

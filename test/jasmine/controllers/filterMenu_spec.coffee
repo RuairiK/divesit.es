@@ -20,9 +20,12 @@ describe "FilterMenuController", ->
   describe "$scope.initialize", ->
     beforeEach ->
       spyOn $scope, '$on'
+      spyOn $scope, 'retrieveFilterPreferences'
       $scope.initialize()
+    it "retrieves filter preferences from local storage", ->
+      expect($scope.retrieveFilterPreferences).toHaveBeenCalled()
     it "listens for 'event:divesites-loaded' events", ->
-      expect($scope.$on).toHaveBeenCalledWith 'event:divesites-loaded', $scope.retrieveFilterPreferences
+      expect($scope.$on).toHaveBeenCalledWith 'event:divesites-loaded', $scope.updateAndSendFilterPreferences
 
   describe "$scope.filterValidators", ->
     describe "entryType", ->
@@ -48,16 +51,39 @@ describe "FilterMenuController", ->
       it "returns true if passed 1", -> expect(maximumLevel 1).toBe true
       it "returns true if passed 2", -> expect(maximumLevel 2).toBe true
 
-  describe "$scope.sendFilterPreferences", ->
+  describe "$scope.storeFilterPreferences", ->
+    $scope.filterPreferences = {}
     beforeEach ->
       localStorageService.clearAll()
       $scope.filterPreferences =
         boatEntry: true
         shoreEntry: false
         depthRange: [0, 50]
-        minimumLevel: 0
+        maximumLevel: 0
+      $scope.storeFilterPreferences()
+    it "stores filterPreferences.boatEntry", ->
+      expect localStorageService.set
+        .toHaveBeenCalledWith 'filterPreferences.boatEntry', $scope.filterPreferences.boatEntry
+    it "stores filterPreferences.shoreEntry", ->
+      expect localStorageService.set
+        .toHaveBeenCalledWith 'filterPreferences.shoreEntry', $scope.filterPreferences.shoreEntry
+    it "stores filterPreferences.depthRange", ->
+      expect localStorageService.set
+        .toHaveBeenCalledWith 'filterPreferences.depthRange', $scope.filterPreferences.depthRange
+    it "stores filterPreferences.maximumLevel", ->
+      expect localStorageService.set
+        .toHaveBeenCalledWith 'filterPreferences.maximumLevel', $scope.filterPreferences.maximumLevel
+
+  describe "$scope.updateAndSendFilterPreferences", ->
+    beforeEach ->
+      localStorageService.clearAll()
+      $scope.filterPreferences =
+        boatEntry: true
+        shoreEntry: false
+        depthRange: [0, 50]
+        maximumLevel: 0
       spyOn $rootScope, '$broadcast'
-      $scope.sendFilterPreferences()
+      $scope.updateAndSendFilterPreferences()
       it "broadcasts an 'event:filter-preferences' event", ->
         expect($rootScope.$broadcast).toHaveBeenCalledWith $scope.filterPreferences
 
@@ -78,10 +104,8 @@ describe "FilterMenuController", ->
         localStorageService.set('filterPreferences.maximumLevel', 1)
         spyOn localStorageService, 'get'
           .and.callThrough()
-        spyOn $scope, 'sendFilterPreferences'
+        spyOn $scope, 'updateAndSendFilterPreferences'
         $scope.retrieveFilterPreferences()
-      it "calls $scope.sendFilterPreferences", ->
-        expect($scope.sendFilterPreferences).toHaveBeenCalled()
       it "retrieves filterPreferences.boatEntry from local storage", ->
         expect(localStorageService.get).toHaveBeenCalledWith 'filterPreferences.boatEntry'
       it "retrieves filterPreferences.shoreEntry from local storage", ->
@@ -107,10 +131,8 @@ describe "FilterMenuController", ->
         localStorageService.set 'filterPreferences.depthRange', "nope"
         localStorageService.set 'filterPreferences.maximumLevel', {foo: 5}
         spyOn localStorageService, 'get'
-        spyOn $scope, 'sendFilterPreferences'
+        spyOn $scope, 'updateAndSendFilterPreferences'
         $scope.retrieveFilterPreferences()
-      it "calls $scope.sendFilterPreferences", ->
-        expect($scope.sendFilterPreferences).toHaveBeenCalled()
       it "retrieves filterPreferences.boatEntry from local storage", ->
         expect(localStorageService.get).toHaveBeenCalledWith 'filterPreferences.boatEntry'
       it "retrieves filterPreferences.shoreEntry from local storage", ->
@@ -132,10 +154,8 @@ describe "FilterMenuController", ->
       beforeEach ->
         localStorageService.clearAll()
         spyOn localStorageService, 'get'
-        spyOn $scope, 'sendFilterPreferences'
+        spyOn $scope, 'updateAndSendFilterPreferences'
         $scope.retrieveFilterPreferences()
-      it "calls $scope.sendFilterPreferences", ->
-        expect($scope.sendFilterPreferences).toHaveBeenCalled()
       it "doesn't try to retrieve filterPreferences.maximumLevel", ->
         expect(localStorageService.get).not.toHaveBeenCalledWith 'filterPreferences.maximumLevel'
       it "doesn't try to retrieve filterPreferences.boatEntry", ->

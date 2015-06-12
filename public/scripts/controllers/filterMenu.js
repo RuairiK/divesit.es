@@ -4,7 +4,15 @@ angular.module('divesitesApp').controller('FilterMenuController', function ($sco
 
   var MAX_DEPTH = 100;
 
-  $scope.sendFilterPreferences = function () {
+  $scope.storeFilterPreferences = function () {
+    localStorageService.set('filterPreferences.boatEntry', $scope.filterPreferences.boatEntry);
+    localStorageService.set('filterPreferences.shoreEntry', $scope.filterPreferences.shoreEntry);
+    localStorageService.set('filterPreferences.depthRange', $scope.filterPreferences.depthRange);
+    localStorageService.set('filterPreferences.maximumLevel', $scope.filterPreferences.maximumLevel);
+  };
+
+  $scope.updateAndSendFilterPreferences = function () {
+    $scope.storeFilterPreferences();
     $rootScope.$broadcast('event:filter-preferences', $scope.filterPreferences);
   };
 
@@ -64,9 +72,28 @@ angular.module('divesitesApp').controller('FilterMenuController', function ($sco
     $scope.filterPreferences.depthRange = $scope.retrievers.depthRange(lsKeys);
     // Minimum level
     $scope.filterPreferences.maximumLevel = $scope.retrievers.maximumLevel(lsKeys);
-    // Send filter preferences
-    $scope.sendFilterPreferences();
   };
+
+  // Slider options
+  function prependSliderTrack(event, ui) {
+      // Add a visible slider track. We can't do this in the markup
+      // because ui-slider is creating the node for us
+      console.log(event.target.id);
+      $(event.target).prepend("<div class='ui-slider-track'></div>");
+      $(event.target).prepend("<div class='ui-slider-track-on'></div>");
+  }
+  $scope.maximumLevelSlider = {
+    create: prependSliderTrack,
+    change: function (event, ui) {
+      var width = $(event.target).children('.ui-slider-handle').css('left');
+      $(event.target).children('.ui-slider-track-on').css({'width': width});
+      //console.log($(event.target).css());
+    }
+  };
+  $scope.depthRangeSlider = {
+    range: true,
+    create: prependSliderTrack
+  }
 
   /////////////////////////////////////////////////////////////////////////////
   // Initialization
@@ -74,8 +101,9 @@ angular.module('divesitesApp').controller('FilterMenuController', function ($sco
 
   $scope.initialize = function () {
     $scope.filterPreferences = {};
+    $scope.retrieveFilterPreferences();
     // Wait for divesites to load before retrieving filter preferences
-    $scope.$on('event:divesites-loaded', $scope.retrieveFilterPreferences);
+    $scope.$on('event:divesites-loaded', $scope.updateAndSendFilterPreferences);
   };
 
   $scope.initialize();

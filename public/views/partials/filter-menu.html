@@ -3,25 +3,49 @@
   <ul class="list-unstyled">
     <!-- <li>Entries</li> -->
     <li>
-      <label class="checkbox-inline">
-        <input type="checkbox" ng-model="filterPreferences.boatEntry"
-        ng-change="sendFilterPreferences()" >
-        <span class="checkbox-material">
-          Boat
-        </span>
-      </label>
-      <label class="checkbox-inline">
-        <input type="checkbox" ng-model="filterPreferences.shoreEntry"
-        ng-change="sendFilterPreferences()">
-        <span class="checkbox-material">
-          Shore
-        </span>
-      </label>
+    <label class="checkbox-inline">
+      <input type="checkbox" ng-model="filterPreferences.boatEntry"
+      ng-change="updateAndSendFilterPreferences()" >
+      <span class="checkbox-material">
+        Boat
+      </span>
+    </label>
+    <label class="checkbox-inline">
+      <input type="checkbox" ng-model="filterPreferences.shoreEntry"
+      ng-change="updateAndSendFilterPreferences()">
+      <span class="checkbox-material">
+        Shore
+      </span>
+    </label>
+    </li>
+    <li id="filterMinimumLevel">
+    <div>Maximum level</div>
+    <div class="slider-container">
+      <div ui-slider="maximumLevelSlider"
+        id="maximumLevelSlider"
+        min="0" max="2"
+        step="1"
+        tick="1"
+        ng-change="updateAndSendFilterPreferences()"
+        ng-model="filterPreferences.maximumLevel"></div>
+    </div>
     </li>
     <li>
-    <div>Minimum level</div>
-    <slider ng-model="filterPreferences.minimumLevel" range="true" min="-1" max="10" step="1"></slider>
+    <h2>Depth range</h2>
+    <div>
+      {{ filterPreferences.depthRange[0]  }}
+    </div>
+    <div class="slider-container">
+      <div ui-slider="depthRangeSlider"
+        id="depthRangeSlider"
+        min="0" max="100"
+        ng-change="updateAndSendFilterPreferences()"
+        ng-model="filterPreferences.depthRange">
+      </div>
+    </div>
+    <div>
+      {{ filterPreferences.depthRange[1]  }}
+    </div>
     </li>
-    <li>Depth range</li>
   </ul>
 </div>
