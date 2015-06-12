@@ -42,7 +42,7 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
   function updateVisibilityOnFilter (marker) {
     var shouldBeVisible = Object.keys(marker.filterVisibility).every(function (x) {return marker.filterVisibility[x];});
     marker.options.visible = shouldBeVisible;
-  };
+  }
 
   $scope.filterMarker = function (m, data) {
     function isWithinDepthRange (depth, range) {

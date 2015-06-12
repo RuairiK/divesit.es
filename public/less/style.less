@@ -54,16 +54,25 @@ body {
   background-color: @indigo-50;
   .BoxShadowHelper(2);
   padding: 8px;
-}
-.slider-container {
-  padding-left: 8px;
-  padding-right: 8px;
+  .slider-container {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .col-xs-1 {
+    padding: 0;
+  }
+  .lower-bound, .upper-bound {
+    text-align: right;
+    color: @lightbg-secondary;
+  }
+  .lower-bound {
+    padding-right: 8px;
+  }
 }
 
 .infoBox {
   z-index: 1; /* higher than map */
 }
-
 .angular-google-map-container {
   position: absolute;
   height: 100%;

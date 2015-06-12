@@ -19,8 +19,8 @@ angular.module('divesitesApp').controller('FilterMenuController', function ($sco
   $scope.filterValidators = {
     entryType: function (value) {return 'true' == value || true === value || 'false' == value || false === value},
     depthRange: function (value) {
-      return Object.prototype.toString.call(value) === '[object Array]' 
-      && value.length == 2 && value[0] >= 0 && value[1] <= MAX_DEPTH
+      return Object.prototype.toString.call(value) === '[object Array]' &&
+        value.length == 2 && value[0] >= 0 && value[1] <= MAX_DEPTH
     },
     maximumLevel: function (value) {return (value - 0) == value && (''+value).trim().length > 0}
   };
@@ -76,11 +76,11 @@ angular.module('divesitesApp').controller('FilterMenuController', function ($sco
 
   // Slider options
   function prependSliderTrack(event, ui) {
-      // Add a visible slider track. We can't do this in the markup
-      // because ui-slider is creating the node for us
-      console.log(event.target.id);
-      $(event.target).prepend("<div class='ui-slider-track'></div>");
-      $(event.target).prepend("<div class='ui-slider-track-on'></div>");
+    // Add a visible slider track. We can't do this in the markup
+    // because ui-slider is creating the node for us
+    console.log(event.target.id);
+    $(event.target).prepend("<div class='ui-slider-track'></div>");
+    $(event.target).prepend("<div class='ui-slider-track-on'></div>");
   }
   $scope.maximumLevelSlider = {
     create: prependSliderTrack,

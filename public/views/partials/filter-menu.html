@@ -32,19 +32,17 @@
     </li>
     <li>
     <h2>Depth range</h2>
-    <div>
-      {{ filterPreferences.depthRange[0]  }}
-    </div>
-    <div class="slider-container">
-      <div ui-slider="depthRangeSlider"
-        id="depthRangeSlider"
-        min="0" max="100"
-        ng-change="updateAndSendFilterPreferences()"
-        ng-model="filterPreferences.depthRange">
+    <div class="fluid-container">
+      <div class="col-xs-1 lower-bound">{{ filterPreferences.depthRange[0]  }}</div>
+      <div class="col-xs-10 slider-container">
+        <div ui-slider="depthRangeSlider"
+          id="depthRangeSlider"
+          min="0" max="100"
+          ng-change="updateAndSendFilterPreferences()"
+          ng-model="filterPreferences.depthRange">
+        </div>
       </div>
-    </div>
-    <div>
-      {{ filterPreferences.depthRange[1]  }}
+      <div class="col-xs-1 upper-bound">{{ filterPreferences.depthRange[1]  }}</div>
     </div>
     </li>
   </ul>
