@@ -1,0 +1,9 @@
+{
+  "asi": true,
+  "node": true,
+  "globals": {
+    "angular": false,
+    "google": false,
+    "$": false
+  }
+}

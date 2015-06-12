@@ -12,13 +12,7 @@ module.exports = (grunt) ->
           'public/scripts/**/*.js'
         ]
       options:
-        asi: true # suppress semi-colon nonsense
-        node: true # allow 'use strict' pragma
-        globals:
-          # Note that 'false' means 'defined but read-only'
-          angular: false
-          google: false
-          $: false
+        jshintrc: ".jshintrc"
 
     less: # Compile LESS files
       "public/styles/style.css": "public/less/style.less"
