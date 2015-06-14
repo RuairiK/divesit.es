@@ -4,6 +4,8 @@ node_modules/
 coverage/
 # This is where Bower puts the scripts
 public/libs/
+# Ignore compiled style; let Grunt build style.css
+public/styles/
 .*.swp
 npm-debug.log
 keys.js

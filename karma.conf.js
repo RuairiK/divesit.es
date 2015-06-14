@@ -5,30 +5,34 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: '.',
 
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'requirejs'],
+    // We don't need requirejs, and it's been a world of hurt, so goodbye 
+    frameworks: ['jasmine'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'test-main.js',
+      //'test-main.js',
       'public/libs/angular/angular.js',
-      'public/libs/angular-bootstrap-slider/slider.js',
-      'public/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
-      'public/libs/angular-route/angular-route.js',
       'public/libs/angular-mocks/angular-mocks.js',
-      'public/libs/angular-cookies/angular-cookies.js',
-      'public/libs/satellizer/satellizer.min.js',
-      'public/libs/underscore/underscore.js',
-      'public/libs/angular-local-storage/dist/angular-local-storage.js',
+      'public/libs/angular-route/angular-route.js',
       {pattern: 'public/libs/angular-google-maps/dist/*.js', included: true},
+      'public/libs/angular-local-storage/dist/angular-local-storage.js',
+      'public/libs/angular-ui-slider/src/slider.js',
+      //'public/libs/jquery/dist/jquery.min.js',
+      //'public/libs/jqueryui/jquery-ui.js',
+      //'public/libs/angular-bootstrap-slider/slider.js',
+      //'public/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
+      //'public/libs/angular-cookies/angular-cookies.js',
+      //'public/libs/satellizer/satellizer.min.js',
+      'public/libs/underscore/underscore.js',
       {pattern: 'public/scripts/**/*.js', included: true},
       {pattern: 'public/scripts/*.js', included: true},
-      {pattern: 'test/jasmine/**/*.coffee', included: false}
+      'test/jasmine/**/*.coffee'
     ],
 
 
@@ -64,7 +68,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_WARN,
+    logLevel: config.LOG_INFO,
 
 
     // enable / disable watching file and executing tests whenever any file changes

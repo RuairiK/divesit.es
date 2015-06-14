@@ -1,8 +1,8 @@
 async = require 'async'
 
-Divesite = require.main.require 'models/Divesite'
-User = require.main.require 'models/User'
-Comment = require.main.require 'models/Comment'
+Divesite = require '../../models/Divesite'
+User = require '../../models/User'
+Comment = require '../../models/Comment'
 
 USERNAME = 'TEST_USER'
 
@@ -18,7 +18,14 @@ createUser = (done) -> User.create {
 }, done
 
 createSite = (done) -> Divesite.create {
-  name: "TEST_DIVESITE", category: "wreck", chart_depth: 100, loc: [0, 0]
+  name: "TEST_DIVESITE"
+  boat_entry: true
+  shore_entry: true
+  depth: 100
+  loc: [0, 0]
+  boatEntry: true
+  shoreEntry: true
+  description: 'TEST_DIVESITE DESCRIPTION'
 }, done
 
 createSiteAndUser = (done) -> async.parallel [

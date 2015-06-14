@@ -9,10 +9,10 @@ HTTP = require('http-status-codes')
 request = require('supertest')
 moment = require 'moment'
 
-routes = require.main.require('routes/index')
-Divesite = require.main.require('models/Divesite')
-User = require.main.require('models/User')
-app = require.main.require('app')
+routes = require('../../../routes/index')
+Divesite = require('../../../models/Divesite')
+User = require('../../../models/User')
+app = require('../../../app')
 utils = require('../utils')
 
 describe "PATCH /divesites/:id", () ->
@@ -37,6 +37,7 @@ describe "PATCH /divesites/:id", () ->
           updated.name.should.equal original.name
           cb()
       ], done
+
   describe "with authorization", () ->
     describe "with a valid site ID", () ->
       describe "as the site's creator", () ->
@@ -51,22 +52,25 @@ describe "PATCH /divesites/:id", () ->
                 .set 'force-authenticate', true
                 .set 'auth-id', user._id
                 .send {
+                  name: [1, 2, 3]
                   coords: {longitude: 'five', latitude: 'banana'}
                   depth: "real deep"
-                  category: "Some totally bogus category that will never be implemented"
+                  boatEntry: 'banana'
+                  shoreEntry: 4
+                  description: 'whatever'
                 }
                 .expect HTTP.BAD_REQUEST
                 .end (e, res) -> cb(e, site, res)
-            (site, res, cb) -> 
+            (site, res, cb) ->
               # Expect errors in response
               res.body.should.be.an.Object
               res.body.should.have.properties ['errors']
-              res.body.errors.should.have.properties ['loc', 'chart_depth', 'category']
+              res.body.errors.should.have.properties ['loc']
               Divesite.findOne {_id: site._id}, (e, updated) -> cb(e, site, updated)
             (original, updated, cb) ->
               updated.loc.should.be.an.Array
-              updated.chart_depth.should.equal original.chart_depth
-              updated.category.should.equal original.category
+              updated.depth.should.equal original.depth
+              updated.boatEntry.should.equal original.boatEntry
               cb()
           ], done
         it "updates only allowed fields", (done) ->

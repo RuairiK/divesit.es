@@ -5,7 +5,7 @@
   "scripts": {
     "postinstall": "bower install",
     "start": "node ./bin/www",
-    "test": "mocha test/mocha/ && ./node_modules/.bin/karma start --single-run --browsers PhantomJS && istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/mocha/"
+    "test": "grunt test"
   },
   "dependencies": {
     "async": "^0.9.0",
@@ -18,6 +18,8 @@
     "debug": "~2.1.1",
     "ejs": "~2.2.3",
     "express": "~4.11.1",
+    "grunt": "^0.4.5",
+    "grunt-contrib-less": "^1.0.1",
     "http-status-codes": "^1.0.5",
     "jwt-simple": "^0.3.0",
     "mocha-lcov-reporter": "0.0.2",
@@ -34,6 +36,15 @@
     "debug": "^2.1.3",
     "ejs": "^2.3.1",
     "frisby": "*",
+    "grunt": "^0.4.5",
+    "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-env": "^0.4.4",
+    "grunt-karma": "^0.10.1",
+    "grunt-mocha-istanbul": "^2.4.0",
+    "grunt-mocha-test": "^0.12.7",
+    "istanbul": "^0.3.13",
     "jasmine-core": "^2.2.0",
     "jasmine-node": "2.0.0-beta4",
     "karma": "^0.12.31",
@@ -48,6 +59,7 @@
     "karma-phantomjs-launcher": "*",
     "karma-requirejs": "^0.2.2",
     "karma-spec-reporter": "*",
+    "load-grunt-tasks": "^3.1.0",
     "mocha": "^2.2.4",
     "sinon": "^1.14.1",
     "supertest": "^0.15.0"

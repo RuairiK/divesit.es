@@ -8,10 +8,10 @@ express = require('express')
 request = require('supertest')
 HTTP = require('http-status-codes')
 
-routes = require.main.require('routes/index')
-Divesite = require.main.require('models/Divesite')
-User = require.main.require('models/User')
-app = require.main.require('app')
+routes = require '../../../routes/index'
+Divesite = require '../../../models/Divesite'
+User = require '../../../models/User'
+app = require '../../../app'
 
 describe "GET /auth/profile", () ->
 
@@ -24,7 +24,7 @@ describe "GET /auth/profile", () ->
       }, cb)
     ], done
 
-  afterEach (done) -> User.find().remove(done)
+  afterEach (done) -> User.find().remove done
 
   describe "without authorization", () ->
     it "returns HTTP 401", (done) ->
@@ -34,10 +34,10 @@ describe "GET /auth/profile", () ->
         .end done
 
   describe "with authorization", () ->
-    it "returns HTTP 200", (done) -> 
+    it "returns HTTP 200", (done) ->
       async.waterfall [
         (cb) -> User.findOne({displayName: 'TEST_USER'}, cb)
-        (user, cb) -> 
+        (user, cb) ->
           request app
             .get '/auth/profile'
             .set 'force-authenticate', true

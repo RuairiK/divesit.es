@@ -24,15 +24,10 @@ router.get('/', function (req, response, next) {
 
 
 /* GET an individual comment by ID */
-router.get('/:id', validation.hasValidIdOr404, function (req, response, next) {
-  Comment.findOne({_id: req.params.id}, function (err, comment) {
-    if (err) {return next(err); }
-    if (!comment) {
-      return response.status(HTTP.NOT_FOUND).json({});
-    }
-    return response.json(comment);
-  });
-})
+router.get('/:id', validation.hasValidIdOr404, validation.findObjectOr404(Comment), function (req, response, next) {
+  var comment = req.obj;
+  return response.json(comment);
+});
 
 
 /* POST a new comment to no divesite */
@@ -42,39 +37,31 @@ router.post('/', auth.ensureAuthenticated, function (req, response, next) {
 
 
 /* DELETE a comment */
-router.delete('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function (req, response, next) {
-  Comment.findOne({_id: req.params.id}, function (err, comment) {
-    if (err) return done(err);
-    if (!comment) return response.status(HTTP.NOT_FOUND).json({});
-    if (req.user != comment.user._id) return response.status(HTTP.FORBIDDEN).json({});
-    Comment.remove({_id: req.params.id}, function (err, comment) {
-      response.status(HTTP.NO_CONTENT).json({});
-    });
+router.delete('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, validation.findObjectOr404(Comment), function (req, response, next) {
+  var comment = req.obj;
+  // Only the comment's creator can delete it
+  if (req.user != comment.user._id) return response.status(HTTP.FORBIDDEN).json({});
+  Comment.remove({_id: req.params.id}, function (err, comment) {
+    response.status(HTTP.NO_CONTENT).json({});
   });
 });
 
 
 /* PATCH an existing comment */
-router.patch('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, function (req, response, next) {
-  Comment.findOne({_id: req.params.id}, function (err, comment) {
-    if (err) {return next(err);}
-    // Return a 404 if we can't retrieve the comment
-    if (!comment) {
-      return response.status(HTTP.NOT_FOUND).json({});
+router.patch('/:id', auth.ensureAuthenticated, validation.hasValidIdOr404, validation.findObjectOr404(Comment), function (req, response, next) {
+  var comment = req.obj;
+  // Users can only edit their own comments
+  if (req.user != comment.user._id) {
+    return response.status(HTTP.FORBIDDEN).json({});
+  } 
+  // The only changes allowed are to the comment text
+  comment.text = req.body.text;
+  comment.updated_at = Date.now();
+  comment.save(function (err) {
+    if (err) {
+      return next(err);
     }
-    // Users can only edit their own comments
-    if (req.user != comment.user._id) {
-      return response.status(HTTP.FORBIDDEN).json({});
-    } 
-    // The only changes allowed are to the comment text
-    comment.text = req.body.text;
-    comment.updated_at = Date.now();
-    comment.save(function (err) {
-      if (err) {
-        return next(err);
-      }
-      return response.status(HTTP.OK).json(comment);
-    });
+    return response.status(HTTP.OK).json(comment);
   });
 });
 

@@ -1,0 +1,54 @@
+<div>
+  <h1 class="header">SHOW SITES</h1>
+  <ul class="list-unstyled">
+    <li>
+    <div class="fluid-container">
+      <div class="col-xs-6">
+        <label class="checkbox-inline">
+          <input type="checkbox" ng-model="filterPreferences.boatEntry"
+          ng-change="updateAndSendFilterPreferences()" >
+          <span class="checkbox-material">
+            Boat
+          </span>
+        </label>
+      </div>
+      <div class="col-xs-6">
+        <label class="checkbox-inline">
+          <input type="checkbox" ng-model="filterPreferences.shoreEntry"
+          ng-change="updateAndSendFilterPreferences()">
+          <span class="checkbox-material">
+            Shore
+          </span>
+        </label>
+      </div>
+    </div>
+    </li>
+    <li id="filterMinimumLevel">
+    <h2>Maximum level<h2>
+        <div class="slider-container">
+          <div ui-slider="maximumLevelSlider"
+            id="maximumLevelSlider"
+            min="0" max="2"
+            step="1"
+            tick="1"
+            ng-change="updateAndSendFilterPreferences()"
+            ng-model="filterPreferences.maximumLevel"></div>
+        </div>
+        </li>
+        <li>
+        <h2>Depth range</h2>
+        <div class="fluid-container">
+          <div class="col-xs-1 lower-bound">{{ filterPreferences.depthRange[0]  }}</div>
+          <div class="col-xs-10 slider-container">
+            <div ui-slider="depthRangeSlider"
+              id="depthRangeSlider"
+              min="0" max="100"
+              ng-change="updateAndSendFilterPreferences()"
+              ng-model="filterPreferences.depthRange">
+            </div>
+          </div>
+          <div class="col-xs-1 upper-bound">{{ filterPreferences.depthRange[1]  }}</div>
+        </div>
+        </li>
+      </ul>
+    </div>

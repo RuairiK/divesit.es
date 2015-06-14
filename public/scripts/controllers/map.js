@@ -1,141 +1,141 @@
 'use strict';
 
-var app = angular.module('divesitesApp');
+angular.module('divesitesApp').controller('MapController', function ($scope, $rootScope, localStorageService, $http, uiGmapIsReady) {
 
-app.controller('MapController', function(uiGmapIsReady, $http, $scope, $rootScope, localStorageService, $modal, $timeout) {
+  /////////////////////////////////////////////////////////////////////////////
+  // Constants
+  /////////////////////////////////////////////////////////////////////////////
 
-    $scope.retrieveDivesites = function () {
-        // Call the API for dive sites (currently returns everything)
-        $http.get('/divesites/').success(function (data) {
-            // On success, update the markers
-            $scope.map.markers = data.map(function (e) {
-                return {
-                    id: e._id, 
-                    location: {
-                        // The order of latitude and longitude is specified by GeoJSON.
-                        // It's the opposite way around from how GPS coordinates are normally
-                        // presented, so we need to be aware of this going forward.
-                        longitude: e.loc[0],
-                        latitude: e.loc[1]
-                    },
-                    title: e.name, // the site name
-                    chart_depth: e.chart_depth, // chart depth (at lowest astronomical tide)
-                    options: { // Google Maps MarkerOptions
-                        visible: false // initially false, switched on when we know preferences
-                    },
-                    category: e.category, // site category ('wreck', 'scenic', etc.)
-                    icon: '/img/icons/' + e.category + '.png'
-                };
-            });
-        }).then(function () {
-            $rootScope.$broadcast('event:map-isready');
-        });
-    };
+  var MIN_ZOOM = 3;
+  var MAX_ZOOM = 14;
 
-    // Initialize controller
+  /////////////////////////////////////////////////////////////////////////////
+  // Function defs
+  /////////////////////////////////////////////////////////////////////////////
 
-    // Retrieve centre and zoom values from local storage, if they exist
+  function mapIdleEventHandler (map) {
+    // On idle, put recent map view settings into local storage
+    $scope.$apply(function () {
+      localStorageService.set('map.zoom', map.zoom);
+      localStorageService.set('map.center.latitude', map.center.lat());
+      localStorageService.set('map.center.longitude', map.center.lng());
+    });
+  }
+
+  function mapZoomChangedEventHandler (map) {
+    // Constrain the zoom level
+    if (map.zoom > MAX_ZOOM) {
+      map.setZoom(MAX_ZOOM);
+    } else if (map.zoom < MIN_ZOOM) {
+      map.setZoom(MIN_ZOOM);
+    }
+  }
+
+  $scope.checkMinimumLevel = function (marker, data) {
+    return marker.minimumLevel <= data.maximumLevel;
+  };
+
+  $scope.checkEntryTypes = function (m, data) {
+    return (m.boatEntry && data.boatEntry) || (m.shoreEntry && data.shoreEntry);
+  };
+
+  function updateVisibilityOnFilter (marker) {
+    var shouldBeVisible = Object.keys(marker.filterVisibility).every(function (x) {return marker.filterVisibility[x];});
+    marker.options.visible = shouldBeVisible;
+  }
+
+  $scope.filterMarker = function (m, data) {
+    function isWithinDepthRange (depth, range) {
+      return depth >= range[0] && depth <= range[1];
+    }
+    m.filterVisibility.minimumLevel = $scope.checkMinimumLevel(m, data);
+    m.filterVisibility.depthRange = isWithinDepthRange(m.depth, data.depthRange);
+    m.filterVisibility.entryType = $scope.checkEntryTypes(m, data);
+    updateVisibilityOnFilter(m);
+  };
+
+  $scope.filterPreferences = function (event, data) {
+    $scope.map.markers.forEach(function (m) {$scope.filterMarker(m, data)});
+  };
+
+  $scope.retrieveDivesites = function () {
+    $http.get('/divesites/')
+    .success(function (data) {
+      $scope.map.markers = data.map(function (e) {
+        return {
+          id: e.id,
+          title: e.name,
+          loc: e.loc,
+          depth: e.depth,
+          createdAt: e.createdAt,
+          updatedAt: e.updatedAt,
+          boatEntry: e.boatEntry,
+          shoreEntry: e.shoreEntry,
+          minimumLevel: e.minimumLevel,
+          description: e.description,
+          options: { // Google Maps MarkerOptions
+            visible: false // initially false, switched on when filtered
+          },
+          icon: 'public/libs/material-design-icons/maps/1x_web/ic_place_black_24dp.png',
+          filterVisibility: {
+            entryType: false,
+            depthRange: false,
+            minimumLevel: false
+          }
+        }
+      });
+    }).then(function () {
+      $rootScope.$broadcast('event:divesites-loaded');
+    });
+  };
+
+  $scope.uiGmapIsReady = function (maps) {
+    $rootScope.$broadcast('event:map-is-ready');
+  };
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Controller initialization
+  /////////////////////////////////////////////////////////////////////////////
+
+  $scope.initialize = function () {
     $scope.map = {
-        center: {
-            latitude: (localStorageService.get('map.center.latitude') || 53.5),
-            longitude: (localStorageService.get('map.center.longitude') || -8)
-        },
-        zoom: (localStorageService.get('map.zoom') || 7)
+      events: {
+        idle: mapIdleEventHandler,
+        zoom_changed: mapZoomChangedEventHandler
+      },
+      center: {
+        latitude: localStorageService.get('map.center.latitude') || 53.5,
+        longitude: localStorageService.get('map.center.longitude') || -8
+      },
+      zoom: localStorageService.get('map.zoom') || 7,
+      markers: [],
+      options: {
+        scrollwheel: true,
+        disableDefaultUI: true,
+        mapTypeId: 'roadmap'
+      },
+      markerEvents: {
+        click: function (marker, event, model, args) {
+          console.log(model.shoreEntry);
+        }
+      }
     };
-
-    // Needs to be non-null at initialization (for some obscure reason
-    // mentioned, but not explained, in the  angular-google-maps source)
-    $scope.map.markers = [];
-
-    // Object to receive marker functionality
     $scope.mapControl = {};
     $scope.markerControl = {};
 
-    // Map options
-    $scope.map.options = {
-        scrollwheel: true,
-        disableDefaultUI: true,
-        mapTypeId: 'satellite'
-
+    $scope.events = {
+      filterPreferences: $scope.filterPreferences,
+      mapIsReady: $scope.retrieveDivesites
     };
 
-    // Map marker options
-    $scope.map.markerOptions = { };
 
-    // stubs for future event handling
-    $scope.map.events = {
-        // Prevent zoom level being too high, so as to avoid map tile 404 errors around
-        // offshore dive sites.
-        zoom_changed: function(map){
-            var maxZoom = 14
-            if(map.zoom > maxZoom){
-                map.setZoom(maxZoom);
-            }
-        },
-        // On idle, update the local storage storing the most recent map view settings
-        idle: function (map) {
-            $scope.$apply(function () {
-                localStorageService.set('map.zoom', map.zoom);
-                // TODO: I don't know if calling map.center.[lat|lng]() is actually stable
-                // or documented, but storing values from $scope.map.center leaves
-                // the local storage out of date by exactly one drag. I think this is
-                // a fault on the angular-google-maps side but I'm not sure.
-                localStorageService.set('map.center.latitude', map.center.lat());
-                localStorageService.set('map.center.longitude', map.center.lng());
-            });
-        }
-    };
+    // Listen for filter events
+    $scope.$on('event:filter-preferences', $scope.events.filterPreferences);
+    // Listen for map-ready events (to load divesites)
+    $scope.$on('event:map-is-ready', $scope.events.mapIsReady);
 
-    // Map marker events 
-    $scope.map.markerEvents = {
-        // On click, retrieve this site's record from the sites API and do something
-        // exciting with it
-        click: function (marker, event, model, args) {
-            $http.get('/divesites/' + model.id).success(function (data) {
-                // Pull the data we want from the returned JSON
-                $scope.siteInfo = {
-                    "_id": data._id,
-                    name: data.name,
-                    coordinates: {
-                        longitude: data.loc[0],
-                        latitude: data.loc[1]
-                    },
-                    chart_depth: data.chart_depth
-                }
-                // Open the modal 
-                $modal.open({
-                    templateUrl: 'views/partials/site-info.html',
-                    controller: 'SiteInfoController',
-                    // TODO: rather than send the full, scope, just give the modal
-                    // the site data
-                    scope: $scope
-                });
-            });
-        }
-    };
+    uiGmapIsReady.promise().then($scope.uiGmapIsReady);
+  };
 
-    $scope.$on('event:filter-sites', function (event, data) {
-        $scope.map.markers.forEach(function (m) {
-            if (isWithinDepthRange(m.chart_depth, data.depthRange)) {
-                if (m.category == data.category) {
-                    m.options.visible = data.show;
-                }
-            } else {
-                m.options.visible = false;
-            }
-        });
-    });
-
-    var isWithinDepthRange= function(depth, range){
-        return depth >= range[0] && depth <= range[1]
-    }
-
-    uiGmapIsReady.promise().then(
-        // Fires when the map is loaded. Once the map is loaded, go get the
-        // dive site data from the API. This means that 'event:map-isready'
-        // is only called when we have *everything* we need.
-        function (maps) {
-            $scope.mapInstance = maps[0].map;
-            $scope.retrieveDivesites();
-        });
+  $scope.initialize();
 });
