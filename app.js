@@ -19,7 +19,7 @@ if (app.get('env') === 'test') {
   // For testing, use a local mongo DB
   mongodbConnString = "mongodb://localhost:27017/test-divesites";
 } else {
-  mongodbConnString = config.MONGOLAB_URI
+  mongodbConnString = config.MONGOLAB_URI;
 }
 
 /*****************************************************************************/
@@ -28,11 +28,13 @@ if (app.get('env') === 'test') {
 
 mongoose.connect(mongodbConnString, function(err){
   if (err) {
-    if (app.get('env') != 'test')
+    if (app.get('env') !== 'test') {
       console.log('Database connection error', err);
+    }
   } else {
-    if (app.get('env') != 'test')
+    if (app.get('env') !== 'test') {
       console.log('Database connection successful');
+    }
   }
 });
 
