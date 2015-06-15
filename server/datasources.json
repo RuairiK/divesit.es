@@ -6,7 +6,7 @@
   "divesites": {
     "host": "localhost",
     "port": 27017,
-    "database": "lb-divesites",
+    "database": "divesites",
     "username": "",
     "password": "",
     "name": "divesites",

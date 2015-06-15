@@ -7,8 +7,8 @@ module.exports = (grunt) ->
     jshint: # lint .js files
       all:
         src: [
-          'models/*.js'
-          'routes/*.js'
+          'server/**/*.js'
+          'common/**/*.js'
           'public/scripts/**/*.js'
         ]
       options:
