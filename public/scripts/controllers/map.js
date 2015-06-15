@@ -94,37 +94,6 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
         console.log(errorResponse);
       }
     );
-    //$http.get('/divesites/')
-    /*
-       Divesite.find()
-       .success(function (data) {
-       $scope.map.markers = data.map(function (e) {
-       return {
-id: e.id,
-title: e.name,
-loc: e.loc,
-depth: e.depth,
-createdAt: e.createdAt,
-updatedAt: e.updatedAt,
-boatEntry: e.boatEntry,
-shoreEntry: e.shoreEntry,
-minimumLevel: e.minimumLevel,
-description: e.description,
-options: { // Google Maps MarkerOptions
-visible: false // initially false, switched on when filtered
-},
-icon: 'public/libs/material-design-icons/maps/1x_web/ic_place_black_24dp.png',
-filterVisibility: {
-entryType: false,
-depthRange: false,
-minimumLevel: false
-}
-}
-});
-}).then(function () {
-$rootScope.$broadcast('event:divesites-loaded');
-});
-*/
   };
 
   $scope.uiGmapIsReady = function (maps) {
