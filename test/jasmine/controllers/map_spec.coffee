@@ -1,7 +1,7 @@
 MOCK_DATA = [
   {
     "_id": "54f5c339d65093780e3a3f14"
-    "loc": {longitude: -6.05441, latitude: 53.27209}
+    "loc": {lng: -6.05441, lat: 53.27209}
     "name": "HMS GUIDE ME II"
     "depth": 32.706
     "createdAt": "2015-03-16T17:32:08.991Z"
@@ -13,7 +13,7 @@ MOCK_DATA = [
   },
   {
     "id": "54f5d4f1506054993d9e98c6"
-    "loc": {longitude: -8.44224214553833, latitude: 51.69350895045772}
+    "loc": {lng: -8.44224214553833, lat: 51.69350895045772}
     "name": "Oysterhaven slip"
     "depth": 6
     "createdAt": "2015-03-03T15:36:17.899Z"
@@ -35,9 +35,9 @@ describe "MapController", ->
     $scope = $rootScope.$new()
     localStorageService = _localStorageService_
     $httpBackend = _$httpBackend_
-    $httpBackend.when "GET", "/divesites/"
+    $httpBackend.when "GET", "/api/Divesites"
       .respond MOCK_DATA
-    $httpBackend.when "GET", "/divesites/" + MOCK_DATA[0]._id
+    $httpBackend.when "GET", "/api/Divesites/" + MOCK_DATA[0]._id
       .respond MOCK_DATA[0]
     $controller = _$controller_ "MapController", {
       $scope: $scope

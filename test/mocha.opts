@@ -1,3 +1,6 @@
 --recursive
 --compilers coffee:coffee-script
 --require coffee-script/register
+--timeout 5000
+--full-trace
+--trace

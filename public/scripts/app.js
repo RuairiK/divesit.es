@@ -2,7 +2,8 @@
   'use strict';
   var app = angular.module('divesitesApp', [
     'ngRoute', 'uiGmapgoogle-maps', 'LocalStorageModule',
-    'ui.slider'
+    'ui.slider',
+    'lbServices', 'ngResource'
   ])
   .config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 

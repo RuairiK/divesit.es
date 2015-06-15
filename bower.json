@@ -15,7 +15,8 @@
     "underscore": "~1.8.3",
     "angular-local-storage": "~0.1.5",
     "jqueryui": "~1.11.4",
-    "angular-ui-slider": "~0.1.2"
+    "angular-ui-slider": "~0.1.2",
+    "angular-resource": "~1.4.0"
   },
   "devDependencies": {
     "angular-mocks": "latest"

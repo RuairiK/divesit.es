@@ -1,18 +1,12 @@
-process.env.NODE_ENV = 'test'
-
 async = require 'async'
-assert = require('assert')
-should = require('should')
-mongoose = require('mongoose')
-express = require('express')
+expect = require('chai').expect
 HTTP = require('http-status-codes')
 request = require('supertest')
 
-routes = require('../../../routes/index')
-Divesite = require('../../../models/Divesite')
-User = require('../../../models/User')
-app = require('../../../app')
-utils = require('../utils')
+utils = require '../utils'
+app = require('../../../server/server')
+Divesite = app.models.Divesite
+User = app.models.User
 
 siteData =
   name: "TEST_SITE"
@@ -21,74 +15,62 @@ siteData =
   description: 'TEST_SITE description'
   boatEntry: true
   shoreEntry: true
+  minimumLevel: 0
   loc:
-    longitude: 0
-    latitude: 0
+    lng: 0
+    lat: 0
 
 
 describe "POST /divesites", () ->
-  before utils.createUser
-  after utils.tearDown
 
-  afterEach (done) -> Divesite.find().remove done
+  beforeEach utils.createUser
+  afterEach utils.tearDown
 
   describe "without authorization", () ->
     it "returns HTTP 401 and doesn't add a new site", (done) ->
       request app
-        .post '/divesites'
+        .post '/api/divesites'
         .expect 'Content-type', /json/
         .expect HTTP.UNAUTHORIZED
         .end (err, res) ->
           # Check that there's nothing in the db
           Divesite.find (err, res) ->
-            res.should.be.an.Array
-            res.should.be.empty
-            done()
+            expect(res).to.be.an.Array
+            expect(res).to.be.empty
+            done err
 
-  describe "with authorization", () ->
-    makeRequest = () ->
+  describe "with authorization", ->
+
+    token = {}
+
+    beforeEach (done) ->
+      User.login {'email': 'user@example.com', 'password': "pass"}, (err, accessToken) ->
+        token = accessToken.id
+        done()
+
+    it "returns HTTP 200", (done) ->
       request app
-        .post '/divesites'
-        .set 'force-authenticate', true
+        .post '/api/divesites'
+        .set 'Authorization', token
+        .send siteData
+        .expect HTTP.OK
+        .end done
 
-    it "returns HTTP 201", (done) -> async.waterfall [
-      (cb) -> User.findOne cb
-      (user, cb) ->
-        makeRequest()
-          .set 'auth-id', user._id
-          .send siteData
-          .expect HTTP.CREATED
-          .end cb
-    ], done
+    it "returns JSON", (done) ->
+      request app
+        .post '/api/divesites'
+        .set 'Authorization', token
+        .send siteData
+        .expect 'Content-Type', /json/
+        .end done
 
-    it "returns JSON", (done) -> async.waterfall [
-      (cb) -> User.findOne cb
-      (user, cb) ->
-        makeRequest()
-          .set 'auth-id', user._id
-          .send siteData
-          .expect 'Content-Type', /json/
-          .end (e, res) ->
-            console.log e
-            cb()
-    ], done
 
-    it "adds a dive site to the database", (done) -> async.waterfall [
-      (cb) -> User.findOne cb
-      (user, cb) ->
-        makeRequest()
-          .set 'auth-id', user._id
-          .send siteData
-          .end (e, r) -> cb(e, user)
-      (user, cb) -> Divesite.findOne {name: siteData.name}, (e, site) -> cb(e, user, site)
-      (user, site, cb) ->
-        site.should.be.an.Object
-        site.should.have.properties ['creator_id', '_id', 'name', 'shoreEntry',
-        'loc', 'updated_at', 'boatEntry', 'description'
-        ]
-        site.loc.should.be.an.Array
-        site.loc.should.have.length 2
-        should.equal site.name, siteData.name
-        should.equal "" + site.creator_id, "" + user._id
-        cb()
-    ], done
+    it "adds a site to the database", (done) ->
+      request app
+        .post '/api/divesites'
+        .set 'Authorization', token
+        .send siteData
+        .end (err, res) ->
+          Divesite.find {name: "TEST_SITE"}, (err, sites) ->
+            expect(sites).to.have.length 1
+            done err

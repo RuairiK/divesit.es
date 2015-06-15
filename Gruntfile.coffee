@@ -30,6 +30,7 @@ module.exports = (grunt) ->
       test:
         options:
           require: 'coffee-script/register'
+
         src: 'test/mocha/**/*.coffee'
 
     mocha_istanbul:

@@ -93,7 +93,6 @@ angular.module('divesitesApp').controller('FilterMenuController', function ($sco
   function prependSliderTrack(event, ui) {
     // Add a visible slider track. We can't do this in the markup
     // because ui-slider is creating the node for us
-    console.log(event.target.id);
     $(event.target).prepend("<div class='ui-slider-track'></div>");
     $(event.target).prepend("<div class='ui-slider-track-on'></div>");
   }
@@ -102,7 +101,6 @@ angular.module('divesitesApp').controller('FilterMenuController', function ($sco
     change: function (event, ui) {
       var width = $(event.target).children('.ui-slider-handle').css('left');
       $(event.target).children('.ui-slider-track-on').css({'width': width});
-      //console.log($(event.target).css());
     }
   };
   $scope.depthRangeSlider = {

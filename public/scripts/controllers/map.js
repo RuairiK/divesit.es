@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('divesitesApp').controller('MapController', function ($scope, $rootScope, localStorageService, $http, uiGmapIsReady) {
+angular.module('divesitesApp').controller('MapController', function ($scope, $rootScope, localStorageService, $http, uiGmapIsReady, Divesite) {
 
   /////////////////////////////////////////////////////////////////////////////
   // Constants
@@ -59,34 +59,72 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
   };
 
   $scope.retrieveDivesites = function () {
-    $http.get('/divesites/')
-    .success(function (data) {
-      $scope.map.markers = data.map(function (e) {
-        return {
-          id: e.id,
-          title: e.name,
-          loc: e.loc,
-          depth: e.depth,
-          createdAt: e.createdAt,
-          updatedAt: e.updatedAt,
-          boatEntry: e.boatEntry,
-          shoreEntry: e.shoreEntry,
-          minimumLevel: e.minimumLevel,
-          description: e.description,
-          options: { // Google Maps MarkerOptions
-            visible: false // initially false, switched on when filtered
-          },
-          icon: 'public/libs/material-design-icons/maps/1x_web/ic_place_black_24dp.png',
-          filterVisibility: {
-            entryType: false,
-            depthRange: false,
-            minimumLevel: false
+    Divesite.find(
+      {},
+      function (sites) {
+        $scope.map.markers = sites.map(function (e) {
+          return {
+            id: e.id,
+            title: e.name,
+            loc: {
+              latitude: e.loc.lat,
+              longitude: e.loc.lng
+            },
+            depth: e.depth,
+            createdAt: e.createdAt,
+            updatedAt: e.updatedAt,
+            boatEntry: e.boatEntry,
+            shoreEntry: e.shoreEntry,
+            minimumLevel: e.minimumLevel,
+            description: e.description,
+            options: { // Google Maps MarkerOptions
+              visible: false // initially false, switched on when filtered
+            },
+            icon: 'public/libs/material-design-icons/maps/1x_web/ic_place_black_24dp.png',
+            filterVisibility: {
+              entryType: false,
+              depthRange: false,
+              minimumLevel: false
+            }
           }
-        }
-      });
-    }).then(function () {
-      $rootScope.$broadcast('event:divesites-loaded');
-    });
+        });
+        $rootScope.$broadcast('event:divesites-loaded');
+      },
+      function (errorResponse) {
+        console.log(errorResponse);
+      }
+    );
+    //$http.get('/divesites/')
+    /*
+       Divesite.find()
+       .success(function (data) {
+       $scope.map.markers = data.map(function (e) {
+       return {
+id: e.id,
+title: e.name,
+loc: e.loc,
+depth: e.depth,
+createdAt: e.createdAt,
+updatedAt: e.updatedAt,
+boatEntry: e.boatEntry,
+shoreEntry: e.shoreEntry,
+minimumLevel: e.minimumLevel,
+description: e.description,
+options: { // Google Maps MarkerOptions
+visible: false // initially false, switched on when filtered
+},
+icon: 'public/libs/material-design-icons/maps/1x_web/ic_place_black_24dp.png',
+filterVisibility: {
+entryType: false,
+depthRange: false,
+minimumLevel: false
+}
+}
+});
+}).then(function () {
+$rootScope.$broadcast('event:divesites-loaded');
+});
+*/
   };
 
   $scope.uiGmapIsReady = function (maps) {
@@ -116,7 +154,7 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
       },
       markerEvents: {
         click: function (marker, event, model, args) {
-          console.log(model.shoreEntry);
+          console.log(model);
         }
       }
     };
