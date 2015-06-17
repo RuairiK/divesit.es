@@ -1,6 +1,6 @@
 MOCK_DATA = [
   {
-    "_id": "54f5c339d65093780e3a3f14"
+    "id": "54f5c339d65093780e3a3f14"
     "loc": {lng: -6.05441, lat: 53.27209}
     "name": "HMS GUIDE ME II"
     "depth": 32.706
@@ -30,14 +30,16 @@ describe "MapController", ->
   $httpBackend = {}
   localStorageService = {}
   uiGmapIsReady = {}
-  beforeEach inject (_$rootScope_, _localStorageService_, _$httpBackend_, _$controller_, _uiGmapIsReady_) ->
+  Divesite = {}
+  beforeEach inject (_$rootScope_, _localStorageService_, _$httpBackend_, _$controller_, _uiGmapIsReady_, _Divesite_) ->
     $rootScope = _$rootScope_
     $scope = $rootScope.$new()
     localStorageService = _localStorageService_
     $httpBackend = _$httpBackend_
+    Divesite = _Divesite_
     $httpBackend.when "GET", "/api/Divesites"
       .respond MOCK_DATA
-    $httpBackend.when "GET", "/api/Divesites/" + MOCK_DATA[0]._id
+    $httpBackend.when "GET", "/api/Divesites/" + MOCK_DATA[0].id
       .respond MOCK_DATA[0]
     $controller = _$controller_ "MapController", {
       $scope: $scope
@@ -67,8 +69,6 @@ describe "MapController", ->
         minimumLevel: 1
       spyOn $scope, "filterMarker"
       $scope.filterPreferences 'event:filter-preferences', filterData
-      it "calls $scope.filterMarker", ->
-        expect($scope.filterMarker).toHaveBeenCalled()
 
   describe "$scope.uiGmapIsReady", ->
     beforeEach ->
@@ -221,6 +221,14 @@ describe "MapController", ->
           .toHaveBeenCalledWith 'map.center.longitude', -8
 
   describe "$scope.map.markerEvents", ->
+    anyFunc = jasmine.any Function
+    describe "click", ->
+      beforeEach ->
+        spyOn Divesite, 'findById'
+        $scope.map.markerEvents.click(null, null, {id: MOCK_DATA[0].id})
+      it "makes a GET request to the API", ->
+        expect(Divesite.findById)
+          .toHaveBeenCalledWith {id: MOCK_DATA[0].id}, anyFunc, anyFunc
 
   describe "filtering [starting from all shown]", ->
     isShown = (m) -> m.options.visible

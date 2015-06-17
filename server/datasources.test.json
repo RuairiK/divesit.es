@@ -1,0 +1,6 @@
+{
+  "divesites": {
+    "name": "divesites",
+    "connector": "memory"
+  }
+}

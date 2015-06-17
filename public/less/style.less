@@ -2,14 +2,19 @@
 @import 'box-shadow-helper';
 
 @darkbg-text: rgba(255, 255, 255, 0.87);
-@lightbg-text: rgba(0, 0, 0, 0.87);
 
+@lightbg-text: rgba(0, 0, 0, 0.87);
 @lightbg-secondary: rgba(0, 0, 0, 0.54);
 @lightbg-hint: rgba(0, 0, 0, 0.26);
+
+.card-border {
+  border-radius: 2px;
+}
 
 body {
   font-family: 'Montserrat', sans-serif;
 }
+
 .logo {
   color: @darkbg-text;
   background-color: @indigo-500;
@@ -28,6 +33,7 @@ body {
 .filter-menu {
   width: 400px;
   color: @lightbg-text;
+  .card-border;
   h1 {
     font-size: 16px;
     letter-spacing: 0.2em;
@@ -71,9 +77,75 @@ body {
   }
 }
 
-.infoBox {
+.info-box > div {
   z-index: 1; /* higher than map */
+  position: absolute;
+  width: 400px;
+  /* height: 250px; */
+  top: 84px;
+  right: 32px;
+  background-color: @indigo-50;
+  .BoxShadowHelper(2);
+  .card-border;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 16px;
+  padding-top: 24px;
+  .header-area {
+    h2 {
+      font-size: 24px;
+      color: @lightbg-text;
+      padding-bottom: 8px;
+      border-bottom: solid 1px @lightbg-hint;
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+    h3.subtitle {
+      font-size: 14px;
+      color: @lightbg-secondary;
+      line-height: 24px;
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+  }
+  .dismiss-button {
+    position: absolute;
+    top: -18px;
+    left: 16px;
+
+    .fa-stack {
+      width: 36px;
+      height: 36px;
+    }
+    .fa-stack-2x {
+      font-size: 36px;
+    }
+    .fa-circle {
+      color: @indigo-50;
+      .TextShadowHelper(2);
+    }
+    .fa-times-circle {
+      color: @indigo-500;
+    }
+  }
+  .info-row {
+    font-size: 12px;
+    div {
+      float: left;
+      width: 50%;
+    }
+    .key {
+      color: @lightbg-text;
+    }
+    .value {
+      color: @lightbg-secondary;
+    }
+  }
+  .description {
+    padding-top: 8px;
+  }
 }
+
 .angular-google-map-container {
   position: absolute;
   height: 100%;
@@ -82,6 +154,7 @@ body {
   left: 0;
   border-width: 0;
 }
+
 .ui-slider-horizontal  {
   height: 16px;
   color: rgba(0, 0, 0, 0.26);

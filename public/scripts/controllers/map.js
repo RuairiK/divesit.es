@@ -31,6 +31,17 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     }
   }
 
+  function markerClickEventHandler (marker, event, model, args) {
+    var id = model.id;
+    Divesite.findById(
+      {id: id},
+      function (site) {
+        $rootScope.$broadcast("event:site-loaded", site);
+      },
+      function (error) {
+      });
+  }
+
   $scope.checkMinimumLevel = function (marker, data) {
     return marker.minimumLevel <= data.maximumLevel;
   };
@@ -57,6 +68,21 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
   $scope.filterPreferences = function (event, data) {
     $scope.map.markers.forEach(function (m) {$scope.filterMarker(m, data)});
   };
+
+  /*
+  $scope.formatDivesite = function (siteJSON) {
+    var site = Object.copy(siteJSON);
+    site.loc = {latitude: siteJSON.loc.lat, longitude: siteJSON.loc.lng};
+    site.options = { visible: false };
+    site.filterVisibility = {
+      entryType: false,
+      depthRange: false,
+      minimumLevel: false
+    };
+    site.icon = 'public/libs/material-design-icons/maps/1x_web/ic_place_black_24dp.png';
+    return site;
+  };
+ */
 
   $scope.retrieveDivesites = function () {
     Divesite.find(
@@ -100,6 +126,7 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     $rootScope.$broadcast('event:map-is-ready');
   };
 
+
   /////////////////////////////////////////////////////////////////////////////
   // Controller initialization
   /////////////////////////////////////////////////////////////////////////////
@@ -122,17 +149,15 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
         mapTypeId: 'roadmap'
       },
       markerEvents: {
-        click: function (marker, event, model, args) {
-          console.log(model);
-        }
+        click: markerClickEventHandler // fires on marker click
       }
     };
     $scope.mapControl = {};
     $scope.markerControl = {};
 
     $scope.events = {
-      filterPreferences: $scope.filterPreferences,
-      mapIsReady: $scope.retrieveDivesites
+      filterPreferences: $scope.filterPreferences, // fires on 'event:filter-preferences'
+      mapIsReady: $scope.retrieveDivesites // fires on 'event:map-is-ready'
     };
 
 

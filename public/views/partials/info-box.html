@@ -1,0 +1,42 @@
+<div ng-show="infoBox.visible">
+  <a href class="dismiss-button" ng-click="dismissInfoBox()">
+    <span class="fa-stack fa-lg">
+      <i class="fa fa-circle fa-stack-2x"></i>
+      <i class="fa fa-times-circle fa-stack-2x"></i>
+    </span>
+  </a>
+  <div class="header-area">
+    <h2>{{ infoBox.site.name }}</h2>
+    <!-- <h3 class="subtitle">Dive site</h3> -->
+  </div>
+  <div class="info-row">
+    <div class="key">
+      Coordinates
+    </div>
+    <div class="value">
+      {{ infoBox.site.loc.lat | truncateCoordinate }}°N,
+      {{ infoBox.site.loc.lng | truncateCoordinate }}°E
+    </div>
+    <div>
+    </div>
+  </div>
+  <div class="info-row clearfix">
+    <div class="key">
+      Experience level
+    </div>
+    <div class="value clearfix">
+      {{ infoBox.site.minimumLevel | stringifyExperienceLevel }}
+    </div>
+  </div>
+  <div class="info-row clearfix">
+    <div class="key">
+      Depth
+    </div>
+    <div class="value">
+      {{ infoBox.site.depth }} m
+    </div>
+  </div>
+  <div class="description">
+    {{ infoBox.site.description }}
+  </div>
+</div>

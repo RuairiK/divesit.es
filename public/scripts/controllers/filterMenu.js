@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('divesitesApp').controller('FilterMenuController', function ($scope, $rootScope, localStorageService) {
+angular.module('divesitesApp').
+  controller('FilterMenuController', function ($scope, $rootScope, localStorageService) {
 
   var MAX_DEPTH = 100;
 
@@ -21,10 +22,10 @@ angular.module('divesitesApp').controller('FilterMenuController', function ($sco
     switch (maximumLevel) {
       case 0:
         levelString = "Beginner";
-        break;
+      break;
       case 1:
         levelString = "Intermediate";
-        break;
+      break;
       default:
         levelString = "Advanced";
     }
@@ -76,7 +77,7 @@ angular.module('divesitesApp').controller('FilterMenuController', function ($sco
     }
   };
 
-  $scope.retrieveFilterPreferences = function () {
+  $scope.retrieveFilterPreferences = function () { // fires on 'event:divesites-loaded'
     // Retrieve filter preferences from local storage if they're there.
     // Explicitly check each key.
     var lsKeys = localStorageService.keys();
