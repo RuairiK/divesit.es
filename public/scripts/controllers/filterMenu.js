@@ -17,21 +17,6 @@ angular.module('divesitesApp').
     $rootScope.$broadcast('event:filter-preferences', $scope.filterPreferences);
   };
 
-  $scope.stringifyMaximumLevel = function (maximumLevel) {
-    var levelString;
-    switch (maximumLevel) {
-      case 0:
-        levelString = "Beginner";
-      break;
-      case 1:
-        levelString = "Intermediate";
-      break;
-      default:
-        levelString = "Advanced";
-    }
-    return levelString;
-  }
-
   $scope.filterValidators = {
     entryType: function (value) {return 'true' == value || true === value || 'false' == value || false === value},
     depthRange: function (value) {
