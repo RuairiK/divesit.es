@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('divesitesApp').
-  controller('InfoBoxController', function ($scope, $rootScope, dsParse) {
+  controller('InfoBoxController', function ($scope, $rootScope) {
 
   $scope.siteLoadedEventHandler = function (event, data) {
     $scope.infoBox.visible = true;
@@ -12,9 +12,6 @@ angular.module('divesitesApp').
   $scope.dismissInfoBox = function () {
     $scope.infoBox.visible = false;
   }
-
-  // TODO: move this to a filter
-  $scope.stringifyLevel = dsParse.stringifyLevel;
 
   /////////////////////////////////////////////////////////////////////////////
   // Listen for $rootScope events
