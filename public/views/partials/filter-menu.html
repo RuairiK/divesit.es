@@ -24,7 +24,7 @@
     </div>
     </li>
     <li id="filterMinimumLevel">
-    <h2>Maximum level: <span>{{ stringifyMaximumLevel(filterPreferences.maximumLevel)  }}</span><h2>
+    <h2>Maximum level: <span>{{ filterPreferences.maximumLevel | stringifyExperienceLevel }}</span><h2>
         <div class="slider-container">
           <div ui-slider="maximumLevelSlider"
             id="maximumLevelSlider"
