@@ -39,8 +39,9 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        "public/scripts/**/*.js": 'coverage',
-        "**/*.coffee": "coffee"
+      // Exclude lb-services.js from coverage checking, since it doesn't belong to us
+      "public/scripts/**/*(!lb-services).js": 'coverage',
+      "**/*.coffee": "coffee"
     },
 
     // test results reporter to use
