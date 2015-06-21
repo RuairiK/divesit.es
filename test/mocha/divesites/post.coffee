@@ -64,7 +64,6 @@ describe "POST /divesites", () ->
         .expect 'Content-Type', /json/
         .end done
 
-
     it "adds a site to the database", (done) ->
       request app
         .post '/api/divesites'

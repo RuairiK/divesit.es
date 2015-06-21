@@ -5,42 +5,13 @@ HTTP = require 'http-status-codes'
 request = require 'supertest'
 
 app = require '../../../server/server'
+utils = require '../utils'
 Divesite = app.models.Divesite
 
-createSites = (done) ->
-  async.parallel [
-    (cb) -> Divesite.create {
-      name: 'SITE_1',
-      boatEntry: true,
-      shoreEntry: false,
-      depth: 10,
-      loc: [1, 1],
-      minimumLevel: 0
-      description: 'SITE_1 DESCRIPTION'
-    }, cb
-    (cb) -> Divesite.create {
-      name: 'SITE_2',
-      boatEntry: false,
-      shoreEntry: true,
-      depth: 20,
-      loc: [2, 2]
-      minimumLevel: 1
-      description: 'SITE_2 DESCRIPTION'
-    }, cb
-    (cb) -> Divesite.create {
-      name: 'SITE_3',
-      boatEntry: true,
-      shoreEntry: true,
-      depth: 30,
-      loc: [3, 3]
-      minimumLevel: 2
-      description: 'SITE_3 DESCRIPTION'
-    }, cb
-  ], done
 
 describe "GET /divesites", ->
 
-  before (done) -> createSites done
+  before (done) -> utils.createSites done
   after (done) -> Divesite.destroyAll done
 
   req = {}
@@ -67,7 +38,7 @@ describe "GET /divesites", ->
 
 describe "GET /divesites/:id", ->
 
-  before (done) -> createSites done
+  before (done) -> utils.createSites done
   after (done) -> Divesite.destroyAll done
 
   describe "with a valid site ID", ->
@@ -81,3 +52,16 @@ describe "GET /divesites/:id", ->
             .expect 'Content-Type', /json/
             .end done
       ], done
+
+  describe "with an invalid site ID", ->
+    invalidId = {}
+    beforeEach (done) ->
+      Divesite.find (err, sites) ->
+        ids = (site.id for site in sites)
+        invalidId = ids.sort().reverse()[0] + 1
+        done err
+    it "returns HTTP 404", (done) ->
+      request app
+        .get "/api/divesites/#{invalidId}"
+        .expect HTTP.NOT_FOUND
+        .end done
