@@ -10,7 +10,6 @@ User = app.models.User
 
 siteData =
   name: "TEST_SITE"
-  category: "wreck"
   depth: 50
   description: 'TEST_SITE description'
   boatEntry: true
@@ -42,11 +41,13 @@ describe "POST /divesites", () ->
   describe "with authorization", ->
 
     token = {}
+    userId = {}
 
     beforeEach (done) ->
       User.login {'email': 'user@example.com', 'password': "pass"}, (err, accessToken) ->
         token = accessToken.id
-        done()
+        userId = accessToken.userId
+        done err
 
     it "returns HTTP 200", (done) ->
       request app
@@ -55,7 +56,6 @@ describe "POST /divesites", () ->
         .send siteData
         .expect HTTP.OK
         .end done
-
     it "returns JSON", (done) ->
       request app
         .post '/api/divesites'
@@ -63,13 +63,32 @@ describe "POST /divesites", () ->
         .send siteData
         .expect 'Content-Type', /json/
         .end done
-
     it "adds a site to the database", (done) ->
       request app
         .post '/api/divesites'
         .set 'Authorization', token
         .send siteData
         .end (err, res) ->
-          Divesite.find {name: "TEST_SITE"}, (err, sites) ->
+          Divesite.find {where: {name: "TEST_SITE"}}, (err, sites) ->
             expect(sites).to.have.length 1
+            done err
+    it "sets the authenticated user as the creator of the new site", (done) ->
+      request app
+        .post "/api/divesites"
+        .set "Authorization", token
+        .send siteData
+        .end (err, res) ->
+          Divesite.findOne {where: {name: "TEST_SITE"}}, (err, site) ->
+            expect(site.userId).to.equal userId
+            done err
+    it "overrides a 'userId' key in the submitted site data", (done) ->
+      bogusSiteData = JSON.parse JSON.stringify siteData
+      bogusSiteData.userId = userId + 1
+      request app
+        .post "/api/divesites"
+        .set "Authorization", token
+        .send bogusSiteData
+        .end (err, res) ->
+          Divesite.findOne {where: {name: "TEST_SITE"}}, (err, site) ->
+            expect(site.userId).to.equal userId
             done err
