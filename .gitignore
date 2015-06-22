@@ -1,13 +1,16 @@
 # Dependency directory
 node_modules/
-#Karma test coverage reports
+# Test coverage reports
 coverage/
 # This is where Bower puts the scripts
 public/libs/
-# Ignore compiled style; let Grunt build style.css
+# Compiled CSS (let Grunt build style.css)
 public/styles/
+# VIM temp files
 .*.swp
+# NPM log output
 npm-debug.log
 keys.js
 .env
-
+# API config for third-party auth
+providers.json
