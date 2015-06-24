@@ -28,7 +28,7 @@ describe "PUT /divesites/:id", ->
         .send {name: "NEW_NAME"}
         .expect HTTP.UNAUTHORIZED
         .end done
-    it "doesn't patch an existing divesite", (done) ->
+    it "doesn't update an existing divesite", (done) ->
       request app
         .put "/api/divesites/#{site.id}"
         .send {name: "NEW_NAME"}
@@ -40,16 +40,18 @@ describe "PUT /divesites/:id", ->
 
   describe "with authentication", ->
     token = {}
+    userId = {}
     beforeEach (done) ->
       User.login {'email': 'user@example.com', 'password': "pass"}, (err, accessToken) ->
         token = accessToken.id
+        userId = accessToken.userId
         done()
 
     describe "and a valid site ID", ->
       site = {}
       beforeEach (done) ->
         User.findOne {where: {email: 'user@example.com'}}, (err, user) ->
-          Divesite.findOne (err, res) ->
+          Divesite.findOne {where: {name: "SITE_1"}}, (err, res) ->
             res.userId = user.id # Assign ownership
             site = res
             res.save done
@@ -100,8 +102,47 @@ describe "PUT /divesites/:id", ->
                 expect(res).to.be.empty
                 cb err
       ], done
-      it "updates only whitelisted fields" # pending while we decide which fields are whitelisted
-      it "doesn't update non-whitelisted fields" # pending while we decide which fields aren't whitelisted
+      it "ignores non-whitelisted fields", (done) ->
+        async.series [
+          (cb) ->
+            request app
+              .put "/api/divesites/#{site.id}"
+              .set "Authorization", token
+              .send
+                userId: userId + 1
+                createdAt: Date.now()
+                updatedAt: Date.now()
+              .end cb
+          (cb) ->
+            Divesite.findById site.id, (err, res) ->
+              expect(res.userId).to.equal userId
+              expect(res.createdAt).to.equal site.createdAt
+              expect(res.updatedAt).to.equal site.updatedAt
+              cb err
+        ], done
+      it "updates with all whitelisted fields", (done) -> async.series [
+        (cb) ->
+          request app
+            .put "/api/divesites/#{site.id}"
+            .set "Authorization", token
+            .send
+              name: "NEW_NAME"
+              depth: 20
+              minimumLevel: 2
+              boatEntry: false
+              shoreEntry: true
+              description: "NEW DESCRIPTION"
+            .end cb
+        (cb) ->
+          Divesite.findById site.id, (err, res) ->
+            expect(res.name).to.equal "NEW_NAME"
+            expect(res.depth).to.equal 20
+            expect(res.minimumLevel).to.equal 2
+            expect(res.boatEntry).to.be.false
+            expect(res.shoreEntry).to.be.true
+            expect(res.description).to.equal "NEW DESCRIPTION"
+            cb err
+      ], done
 
     describe "with an invalid site ID", ->
       invalidId = {}

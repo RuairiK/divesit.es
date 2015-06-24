@@ -41,17 +41,19 @@ describe "GET /divesites/:id", ->
   before (done) -> utils.createSites done
   after (done) -> Divesite.destroyAll done
 
+  site = {}
+  beforeEach (done) ->
+    Divesite.findOne {where: {name: "SITE_1"}}, (err, res) ->
+      site = res
+      done err
+
   describe "with a valid site ID", ->
     it "returns HTTP 200 and JSON", (done) ->
-      async.waterfall [
-        (cb) -> Divesite.findOne cb
-        (site, cb) ->
-          request app
-            .get "/api/divesites/#{site.id}"
-            .expect HTTP.OK
-            .expect 'Content-Type', /json/
-            .end done
-      ], done
+      request app
+        .get "/api/divesites/#{site.id}"
+        .expect HTTP.OK
+        .expect 'Content-Type', /json/
+        .end done
 
   describe "with an invalid site ID", ->
     invalidId = {}
