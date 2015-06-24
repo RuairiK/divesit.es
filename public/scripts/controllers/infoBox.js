@@ -3,6 +3,10 @@
 angular.module('divesitesApp').
   controller('InfoBoxController', function ($scope, $rootScope) {
 
+  $scope.markerClickedEventHandler = function (event, data) {
+    $scope.infoBox.site.imgSrc = "";
+  };
+
   $scope.siteLoadedEventHandler = function (event, data) {
     $scope.infoBox.visible = true;
     console.log(data);
@@ -19,9 +23,11 @@ angular.module('divesitesApp').
 
   $scope.initialize = function () {
     $scope.infoBox = {
-      visible: false
+      visible: false,
+      site: {}
     };
     $scope.$on('event:site-loaded', $scope.siteLoadedEventHandler);
+    $scope.$on('event:marker-clicked', $scope.markerClickedEventHandler);
     console.log("Initializing InfoBoxController");
   };
 

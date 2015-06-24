@@ -32,10 +32,14 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
   }
 
   function markerClickEventHandler (marker, event, model, args) {
+    $rootScope.$broadcast("event:marker-clicked");
     var id = model.id;
     Divesite.findById(
       {id: id},
       function (site) {
+        // XXX: for development only!
+        //site.imgSrc = 'http://lorempixel.com/400/300/nature/' + (Math.floor(Math.random() * (20 - 1 + 1)) + 1);
+        site.imgSrc = 'http://lorempixel.com/400/300/nature/';
         $rootScope.$broadcast("event:site-loaded", site);
       },
       function (error) {
@@ -106,7 +110,7 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
             options: { // Google Maps MarkerOptions
               visible: false // initially false, switched on when filtered
             },
-            icon: 'public/libs/material-design-icons/maps/1x_web/ic_place_black_24dp.png',
+            // icon: 'img/ic_place_black_18dp.png', // Map icon URL
             filterVisibility: {
               entryType: false,
               depthRange: false,
