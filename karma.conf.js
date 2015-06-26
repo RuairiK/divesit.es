@@ -25,6 +25,7 @@ module.exports = function(config) {
       'public/libs/angular-local-storage/dist/angular-local-storage.js',
       'public/libs/angular-ui-slider/src/slider.js',
       'public/libs/underscore/underscore.js',
+      'public/libs/angular-bootstrap/ui-bootstrap-tpls.js',
       {pattern: 'public/scripts/**/*.js', included: true},
       {pattern: 'public/scripts/*.js', included: true},
       'test/jasmine/**/*.coffee'
@@ -40,7 +41,7 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       // Exclude lb-services.js from coverage checking, since it doesn't belong to us
-      "public/scripts/**/*(!lb-services).js": 'coverage',
+      "public/scripts/**/*.js": 'coverage',
       "**/*.coffee": "coffee"
     },
 
