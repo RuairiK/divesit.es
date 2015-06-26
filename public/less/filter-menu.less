@@ -1,0 +1,86 @@
+.filter-menu {
+  /* Size and positioning */
+  position: absolute;
+  top: 84px;
+  left: 32px;
+  width: 400px;
+  max-width: ~"calc(50% - 48px)";
+  /* Z-index and material properties */
+  z-index: 1; /* higher than map */
+  .BoxShadowHelper(2);
+  .card-border;
+  /* Margins and padding */
+  padding-bottom: 24px;
+  /* Colour and typography */
+  color: @lightbg-text;
+  background-color: @indigo-50;
+  font-size: 16px;
+  .header {
+    padding: 24px 16px 16px;
+    h2 {
+      font-size: 24px;
+      margin: 0;
+      font-weight: normal;
+    }
+  }
+  ul {
+    margin: 0;
+  }
+  h3 {
+    margin: 0;
+    color: @lightbg-secondary;
+    font-size: 16px;
+    font-weight: normal;
+    margin-bottom: 8px;
+  }
+  #filterList {
+    li {
+      margin: 0;
+    }
+    & > li {
+      margin: 0px 16px 16px 16px;
+    }
+  }
+  input[type=checkbox]:before {
+    content: "";
+    border: 2px solid #ccc;
+    display: block;
+    height: 16px;
+    width: 16px;
+    z-index: 2;
+    position: absolute;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  input[type=checkbox]:after {
+    background: @indigo-50;
+    height: 16px;
+    width: 16px;
+    content: "";
+    position: absolute;
+    display: block;
+  }
+  input[type=checkbox]:checked:before {
+    border-top-style: none;
+    border-right-style: none;
+    transform: rotate(-45deg);
+    border-color: @indigo-500;
+    height: 11px;
+  }
+  input[type=checkbox]:checked:after {
+  }
+  .slider-container {
+    margin-bottom: 16px;
+  }
+  .col-xs-1 {
+    padding: 0;
+  }
+  .lower-bound, .upper-bound {
+    font-weight: bold;
+    text-align: right;
+    color: @lightbg-secondary;
+  }
+  .lower-bound {
+    padding-right: 8px;
+  }
+}

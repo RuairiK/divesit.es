@@ -1,64 +1,82 @@
-.info-box .main {
-  /* Size and positioning */
-  position: absolute;
-  top: 84px; // Navbar + 32px
-  bottom: 32px; 
-  right: 32px;
-  width: 400px;
-  max-width: ~"calc(50% - 48px)";
-  background-color: @indigo-50;
-  /* Z-index and material properties */
-  z-index: 1; // higher than map
-  .BoxShadowHelper(2);
-  .card-border;
+.info-box {
 
-  .dismiss-button {
-    /* Positioning */
-    position: absolute;
-    top: -24px;
-    right: 16px;
-    .fa-stack {
+  .fab {
+    span.fa-stack {
       width: 48px;
       height: 48px;
     }
     .fa-stack-2x {
       font-size: 48px;
+      color: @pink-500;
     }
     .fa-circle {
       color: @pink-50;
       .TextShadowHelper(2);
     }
-    .fa-times-circle {
-      color: @pink-500;
-    }
   }
 
-  .header {
+  .info-button, .dismiss-button {
+    /* Positionining */
+    position: absolute;
+    top: @info-button-top;
+    right: 48px;
+    /* Z-index and material properties */
+    z-index: 2;
+  }
+
+  .main {
     /* Size and positioning */
     position: absolute;
-    height: 225px;
-    top: 0;
-    width: 100%;
-    /* Overflow */
-    overflow: hidden;
-    /* Colour */
-    background-color: @indigo-500;
-    color: @darkbg-text;
-    /* Border */
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    img {
-      min-width: 400px;
-      min-height: 225px;
+    top: @infobox-top;
+    bottom: 32px; 
+    right: 32px;
+    width: 400px;
+    max-width: ~"calc(50% - 48px)";
+    background-color: @indigo-50;
+    /* Z-index and material properties */
+    z-index: 1; // higher than map
+    .BoxShadowHelper(2);
+    .card-border;
+    /* Scrolling properties */
+    overflow-y: auto;
+
+    .no-site {
+      margin: 24px 16px 16px;
+      h2 {
+        font-size: 24px;
+      }
+      .body {
+        color: @lightbg-secondary;
+      }
     }
-    .text-overlay {
+
+
+    .header {
+      /* Size and positioning */
       position: absolute;
+      height: 225px;
       top: 0;
-      height: 100%;
       width: 100%;
-      .floor-fade;
-    }
-    .header-container {
+      /* Overflow */
+      overflow: hidden;
+      /* Colour */
+      background-color: @indigo-500;
+      color: @darkbg-text;
+      /* Border */
+      border-top-left-radius: 2px;
+      border-top-right-radius: 2px;
+      img {
+        min-width: 400px;
+        min-height: 225px;
+      }
+      .text-overlay {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        .floor-fade;
+      }
+      .header-container {
         /* Positioning */
         position: absolute;
         bottom: 0;
@@ -66,49 +84,55 @@
         padding-left: 16px;
         padding-right: 16px;
         padding-bottom: 16px;
-      h2 {
-        /* Margins and padding */
-        margin: 0;
-        /* Typography */
-        font-size: 24px;
-        color: @darkbg-text;
-      }
-      span {
-        font-size: 12px;
-        color: @darkbg-text;
-      }
-    }
-  }
-
-  .content {
-    /* Size and positioning */
-    position: absolute;
-    top: 225px;
-    bottom: 16px;
-    width: 100%;
-    overflow-y: auto;
-    /* Margins and padding */
-    padding: 16px;
-    .info-grid {
-      /* Margins and padding */
-      padding-bottom: 16px;
-    }
-
-    .info-row {
-      /* Positioning */
-      position: relative;
-      /* Typography */
-      font-size: 12px;
-      div {
-        width: 50%;
-        &.key {
-          color: @lightbg-text;
+        h2 {
+          /* Margins and padding */
+          margin: 0;
+          /* Typography */
+          font-size: 24px;
+          color: @darkbg-text;
         }
-        &.value {
-          position: absolute;
-          top: 0;
-          left: 50%;
-          color: @lightbg-secondary;
+        span {
+          font-size: 12px;
+          color: @darkbg-text;
+        }
+      }
+    }
+
+    .content {
+      /* Size and positioning */
+      position: absolute;
+      top: 225px;
+      bottom: 16px;
+      width: 100%;
+      /* Margins and padding */
+      padding: 16px;
+      .info-grid {
+        /* Margins and padding */
+        padding-bottom: 16px;
+      }
+
+      .info-row {
+        /* Positioning */
+        position: relative;
+        /* Typography */
+        font-size: 12px;
+        div {
+          width: 50%;
+          &.key {
+            color: @lightbg-text;
+            a.help-hover {
+              position: relative;
+              float: right;
+              right: 48px;
+              text-decoration: none;
+            }
+          }
+          &.value {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            color: @lightbg-secondary;
+          }
         }
       }
     }

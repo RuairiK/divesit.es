@@ -1,57 +1,83 @@
-<div class="main" ng-show="infoBox.visible">
-
-
-  <div class="header">
-    <img ng-src="{{ infoBox.site.imgSrc }}"/>
-    <div class="text-overlay">
-    </div>
-    <div class="header-container">
-      <h2>{{ infoBox.site.name }}</h2>
-      <span ng-show="!infoBox.site.ownerId">Added by divesit.es staff</span>
-      <span ng-show="!!infoBox.site.ownerId">Added by user {{ infoBox.site.ownerId}}</span>
-    </div>
-  </div>
-
-  <a href class="dismiss-button" ng-click="dismissInfoBox()">
+<div>
+  <a ng-show="!infoBox.visible" href ng-click="showInfoBox()" class="info-button fab">
+    <span class="fa-stack fa-lg">
+      <i class="fa fa-stack-2x fa-circle"></i>
+      <i class="fa fa-stack-2x fa-info-circle"></i>
+    </span>
+  </a>
+  <a ng-show="infoBox.visible" href ng-click="dismissInfoBox()" class="dismiss-button fab">
     <span class="fa-stack fa-lg">
       <i class="fa fa-circle fa-stack-2x"></i>
       <i class="fa fa-times-circle fa-stack-2x"></i>
     </span>
   </a>
+</div>
+<div class="main" ng-show="infoBox.visible">
 
-  <div class="content">
-    <div class="info-grid">
-      <div class="info-row">
-        <div class="key">
-          Coordinates
-        </div>
-        <div class="value">
-          {{ infoBox.site.loc.lat | truncateCoordinate }}°N,
-          {{ infoBox.site.loc.lng | truncateCoordinate }}°E
-        </div>
-        <div>
-        </div>
+  <div ng-if="!infoBox.site" class="no-site">
+    <h2>No site selected</h2>
+    <div class="body">Select a site to see information, photos, comments and more.</div>
+  </div>
+
+  <div ng-if="!!infoBox.site" class="info">
+    <div class="header">
+      <img ng-src="{{ infoBox.site.imgSrc }}"/>
+      <div class="text-overlay">
       </div>
-      <div class="info-row">
-        <div class="key">
-          Experience level
-        </div>
-        <div class="value">
-          {{ infoBox.site.minimumLevel | stringifyExperienceLevel }}
-        </div>
-      </div>
-      <div class="info-row">
-        <div class="key">
-          Depth
-        </div>
-        <div class="value">
-          {{ infoBox.site.depth }} m
-        </div>
+      <div class="header-container">
+        <h2>{{ infoBox.site.name }}</h2>
+        <span ng-show="!infoBox.site.ownerId">Added by divesit.es staff</span>
+        <span ng-show="!!infoBox.site.ownerId">Added by user {{ infoBox.site.ownerId}}</span>
       </div>
     </div>
-    <div class="description">
-      <a ng-if="false" href class="fa fa-edit start-editing"></a>
-      {{ infoBox.site.description }}
+
+    <div class="content">
+      <div class="info-grid">
+        <div class="info-row">
+          <div class="key">
+            Coordinates
+            <a class="help-hover fa fa-question-circle"
+              tooltip-placement="right"
+              tooltip-append-to-body="true"
+              tooltip="Lat/lng coordinates for this site"></a>
+          </div>
+          <div class="value">
+            {{ infoBox.site.loc.lat | truncateCoordinate }}°N,
+            {{ infoBox.site.loc.lng | truncateCoordinate }}°E
+          </div>
+          <div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="key">
+            Experience level
+            <a class="help-hover fa fa-question-circle"
+              tooltip-placement="right"
+              tooltip-append-to-body="true"
+              tooltip="Recommended experience level for diving here"></a>
+          </div>
+          <div class="value">
+            {{ infoBox.site.minimumLevel | stringifyExperienceLevel }}
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="key">
+            Depth
+            <a class="help-hover fa fa-question-circle"
+              tooltip-placement="right"
+              tooltip-append-to-body="true"
+              tooltip="Typical maximum depth on this dive"></a>
+          </div>
+          <div class="value">
+            {{ infoBox.site.depth }} m
+          </div>
+        </div>
+      </div>
+      <div class="description">
+        <a ng-if="false" href class="fa fa-edit start-editing"></a>
+        {{ infoBox.site.description }}
+      </div>
     </div>
   </div>
+
 </div>

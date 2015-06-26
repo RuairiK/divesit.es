@@ -5,6 +5,7 @@
 @import 'floor-fade';
 
 @import 'info-box';
+@import 'filter-menu';
 
 
 .card-border {
@@ -34,53 +35,6 @@ a.start-editing {
   text-decoration: none;
 }
 
-.filter-menu {
-  width: 400px;
-  max-width: ~"calc(50% - 48px)";
-  color: @lightbg-text;
-  .card-border;
-  h1 {
-    font-size: 16px;
-    letter-spacing: 0.2em;
-    color: @lightbg-hint;
-    line-height: 24px;
-    margin-top: 12px;
-    margin-bottom: 8px;
-    margin-left: 8px;
-    font-weight: normal;
-  }
-  h2 {
-    margin: 0;
-    color: @lightbg-secondary;
-    font-size: 14px;
-    font-weight: normal;
-  }
-  li {
-    height: 48px;
-  }
-  z-index: 1; /* higher than map */
-  position: absolute;
-  top: 84px;
-  left: 32px;
-  background-color: @indigo-50;
-  .BoxShadowHelper(2);
-  padding: 8px;
-  .slider-container {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-  .col-xs-1 {
-    padding: 0;
-  }
-  .lower-bound, .upper-bound {
-    font-weight: bold;
-    text-align: right;
-    color: @lightbg-secondary;
-  }
-  .lower-bound {
-    padding-right: 8px;
-  }
-}
 
 .angular-google-map-container {
   position: absolute;
