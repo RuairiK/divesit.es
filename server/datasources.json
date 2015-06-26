@@ -7,5 +7,9 @@
     "password": "",
     "name": "divesites",
     "connector": "mongodb"
+  },
+  "local-storage": {
+    "provider": "filesystem",
+    "root": "/tmp/storage"
   }
 }
