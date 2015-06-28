@@ -10,8 +10,7 @@ angular.module('divesitesApp').
   };
 
   $scope.siteLoadedEventHandler = function (event, data) {
-    $scope.infoBox.visible = true;
-    console.log(data);
+    $scope.showInfoBox();
     $scope.infoBox.site = data;
   };
 

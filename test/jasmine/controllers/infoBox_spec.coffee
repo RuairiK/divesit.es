@@ -26,18 +26,13 @@ describe "InfoBoxController", ->
 
   describe "$scope.siteLoadedEventHandler()", ->
     beforeEach ->
-    it "turns an invisible info box visible", ->
-      $scope.infoBox = { visible: false }
-      $scope.siteLoadedEventHandler(null, {})
-      expect($scope.infoBox.visible).toBe true
-    it "keeps a visible info box visible", ->
-      $scope.infoBox = { visible: true }
-      $scope.siteLoadedEventHandler(null, {})
-      expect($scope.infoBox.visible).toBe true
+      spyOn $scope, 'showInfoBox'
+      $scope.siteLoadedEventHandler('event:site-loaded', {})
+    it "calls $scope.showInfoBox()", ->
+      expect($scope.showInfoBox).toHaveBeenCalled()
 
   describe "$scope.dismissInfoBox()", ->
-    beforeEach ->
-    it "turns a visible info box invisible", ->
+    it "makes a visible info box invisible", ->
       $scope.infoBox = {visible: true}
       $scope.dismissInfoBox()
       expect($scope.infoBox.visible).toBe false
@@ -45,3 +40,13 @@ describe "InfoBoxController", ->
       $scope.infoBox = {visible: false}
       $scope.dismissInfoBox()
       expect($scope.infoBox.visible).toBe false
+
+  describe "$scope.showInfoBox()", ->
+    it "makes an invisible info box visible", ->
+      $scope.infoBox = {visible: false}
+      $scope.showInfoBox()
+      expect($scope.infoBox.visible).toBe true
+    it "keeps a visible info box visible", ->
+      $scope.infoBox = {visible: true}
+      $scope.showInfoBox()
+      expect($scope.infoBox.visible).toBe true

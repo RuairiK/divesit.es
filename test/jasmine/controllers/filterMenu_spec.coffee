@@ -58,10 +58,12 @@ describe "FilterMenuController", ->
         shoreEntry: false
         depthRange: [0, 50]
         maximumLevel: 0
-      spyOn $rootScope, '$broadcast'
+      spyOn $scope, 'storeFilterPreferences'
       $scope.updateAndSendFilterPreferences()
-      it "broadcasts an 'event:filter-preferences' event", ->
-        expect($rootScope.$broadcast).toHaveBeenCalledWith $scope.filterPreferences
+    it "broadcasts an 'event:filter-preferences' event", ->
+      expect($rootScope.$broadcast).toHaveBeenCalledWith 'event:filter-preferences', $scope.filterPreferences
+    it "calls $scope.storeFilterPreferences", ->
+      expect($scope.storeFilterPreferences).toHaveBeenCalled()
 
   describe "$scope.retrieveFilterPreferences", ->
     beforeEach ->
