@@ -10,6 +10,9 @@ User = app.models.User
 
 describe "PUT /divesites/:id", ->
 
+  before utils.tearDown
+  after utils.tearDown
+
   beforeEach (done) -> async.parallel [
     (cb) -> utils.createUser cb
     (cb) -> utils.createSites cb
@@ -115,7 +118,7 @@ describe "PUT /divesites/:id", ->
               .end cb
           (cb) ->
             Divesite.findById site.id, (err, res) ->
-              expect(res.userId).to.equal userId
+              expect(res.userId.toString()).to.equal userId.toString()
               expect(res.createdAt).to.equal site.createdAt
               expect(res.updatedAt).to.equal site.updatedAt
               cb err

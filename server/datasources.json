@@ -8,8 +8,10 @@
     "name": "divesites",
     "connector": "mongodb"
   },
-  "local-storage": {
-    "provider": "filesystem",
-    "root": "/tmp/storage"
+  "myfile": {
+    "name": "myfile",
+    "connector": "loopback-component-storage",
+    "root": "/tmp/storage",
+    "provider": "filesystem"
   }
 }

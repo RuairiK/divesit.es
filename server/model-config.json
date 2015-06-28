@@ -42,5 +42,9 @@
   },
   "UserCredential": {
     "dataSource": "divesites"
+  },
+  "Image": {
+    "dataSource": "divesites",
+    "public": true
   }
 }

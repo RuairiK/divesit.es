@@ -9,6 +9,8 @@ app.use(logger('dev'));
 var loopbackPassport = require('loopback-component-passport');
 var PassportConfigurator = loopbackPassport.PassportConfigurator;
 var passportConfigurator = new PassportConfigurator(app);
+// Storage
+var loopbackComponent = require('loopback-component-storage');
 
 /* For now, leave the authentication out of here: it messes with CI tests
  * TODO: put third-party API keys into environment variables on travis-ci.org
@@ -24,7 +26,6 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'developme
   }
   // Initialize Passport
   passportConfigurator.init();
-  //passportConfigurator.setupModels();
   passportConfigurator.setupModels({
     userModel: app.models.User,
     userIdentityModel: app.models.UserIdentity,
@@ -36,7 +37,6 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'developme
     passportConfigurator.configureProvider(s, c);
   }
 }
-
 
 app.start = function() {
   // start the web server
