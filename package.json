@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "main": "server/server.js",
   "scripts": {
-    "postinstall": "bower install",
+    "postinstall": "bower install && mkdir public/libs/lb-ng && node_modules/loopback-sdk-angular-cli/bin/lb-ng server/server.js public/libs/lb-ng/lb-services.js",
     "test": "NODE_ENV='test' grunt test"
   },
   "dependencies": {
@@ -70,6 +70,7 @@
     "karma-requirejs": "^0.2.2",
     "karma-spec-reporter": "*",
     "load-grunt-tasks": "^3.1.0",
+    "loopback-sdk-angular-cli": "^1.1.4",
     "mocha": "^2.2.4",
     "sinon": "^1.14.1",
     "supertest": "^0.15.0"
