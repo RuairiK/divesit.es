@@ -30,7 +30,7 @@ module.exports = (grunt) ->
       test:
         options:
           require: 'coffee-script/register'
-
+          clearRequireCache: true
         src: 'test/mocha/**/*.coffee'
 
     mocha_istanbul:
@@ -41,7 +41,9 @@ module.exports = (grunt) ->
       styles: # watch for LESS changes and compile
         files: ['public/less/*.less']
         tasks: ['less']
-
+      karma:
+        files: ['public/**/*.js']
+        tasks: ['karma']
 
   grunt.loadNpmTasks 'grunt-env'
   grunt.registerTask 'js', ['jshint:all']
