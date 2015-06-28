@@ -26,6 +26,7 @@ module.exports = function(config) {
       'public/libs/angular-ui-slider/src/slider.js',
       'public/libs/underscore/underscore.js',
       'public/libs/angular-bootstrap/ui-bootstrap-tpls.js',
+      'public/libs/lb-ng/lb-services.js',
       {pattern: 'public/scripts/**/*.js', included: true},
       {pattern: 'public/scripts/*.js', included: true},
       'test/jasmine/**/*.coffee'
