@@ -1,0 +1,56 @@
+.navbar {
+  color: @darkbg-text;
+  background-color: @indigo-500;
+  border: 0;
+}
+.navbar-default {
+  /* Margins, padding, and border */
+  border-radius: 0;
+  margin-bottom: 0;
+  /* Material design and z-index */
+  z-index: 1;
+  .BoxShadowHelper(2);
+
+  & > .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+    .navbar-brand {
+      /* Margins and padding */
+      margin-left: 0;
+      padding: 0 32px;
+      color: inherit;
+      &:hover, &:focus {
+        color: inherit;
+      }
+      h1 {
+        margin: 0;
+        line-height: 48px;
+        font-family: 'Cardo', serif;
+      }
+    }
+    .navbar-right {
+      @media (min-width: 768px) {
+        margin-right: 54px;
+      }
+    }
+    .navbar-nav > li > a {
+      color: @darkbg-text;
+      border: solid 2px @pink-500;
+      background-color: @pink-500;
+      padding: 9px 8px;
+      margin-top: 7px;
+      line-height: 14px;
+      letter-spacing: 0.04em;
+      font-weight: bold;
+      .BoxShadowHelper(1);
+      &:hover, &:focus {
+        color: @darkbg-text;
+        background-color: @pink-600;
+      }
+      &:active {
+        background-color: @pink-700;
+      }
+    }
+  }
+
+}

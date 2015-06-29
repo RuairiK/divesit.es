@@ -1,9 +1,14 @@
 (function () {
   'use strict';
   var app = angular.module('divesitesApp', [
-    'ngRoute', 'uiGmapgoogle-maps', 'LocalStorageModule',
-    'ui.slider', 'ui.bootstrap',
-    'lbServices', 'ngResource'
+    'ngResource',
+    'ngRoute',
+    'lbServices',
+    'LocalStorageModule',
+    'satellizer',
+    'ui.bootstrap',
+    'ui.slider',
+    'uiGmapgoogle-maps'
   ])
   .config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 
@@ -21,5 +26,15 @@
     .otherwise({
       redirectTo: '/'
     });
-  });
+  })
+  .config(['satellizer.config', '$authProvider', function (config, $authProvider) {
+    config.authHeader = 'Satellizer';
+    config.httpInterceptor = false;
+    $authProvider.facebook({
+      clientId: '1542355859342321'
+    });
+    $authProvider.google({
+      clientId: '930190391486-hd4l5c4uatuur1kf4foa43noibtm9r02.apps.googleusercontent.com'
+    });
+  }]);
 })();

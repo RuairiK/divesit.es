@@ -1,0 +1,11 @@
+{
+  "divesites": {
+    "host": "localhost",
+    "port": 27017,
+    "database": "divesites",
+    "username": "",
+    "password": "",
+    "name": "divesites",
+    "connector": "mongodb"
+  }
+}

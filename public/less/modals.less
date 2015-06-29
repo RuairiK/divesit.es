@@ -1,0 +1,40 @@
+/* Hacks to make the Bootstrap modal behave more the way we want it to */
+.modal.in .modal.dialog {
+  transform: none !important; /* no translate */
+}
+.modal.fade .modal-dialog {
+  transition: none !important;
+  transform: none !important;
+}
+
+.modal-content {
+  /* Material properties */
+  border-radius: 2px !important;
+  box-shadow: none;
+  .BoxShadowHelper(2);
+
+  /* Margins and padding */
+  padding: 16px;
+
+  h2 {
+    margin: 0 0 16px 0;
+    font-size: 24px;
+  }
+  .content {
+    padding-bottom: 8px;
+  }
+  .btn {
+    /* Positioning */
+    position: relative;
+    /* Margins, border, padding */
+    border-radius: 0;
+    border: 0;
+    margin-bottom: 8px;
+    padding-left: 44px;
+    /* Material properties */
+    .BoxShadowHelper(1);
+    /* Font properties */
+    font-size: 16px;
+
+  }
+}

@@ -46,5 +46,9 @@
   "Image": {
     "dataSource": "divesites",
     "public": true
+  },
+  "Container": {
+    "dataSource": "myfile",
+    "public": true
   }
 }

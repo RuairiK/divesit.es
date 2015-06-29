@@ -8,6 +8,12 @@
     .fa-stack-2x {
       font-size: 48px;
       color: @pink-500;
+      &:hover {
+        color: @pink-600;
+      }
+      &:active {
+        color: @pink-700;
+      }
     }
     .fa-circle {
       color: @pink-50;
@@ -18,7 +24,7 @@
   .info-button, .dismiss-button {
     /* Positionining */
     position: absolute;
-    top: @info-button-top;
+    top: @dismiss-button-top;
     right: 64px;
     /* Z-index and material properties */
     z-index: 2;
