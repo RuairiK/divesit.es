@@ -47,6 +47,11 @@
       "type": "belongsTo",
       "model": "User",
       "foreignKey": ""
+    },
+    "images": {
+      "type": "hasMany",
+      "model": "Image",
+      "foreignKey": ""
     }
   },
   "acls": [

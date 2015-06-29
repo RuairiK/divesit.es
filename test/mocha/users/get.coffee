@@ -1,6 +1,5 @@
 async = require 'async'
 assert = require 'assert'
-should = require 'should'
 HTTP = require 'http-status-codes'
 request = require 'supertest'
 

@@ -16,6 +16,7 @@ describe "POST /api/images", ->
     (cb) -> utils.createUser cb
   ], done
   afterEach utils.tearDown
+
   describe "without authorization", ->
     it "returns HTTP 401", (done) ->
       request app
@@ -30,6 +31,7 @@ describe "POST /api/images", ->
           Image.find {}, (err, images) ->
             expect(images.length).to.equal 0
             done err
+
   describe "with authorization", ->
     token = {}
     userId = {}
@@ -49,6 +51,7 @@ describe "POST /api/images", ->
           divesiteId: siteIds[0]
           url: faker.image.image()
         done err
+
     describe "and invalid data", ->
       it "requires a site ID", (done) ->
         data = JSON.parse JSON.stringify validSiteData

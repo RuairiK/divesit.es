@@ -1,18 +1,18 @@
 async = require 'async'
 assert = require 'assert'
-should = require 'should'
 HTTP = require 'http-status-codes'
 request = require 'supertest'
+expect = require('chai').expect
 
 app = require '../../../server/server'
 utils = require '../utils'
 Divesite = app.models.Divesite
 
 
-describe "GET /divesites", ->
+describe "GET /api/divesites", ->
 
-  before (done) -> utils.createSites done
-  after (done) -> Divesite.destroyAll done
+  before utils.createSites
+  after utils.tearDown
 
   req = {}
   beforeEach ->
@@ -29,17 +29,16 @@ describe "GET /divesites", ->
       .expect 'Content-Type', /json/
       .end done
 
-  it "returns a list of 3 sites", (done) ->
-    req
-      .end (err, res) ->
-        #res.should.be.an.Array
-        done()
-        #res.should.have.length 3
+  it "returns an Array", (done) ->
+    req.end (err, res) ->
+      expect(res.body).to.be.an.Array
+      expect(res.body).to.have.length 3
+      done err
 
-describe "GET /divesites/:id", ->
+describe "GET /api/divesites/:id", ->
 
-  before (done) -> utils.createSites done
-  after (done) -> Divesite.destroyAll done
+  before utils.createSites
+  after utils.tearDown
 
   site = {}
   beforeEach (done) ->
