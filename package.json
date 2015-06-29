@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "main": "server/server.js",
   "scripts": {
-    "postinstall": "bower install && mkdir public/libs/lb-ng && node_modules/loopback-sdk-angular-cli/bin/lb-ng server/server.js public/libs/lb-ng/lb-services.js",
+    "postinstall": "bower install && mkdir public/libs/lb-ng && ./regenerate-lbServices.sh",
     "test": "NODE_ENV='test' grunt test"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "loopback-component-storage": "^1.5.0",
     "loopback-connector-mongodb": "^1.11.0",
     "loopback-datasource-juggler": "^2.29.2",
+    "loopback-satellizer": "^0.1.0",
     "mmmagic": "^0.3.14",
     "mocha-lcov-reporter": "0.0.2",
     "moment": "^2.10.2",
