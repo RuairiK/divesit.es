@@ -1,5 +1,5 @@
 angular.module('divesitesApp')
-.controller('NewSiteModalController', function ($scope, $location, $auth, User, LoopBackAuth, $modalInstance, uiGmapIsReady) {
+.controller('NewSiteModalController', function ($scope, $location, $auth, User, LoopBackAuth, $modalInstance, Divesite, uiGmapIsReady) {
   $scope.rendered = false;
   $scope.map = {
     center: {
@@ -51,10 +51,17 @@ angular.module('divesitesApp')
     console.log("Data to send:");
     // Re-format the loc property so that LoopBack will understand it as a geopoint
     $scope.newSite.loc = {
-      lat: $scope.map.center.latitude,
-      loc: $scope.map.center.longitude
+      lat: Number($scope.map.center.latitude),
+      lng: Number($scope.map.center.longitude)
     }
     console.log($scope.newSite);
+    Divesite
+    .create($scope.newSite)
+    .$promise
+    .then(function (res) {
+      console.log(res);
+      $modalInstance.close();
+    })
   }
 
   $scope.mapControl = {};
