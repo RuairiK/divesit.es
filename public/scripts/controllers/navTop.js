@@ -3,7 +3,6 @@
 angular.module('divesitesApp')
 .controller('NavTopController', function ($scope, $modal, $auth, User, LoopBackAuth, $location) {
   function summonModal() {
-    console.log("summoning modal");
     $modal.open({
       animation: false,
       templateUrl: 'views/partials/sign-in-modal.html',

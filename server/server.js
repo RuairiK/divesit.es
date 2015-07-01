@@ -5,7 +5,6 @@ var boot = require('loopback-boot');
 var app = module.exports = loopback();
 var satellizer = require('loopback-satellizer');
 
-// Logger
 var logger = require('morgan');
 app.use(logger('dev'));
 
@@ -34,15 +33,3 @@ if (require.main === module) {
   app.start();
 }
 
-
-// Bootstrap the application, configure models, datasources and middleware.
-// Sub-apps like REST API are mounted via boot scripts.
-/*
-boot(app, __dirname, function(err) {
-  if (err) throw err;
-
-  // start the server if `$ node server.js`
-  if (require.main === module)
-    app.start();
-});
-*/

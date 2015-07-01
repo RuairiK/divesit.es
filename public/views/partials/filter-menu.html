@@ -26,7 +26,7 @@
       </li>
     </ul>
     </li>
-    <li id="filterMinimumLevel" class="fluid-container">
+    <li id="filterMinimumLevel" class="container-fluid">
     <h3>
       Site difficulty:
       <span>{{ filterPreferences.maximumLevel | stringifyExperienceLevel }}</span>
@@ -45,7 +45,7 @@
     </li>
     <li>
     <h3>Depth range</h3>
-    <div class="fluid-container">
+    <div class="container-fluid">
       <div class="col-xs-1 lower-bound">{{ filterPreferences.depthRange[0]  }}</div>
       <div class="col-xs-10 slider-container">
         <div ui-slider="depthRangeSlider"
@@ -59,4 +59,10 @@
     </div>
     </li>
   </ul>
+  <div ng-if="!isAuthenticated()">
+    Sign in to add new dive sites, log dives, and more.
+  </div>
+  <div ng-if="isAuthenticated()">
+    <a href ng-click="summonNewSiteModal()">Add a new site</a>
+  </div>
 </div>

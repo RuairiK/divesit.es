@@ -33,11 +33,6 @@ angular.module('divesitesApp').
     };
     $scope.$on('event:site-loaded', $scope.siteLoadedEventHandler);
     $scope.$on('event:marker-clicked', $scope.markerClickedEventHandler);
-    console.log("Initializing InfoBoxController");
-
-    console.log("!!infoBox.site?");
-    console.log(!!$scope.infoBox.site);
-    console.log($scope.infoBox.site);
   };
 
   $scope.initialize();

@@ -92,3 +92,23 @@ describe "POST /divesites", () ->
           Divesite.findOne {where: {name: "TEST_SITE"}}, (err, site) ->
             expect(site.userId).to.equal userId
             done err
+    it "works OK with the kind of data that the Angular front-end sends", (done) ->
+      request app
+        .post "/api/divesites"
+        .set "Authorization", token
+        .send {
+          boatEntry: false
+          depth: 10
+          loc:
+            lat: 51.68744595275606
+            lng: -8.456608963012737
+          minimumLevel: "0"
+          name: "Ballymaccus Bay"
+          shoreEntry: true
+          description: "A decent training site but not much to see."
+        }
+        .expect HTTP.OK
+        .end (err, res) ->
+          Divesite.find {where: {name: "Ballymaccus Bay"}}, (err, sites) ->
+            expect(sites).to.have.length 1
+            done err

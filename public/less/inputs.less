@@ -1,0 +1,17 @@
+input[type="text"], input[type="email"], input[type="password"] {
+  border-radius: 0;
+  border: 0;
+  border-bottom: solid 2px @indigo-50 !important;
+  box-shadow: none !important;
+  padding-left: 0;
+  padding-bottom: none;
+  font-size: 16px;
+  &:focus, &:active {
+    box-shadow: none;
+    border: 0;
+    border-bottom: solid 2px @pink-200;
+    -webkit-appearance: none;
+    outline: none;
+  }
+}
+

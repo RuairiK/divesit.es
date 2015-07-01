@@ -4,8 +4,7 @@
       "loopback/common/models",
       "loopback/server/models",
       "../common/models",
-      "./models",
-      "loopback-component-passport/lib/models"
+      "./models"
     ],
     "mixins": [
       "loopback/common/mixins",
@@ -37,18 +36,16 @@
     "dataSource": "divesites",
     "public": true
   },
-  "UserIdentity": {
-    "dataSource": "divesites"
-  },
-  "UserCredential": {
-    "dataSource": "divesites"
-  },
   "Image": {
     "dataSource": "divesites",
     "public": true
   },
   "Container": {
     "dataSource": "myfile",
+    "public": true
+  },
+  "Dive": {
+    "dataSource": "divesites",
     "public": true
   }
 }

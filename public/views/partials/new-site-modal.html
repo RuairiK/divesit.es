@@ -1,0 +1,59 @@
+<div class="new-site-modal">
+  <h2>Add a new site</h2>
+  <form>
+    <label>Site name</label>
+    <input type="text" ng-model="newSite.name" placeholder="Site name">
+    <h3>
+      Location
+    </h3>
+    <div>
+      <div class="col-xs-6">
+        <span>{{ map.center.latitude }}</span> N
+      </div>
+      <div class="col-xs-6">
+        <span>{{ map.center.longitude }}</span> E
+      </div>
+    </div>
+    <ui-gmap-google-map
+    center='map.center'
+    zoom='map.zoom'
+    events='map.events'
+    >
+    </ui-gmap-google-map>
+    <div class="container-fluid">
+      <div class="col-xs-6">
+        <h3>Site difficulty</h3>
+        <div class="radio">
+          <label><input type="radio" value="0" ng-model="newSite.minimumLevel"> Beginner</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" value="1" ng-model="newSite.minimumLevel"> Intermediate</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" value="2" ng-model="newSite.minimumLevel"> Advanced</label>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <h3 class="col-xs-4" style="margin-top: 0">Maximum depth</h3>
+        <div class="col-xs-8">
+          <label><input type="number" ng-model="newSite.depth"> m</label>
+        </div>
+        <h3 class="col-xs-12" style="margin-top: 0">Entry types</h3>
+        <div class="checkbox col-xs-12">
+          <label><input type="checkbox" ng-model="newSite.boatEntry"> Boat</label>
+          <label><input type="checkbox" ng-model="newSite.shoreEntry"> Shore</label>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <h3>Description</h3>
+        <textarea ng-model="newSite.description" class="form-control" rows="4"></textarea>
+      </div>
+    </div>
+    <div class="button-row">
+      <a class="flat-dialog-button lightbg" href ng-click="close()">
+        CANCEL
+      </a>
+      <a class="flat-dialog-button lightbg" href ng-click="submit()">SAVE</a>
+    </div>
+  </form>
+</div>

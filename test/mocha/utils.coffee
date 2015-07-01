@@ -3,6 +3,7 @@ app = require '../../server/server'
 Divesite = app.models.Divesite
 User = app.models.User
 Image = app.models.Image
+Dive = app.models.Dive
 
 createUser = (done) ->
   User.create {email: 'user@example.com', password: 'pass'}, done
@@ -42,6 +43,7 @@ tearDown = (done) -> async.parallel [
   (cb) -> User.destroyAll cb
   (cb) -> Divesite.destroyAll cb
   (cb) -> Image.destroyAll cb
+  (cb) -> Dive.destroyAll cb
 ], done
 
 module.exports =

@@ -6,8 +6,6 @@ angular.module('divesitesApp')
     .authenticate(provider)
     .then(function (response) {
       var accessToken = response.data;
-      console.log("response.data");
-      console.log(response.data);
       LoopBackAuth.setUser(accessToken.id, accessToken.userId, accessToken.user);
       LoopBackAuth.rememberMe = true;
       LoopBackAuth.save();

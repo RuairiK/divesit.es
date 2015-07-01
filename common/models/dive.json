@@ -1,64 +1,38 @@
 {
-  "name": "Divesite",
+  "name": "Dive",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "name": {
-      "type": "string",
+    "date": {
+      "type": "date",
       "required": true
     },
-    "loc": {
-      "type": "geopoint",
-      "required": true
-    },
-    "depth": {
+    "maxDepth": {
       "type": "number",
       "required": true
     },
-    "createdAt": {
-      "type": "date"
+    "averageDepth": {
+      "type": "number"
     },
-    "updatedAt": {
-      "type": "date"
+    "comment": {
+      "type": "string"
     },
-    "boatEntry": {
-      "type": "boolean",
-      "required": true
+    "airTemp": {
+      "type": "number"
     },
-    "shoreEntry": {
-      "type": "boolean",
-      "required": true
+    "waterTemp": {
+      "type": "number"
     },
-    "description": {
-      "type": "string",
-      "required": true
-    },
-    "minimumLevel": {
+    "duration": {
       "type": "number",
       "required": true
     }
   },
   "validations": [],
-  "relations": {
-    "user": {
-      "type": "belongsTo",
-      "model": "User",
-      "foreignKey": ""
-    },
-    "images": {
-      "type": "hasMany",
-      "model": "Image",
-      "foreignKey": ""
-    },
-    "dives": {
-      "type": "hasMany",
-      "model": "Dive",
-      "foreignKey": ""
-    }
-  },
+  "relations": {},
   "acls": [
     {
       "accessType": "*",
@@ -83,13 +57,8 @@
       "accessType": "*",
       "principalType": "ROLE",
       "principalId": "$owner",
-      "permission": "ALLOW"
-    },
-    {
-      "principalType": "ROLE",
-      "principalId": "$authenticated",
       "permission": "ALLOW",
-      "property": "__create__dives"
+      "property": "create"
     }
   ],
   "methods": []

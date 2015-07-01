@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('divesitesApp').
-  controller('FilterMenuController', function ($scope, $rootScope, localStorageService, filterPreferenceRetrievalService) {
+angular.module('divesitesApp')
+.controller('FilterMenuController', function ($scope, $rootScope, localStorageService, filterPreferenceRetrievalService, $auth, User, $modal) {
 
   var MAX_DEPTH = 100;
 
@@ -34,6 +34,21 @@ angular.module('divesitesApp').
     $scope.filterPreferences.depthRange = filterPreferenceRetrievalService.depthRange(lsKeys);
     // Minimum level
     $scope.filterPreferences.maximumLevel = filterPreferenceRetrievalService.maximumLevel(lsKeys);
+  };
+
+  // Check whether the user is logged in
+  $scope.isAuthenticated = function () {
+    return User.isAuthenticated();
+  };
+
+  $scope.summonNewSiteModal = function () {
+    $modal.open({
+      animation: false,
+      templateUrl: 'views/partials/new-site-modal.html',
+      controller: 'NewSiteModalController',
+      backdrop: 'static',
+      size: 'lg'
+    });
   };
 
   // Slider options

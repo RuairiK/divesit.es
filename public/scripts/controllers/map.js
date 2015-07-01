@@ -110,7 +110,7 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
             options: { // Google Maps MarkerOptions
               visible: false // initially false, switched on when filtered
             },
-            // icon: 'img/ic_place_black_18dp.png', // Map icon URL
+            icon: '/img/ic_place_black_18dp.png', // Map icon URL
             filterVisibility: {
               entryType: false,
               depthRange: false,
