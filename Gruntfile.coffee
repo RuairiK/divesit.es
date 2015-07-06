@@ -31,6 +31,7 @@ module.exports = (grunt) ->
         options:
           require: 'coffee-script/register'
           clearRequireCache: true
+          timeout: 5000
         src: 'test/mocha/**/*.coffee'
 
     mocha_istanbul:
