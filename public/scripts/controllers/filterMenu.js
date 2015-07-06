@@ -5,6 +5,14 @@ angular.module('divesitesApp')
 
   var MAX_DEPTH = 100;
 
+  // Store info about the main map here
+  $scope.map = {};
+  $scope.eventHandlers = {
+    centerChanged: function (e, data) {
+      $scope.map = data;
+    }
+  };
+
   // Store all set preferences in local storage
   $scope.storeFilterPreferences = function () {
     localStorageService.set('filterPreferences.boatEntry', $scope.filterPreferences.boatEntry);
@@ -47,7 +55,8 @@ angular.module('divesitesApp')
       templateUrl: 'views/partials/new-site-modal.html',
       controller: 'NewSiteModalController',
       backdrop: 'static',
-      size: 'lg'
+      size: 'lg',
+      scope: $scope
     });
   };
 
@@ -79,6 +88,8 @@ angular.module('divesitesApp')
     $scope.retrieveFilterPreferences();
     // Wait for divesites to load before retrieving filter preferences
     $scope.$on('event:divesites-loaded', $scope.updateAndSendFilterPreferences);
+    // Listen for changes to the main map's centre and store them
+    $scope.$on('event:center_changed', $scope.eventHandlers.centerChanged);
   };
 
   $scope.initialize();

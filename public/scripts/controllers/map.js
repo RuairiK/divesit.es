@@ -13,7 +13,7 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
   // Function defs
   /////////////////////////////////////////////////////////////////////////////
 
-  function mapIdleEventHandler (map) {
+  function mapIdleEventHandler(map) {
     // On idle, put recent map view settings into local storage
     $scope.$apply(function () {
       localStorageService.set('map.zoom', map.zoom);
@@ -22,7 +22,7 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     });
   }
 
-  function mapZoomChangedEventHandler (map) {
+  function mapZoomChangedEventHandler(map) {
     // Constrain the zoom level
     if (map.zoom > MAX_ZOOM) {
       map.setZoom(MAX_ZOOM);
@@ -31,7 +31,12 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     }
   }
 
-  function markerClickEventHandler (marker, event, model, args) {
+  function centerChangedEventHandler(map) {
+    var data = {center: {latitude: map.getCenter().lat(), longitude: map.getCenter().lng()}, zoom: map.getZoom()};
+    $rootScope.$broadcast('event:center_changed', data);
+  }
+
+  function markerClickEventHandler(marker, event, model, args) {
     $rootScope.$broadcast("event:marker-clicked");
     var id = model.id;
     Divesite.findById(
@@ -128,6 +133,8 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
 
   $scope.uiGmapIsReady = function (maps) {
     $rootScope.$broadcast('event:map-is-ready');
+    // Issue an initial 'center-changed' event;
+    $scope.map.events.center_changed(maps[0].map);
   };
 
 
@@ -139,7 +146,8 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     $scope.map = {
       events: {
         idle: mapIdleEventHandler,
-        zoom_changed: mapZoomChangedEventHandler
+        zoom_changed: mapZoomChangedEventHandler,
+        center_changed: centerChangedEventHandler
       },
       center: {
         latitude: localStorageService.get('map.center.latitude') || 53.5,
