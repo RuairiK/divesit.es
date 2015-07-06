@@ -37,12 +37,12 @@ describe "GET /api/divesites", ->
 
 describe "GET /api/divesites/:id", ->
 
-  before utils.createSites
+  before utils.createOwnedSite
   after utils.tearDown
 
   site = {}
   beforeEach (done) ->
-    Divesite.findOne {where: {name: "SITE_1"}}, (err, res) ->
+    Divesite.findOne {where: {name: "Test Divesite"}}, (err, res) ->
       site = res
       done err
 
@@ -53,6 +53,19 @@ describe "GET /api/divesites/:id", ->
         .expect HTTP.OK
         .expect 'Content-Type', /json/
         .end done
+    it "returns the expected fields", (done) ->
+      request app
+        .get "/api/divesites/#{site.id}"
+        .end (err, res) ->
+          site = res.body
+          expect(res.body).to.be.an.Object
+          expect(res.body).to.have.property "name", "Test Divesite"
+          expect(res.body).to.have.property "user"
+          expect(res.body.user).to.have.property "email"
+          expect(res.body.user).to.have.property "id"
+          expect(res.body.user).to.have.property "displayName"
+          console.log res.body
+          done err
 
   describe "with an invalid site ID", ->
     invalidId = {}

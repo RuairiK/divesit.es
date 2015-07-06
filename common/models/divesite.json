@@ -5,6 +5,9 @@
   "options": {
     "validateUpsert": true
   },
+  "scope": {
+    "include": "user"
+  },
   "properties": {
     "name": {
       "type": "string",
@@ -90,6 +93,13 @@
       "principalId": "$authenticated",
       "permission": "ALLOW",
       "property": "__create__dives"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "__get__user"
     }
   ],
   "methods": []

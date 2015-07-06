@@ -26,8 +26,8 @@
       </div>
       <div class="header-container">
         <h2>{{ infoBox.site.name }}</h2>
-        <span ng-show="!infoBox.site.ownerId">Added by divesit.es staff</span>
-        <span ng-show="!!infoBox.site.ownerId">Added by user {{ infoBox.site.ownerId}}</span>
+        <span ng-show="!infoBox.site.userId">Added by an anonymous Divesit.es user</span>
+        <span ng-show="!!infoBox.site.userId">Added by <a href="/api/users/{{infoBox.site.userId}}">{{ infoBox.site.user.displayName}}</a></span>
       </div>
     </div>
 

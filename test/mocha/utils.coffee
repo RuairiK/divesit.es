@@ -39,6 +39,22 @@ createSites = (done) ->
     }, cb
   ], done
 
+
+createOwnedSite = (done) ->
+  async.waterfall [
+    (cb) -> User.create {email: 'user@example.com', password: 'pass', displayName: 'Test User'}, cb
+    (user, cb) -> Divesite.create {
+      name: "Test Divesite",
+      boatEntry: true,
+      shoreEntry: true,
+      depth: 10,
+      minimumLevel: 0
+      description: "A dive site"
+      loc: [0, 0],
+      userId: user.id
+    }, cb
+  ], done
+
 tearDown = (done) -> async.parallel [
   (cb) -> User.destroyAll cb
   (cb) -> Divesite.destroyAll cb
@@ -50,3 +66,4 @@ module.exports =
   createSites: createSites
   createUser: createUser
   tearDown: tearDown
+  createOwnedSite: createOwnedSite
