@@ -20,20 +20,30 @@ describe "Retrieving images", ->
 
   createImage = (site, cb) -> Image.create {url: faker.image.image(), userId: user.id, divesiteId: site.id}, cb
 
-  before (done) -> async.series [
-    (cb) -> utils.createSites cb
-    (cb) -> Divesite.find (err, res) ->
-      sites = res
-      cb err
-    (cb) -> utils.createUser cb
-    (cb) -> User.findOne {where: {email: 'user@example.com'}}, (err, res) ->
-      user = res
-      cb err
-    (cb) -> User.create {email: 'user2@example.com', password: 'pass'}, cb
-    (cb) -> User.findOne {where: {email: 'user2@example.com'}}, (err, res) ->
-      user2 = res
-      cb err
+  before (done) -> async.parallel [
+    (cb) -> async.series [
+      (next) -> utils.createSites next
+      (next) -> Divesite.find (err, res) ->
+        sites = res
+        next err
+    ], cb
+
+    (cb) -> async.series [
+      (next) -> utils.createUser next
+      (next) -> User.findOne {where: {email: 'user@example.com'}}, (err, res) ->
+        user = res
+        next err
+    ], cb
+
+    (cb) -> async.series [
+      (next) -> User.create {email: 'user2@example.com', password: 'pass'}, next
+      (next) -> User.findOne {where: {email: 'user2@example.com'}}, (err, res) ->
+        user2 = res
+        next err
+    ], cb
+
   ], done
+
   after utils.tearDown
 
   describe "GET /api/divesites/{id}/images", ->
