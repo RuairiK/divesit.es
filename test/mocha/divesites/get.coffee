@@ -64,7 +64,6 @@ describe "GET /api/divesites/:id", ->
           expect(res.body.user).to.have.property "email"
           expect(res.body.user).to.have.property "id"
           expect(res.body.user).to.have.property "displayName"
-          console.log res.body
           done err
 
   describe "with an invalid site ID", ->
