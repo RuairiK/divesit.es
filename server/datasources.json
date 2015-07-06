@@ -11,7 +11,7 @@
   "myfile": {
     "name": "myfile",
     "connector": "loopback-component-storage",
-    "root": "public/img",
+    "root": "/tmp/storage",
     "provider": "filesystem"
   }
 }
