@@ -7,7 +7,7 @@ public/libs/
 # Compiled CSS (let Grunt build style.css)
 public/styles/
 # VIM temp files
-.*.swp
+.*.sw*
 # NPM log output
 npm-debug.log
 keys.js
