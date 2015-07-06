@@ -69,6 +69,27 @@ describe "GET /api/divesites/{id}/dives", ->
         expect(res.body[0].divesiteId).to.equal sites[0].id
         done err
 
+describe "GET /api/divesites/{id}/dives/{pk}", ->
+
+  before setup
+  after utils.tearDown
+
+  describe "with valid IDs", ->
+    it "returns HTTP 200", (done) ->
+      Dive.findOne {divesiteId: sites[0]}, (err, res) ->
+        request app
+          .get "/api/divesites/#{sites[0].id}/dives/#{res.id}"
+          .expect HTTP.OK, done
+    it "returns a JSON object", (done) ->
+      Dive.findOne {divesiteId: sites[0]}, (err, res) ->
+        request app
+          .get "/api/divesites/#{sites[0].id}/dives/#{res.id}"
+          .expect "Content-Type", /json/
+          .end (err, res) ->
+            expect(res.body).to.be.an.Object
+            done err
+
+
 describe "GET /api/users/{id}/dives", ->
 
   user2 = {}
@@ -92,19 +113,66 @@ describe "GET /api/users/{id}/dives", ->
 
   after utils.tearDown
 
+  describe "with a valid user ID", ->
+
+    it "returns HTTP 200", (done) ->
+      request app
+        .get "/api/users/#{user.id}/dives"
+        .expect HTTP.OK, done
+    it "returns a list", (done) ->
+      request app
+        .get "/api/users/#{user.id}/dives"
+        .end (err, res) ->
+          expect(res.body).to.be.an.Array
+          done err
+    it "returns the expected number of Dives", (done) ->
+      request app
+        .get "/api/users/#{user.id}/dives"
+        .end (err, res) ->
+          expect(res.body).to.have.length 2
+          done err
+
+    it "doesn't expose the user's email address", (done) ->
+      request app
+        .get "/api/users/#{user.id}/dives"
+        .end (err, res) ->
+          dive = res.body[0]
+          expect(dive).not.to.have.property "email"
+          done err
+
+describe "GET /api/users/{id}/dives/count", ->
+  dive = {}
+  before (done) -> setup done
+  after utils.tearDown
+  beforeEach (done) ->
+    diveData.userId = user.id
+    Dive.create diveData, (err, res) ->
+      dive = res
+      done err
+
   it "returns HTTP 200", (done) ->
     request app
-      .get "/api/users/#{user.id}/dives"
+      .get "/api/users/#{user.id}/dives/count"
       .expect HTTP.OK, done
-  it "returns a list", (done) ->
-    request app
-      .get "/api/users/#{user.id}/dives"
-      .end (err, res) ->
-        expect(res.body).to.be.an.Array
-        done err
-  it "returns the expected number of Dives", (done) ->
-    request app
-      .get "/api/users/#{user.id}/dives"
-      .end (err, res) ->
-        expect(res.body).to.have.length 2
-        done err
+
+describe "GET /api/users/{id}/dives/{pk}", ->
+  dive = {}
+  before (done) -> setup done
+  after utils.tearDown
+
+  beforeEach (done) ->
+    diveData.userId = user.id
+    Dive.create diveData, (err, res) ->
+      dive = res
+      done err
+
+  afterEach (done) -> async.parallel [
+    (cb) -> Dive.destroyAll cb
+  ], done
+
+  describe "with a valid dive ID", ->
+
+    it "returns HTTP 200", (done) ->
+      request app
+        .get "/api/users/#{user.id}/dives/#{dive.id}"
+        .expect HTTP.OK, done

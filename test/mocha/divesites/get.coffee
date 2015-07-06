@@ -61,7 +61,9 @@ describe "GET /api/divesites/:id", ->
           expect(res.body).to.be.an.Object
           expect(res.body).to.have.property "name", "Test Divesite"
           expect(res.body).to.have.property "user"
-          expect(res.body.user).to.have.property "email"
+          expect(res.body.user).not.to.have.property "email"
+          expect(res.body.user).not.to.have.property "password"
+          expect(res.body.user).not.to.have.property "google"
           expect(res.body.user).to.have.property "id"
           expect(res.body.user).to.have.property "displayName"
           done err

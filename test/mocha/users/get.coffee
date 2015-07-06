@@ -40,10 +40,10 @@ describe "GET /users/{id}", ->
       User.findOne {where: {email: 'user@example.com'}}, (err, user) ->
         userId = user.id
         done err
-    it "returns HTTP 401", (done) ->
+    it "returns HTTP 200", (done) ->
       request app
         .get "/api/users/#{userId}"
-        .expect HTTP.UNAUTHORIZED
+        .expect HTTP.OK
         .end done
 
   describe "with authentication", ->
@@ -65,9 +65,9 @@ describe "GET /users/{id}", ->
         .set "Authorization", token
         .expect HTTP.OK
         .end done
-    it "doesn't let a user view another user's profile", (done) ->
+    it "lets a user view another user's profile", (done) ->
       request app
         .get "/api/users/#{user2Id}"
         .set "Authorization", token
-        .expect HTTP.UNAUTHORIZED
+        .expect HTTP.OK
         .end done
