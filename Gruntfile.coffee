@@ -43,7 +43,7 @@ module.exports = (grunt) ->
         files: ['public/less/*.less']
         tasks: ['less']
       karma:
-        files: ['public/**/*.js']
+        files: ['public/**/*.js', 'test/jasmine/**/*.coffee']
         tasks: ['karma']
 
   grunt.loadNpmTasks 'grunt-env'
