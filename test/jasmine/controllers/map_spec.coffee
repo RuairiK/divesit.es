@@ -71,10 +71,19 @@ describe "MapController", ->
       $scope.filterPreferences 'event:filter-preferences', filterData
 
   describe "$scope.uiGmapIsReady", ->
+    maps = []
     beforeEach ->
+      # Mock 'maps' argument
+      maps = [
+        map: {
+          getCenter: () ->
+            lat: () -> 0
+            lng: () -> 0
+          getZoom: () -> 0
+        }
+      ]
       spyOn $rootScope, '$broadcast'
-        .and.callThrough()
-      $scope.uiGmapIsReady()
+      $scope.uiGmapIsReady(maps)
     it "broadcasts an event called 'event:map-is-ready'", ->
       expect($rootScope.$broadcast).toHaveBeenCalledWith 'event:map-is-ready'
 
