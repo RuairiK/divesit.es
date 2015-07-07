@@ -5,10 +5,6 @@ module.exports = function(Container) {
   });
 
   Container.beforeRemote('upload', function (ctx, instance, next) {
-    // Require a 'divesite' header
-    if (!ctx.req.headers.divesite) {
-      return ctx.res.status(422).json(new Error("You need a divesite ID"));
-    }
     // Insert the requesting user's ID as a header
     ctx.req.headers.userId = ctx.req.accessToken.userId;
     next();
@@ -22,14 +18,25 @@ module.exports = function(Container) {
     // Container.getFile
     Container.getFile(container, filename, function (err, res) {
       var Image = Container.app.models.Image;
+      var DivesiteImage = Container.app.models.DivesiteImage;
       // FIXME: This is unlikely to be consistent across storage providers
       var url = "/api/storage/" + container + "/" + filename;
-      // Create an associated Image object
-      Image.create({
-        url: url,
-        userId: ctx.req.headers.userId,
-        divesiteId: ctx.req.headers.divesite
-      }, next);
+      // Create an associated Image or DivesiteImage object
+      if (ctx.req.headers.divesite) {
+        // If there's a Divesite ID in a header, make this a DivesiteImage
+        DivesiteImage.create({
+          url: url,
+          userId: ctx.req.headers.userId,
+          divesiteId: ctx.req.headers.divesite
+        }, next);
+      } else {
+        // If there's no Divesite ID in a header, then make this a
+        // user (profile?) image
+        Image.create({
+          url: url,
+          userId: ctx.req.headers.userId
+        }, next);
+      }
     });
   });
 
