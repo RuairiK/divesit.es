@@ -22,6 +22,7 @@ describe "POST /api/containers/{container}/", ->
     storageService.createContainer {name: 'c1'}, (err, res) ->
       container = res
       done err
+
   after (done) ->
     storageService.destroyContainer 'c1', (err, res) ->
       done err
@@ -34,21 +35,51 @@ describe "POST /api/containers/{container}/", ->
         .expect HTTP.UNAUTHORIZED, done
 
   describe "with authorization", ->
-    before utils.createUser
-    after (done) -> User.destroyAll done
+    before (done) -> utils.createOwnedSite done
 
     token = {}
     userId = {}
+    site = {}
 
-    beforeEach (done) ->
-      User.login {email: "user@example.com", password: "pass"}, (err, res) ->
+    beforeEach (done) -> async.parallel [
+      (cb) -> User.login {email: "user@example.com", password: "pass"}, (err, res) ->
         token = res.id
         userId = res.userId
-        done err
+        cb err
+      (cb) -> Divesite.findOne (err, res) ->
+        site = res
+        cb err
+    ], done
+
+    afterEach (done) -> Image.destroyAll done
+
+    it "requires a divesite in the header", (done) ->
+      request app
+        .post "/api/containers/c1/upload"
+        .set "Authorization", token
+        .attach 'image', path.join __dirname, '../../data/large-dive-flag.jpg'
+        .expect 422, done
 
     it "returns HTTP 200", (done) ->
       request app
         .post "/api/containers/c1/upload"
         .set "Authorization", token
+        .set "divesite", site.id
         .attach 'image', path.join __dirname, '../../data/large-dive-flag.jpg'
-        .expect HTTP.OK, done
+        .expect HTTP.OK, (err, res) ->
+          done err
+
+    it "creates an associated Image", (done) ->
+      request app
+        .post "/api/containers/c1/upload"
+        .set "Authorization", token
+        .set "divesite", site.id
+        .attach "image", path.join __dirname, '../../data/large-dive-flag.jpg'
+        .end (err, res) ->
+          Image.find (err, images) ->
+            expect(images).to.be.an.Array
+            expect(images).to.have.length 1
+            image = images[0]
+            expect(image.userId).to.equal userId
+            expect(image.divesiteId).to.equal site.id
+            done err

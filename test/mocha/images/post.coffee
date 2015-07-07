@@ -1,8 +1,9 @@
 async = require 'async'
 expect = require('chai').expect
 HTTP = require('http-status-codes')
-request = require('supertest')
 faker = require 'faker'
+request = require('supertest')
+path = require 'path'
 
 utils = require '../utils'
 app = require('../../../server/server')
@@ -78,13 +79,20 @@ describe "POST /api/images", ->
           .send data
           .expect 422, done
 
+
     describe "and valid data", ->
       it "returns HTTP 200", (done) ->
         request app
           .post '/api/images'
           .set 'Authorization', token
           .send validSiteData
-          .expect 200, done
+          #.attach 'image', path.join __dirname, '../../data/large-dive-flag.jpg'
+          .expect HTTP.OK
+          .end (err, res) ->
+            if (err)
+              console.log err
+            done err
+
       it "creates an Image instance", (done) ->
         request app
           .post '/api/images'
@@ -94,6 +102,7 @@ describe "POST /api/images", ->
             Image.find (err, images) ->
               expect(images.length).to.equal 1
               done err
+
       it "sets the requesting user as the owner of the Image", (done) ->
         request app
           .post '/api/images'

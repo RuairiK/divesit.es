@@ -8,7 +8,8 @@
     'satellizer',
     'ui.bootstrap',
     'ui.slider',
-    'uiGmapgoogle-maps'
+    'uiGmapgoogle-maps',
+    'angularFileUpload'
   ])
   .config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
 

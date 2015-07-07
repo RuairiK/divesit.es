@@ -1,4 +1,5 @@
 module.exports = function(Image) {
+
   Image.validatesPresenceOf('divesiteId', 'userId');
 
   Image.validateAsync('divesiteId', function (err, done) {
@@ -16,4 +17,5 @@ module.exports = function(Image) {
     req.body.userId = req.accessToken.userId;
     next();
   });
+
 };
