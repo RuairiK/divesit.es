@@ -23,10 +23,6 @@ angular.module('divesitesApp').
   };
 
   $scope.isOwner = function () {
-    console.log("isAuthenticated? " + $scope.isAuthenticated());
-    console.log("LoopBackAuth.currentUserId: " + LoopBackAuth.currentUserId);
-    console.log("site:");
-    console.log($scope.infoBox.site);
     return $scope.isAuthenticated() && LoopBackAuth.currentUserId == $scope.infoBox.site.userId;
   };
 
