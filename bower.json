@@ -24,7 +24,6 @@
     "angular-mocks": "latest"
   },
   "resolutions": {
-    "angular": "1.4.1",
     "satellizer": "~0.9.4"
   }
 }
