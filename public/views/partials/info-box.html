@@ -28,15 +28,16 @@
         <h2>{{ infoBox.site.name }}</h2>
         <span ng-show="!infoBox.site.userId">Added by an anonymous Divesit.es user</span>
         <span ng-show="!!infoBox.site.userId">Added by <a href="/api/users/{{infoBox.site.userId}}">{{ infoBox.site.user.displayName}}</a></span>
+        <span class="fa-stack fa-lg" ng-show="isOwner()">
+          <a href class="fa fa-square fa-stack-2x"></a>
+          <a href class="fa fa-pencil-square fa-stack-2x"></a>
+        </span>
       </div>
     </div>
 
     <div class="content">
-      <div>
+      <div ng-show="isAuthenticated()">
         LOG A DIVE
-      </div>
-      <div>
-        EDIT
       </div>
       <div class="info-grid">
         <div class="info-row">
