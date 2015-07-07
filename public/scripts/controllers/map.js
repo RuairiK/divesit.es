@@ -78,21 +78,6 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     $scope.map.markers.forEach(function (m) {$scope.filterMarker(m, data)});
   };
 
-  /*
-  $scope.formatDivesite = function (siteJSON) {
-    var site = Object.copy(siteJSON);
-    site.loc = {latitude: siteJSON.loc.lat, longitude: siteJSON.loc.lng};
-    site.options = { visible: false };
-    site.filterVisibility = {
-      entryType: false,
-      depthRange: false,
-      minimumLevel: false
-    };
-    site.icon = 'public/libs/material-design-icons/maps/1x_web/ic_place_black_24dp.png';
-    return site;
-  };
- */
-
   $scope.retrieveDivesites = function () {
     Divesite.find(
       {},
