@@ -10,6 +10,7 @@ utils = require '../utils'
 Divesite = app.models.Divesite
 Image = app.models.Image
 User = app.models.User
+DivesiteImage = app.models.DivesiteImage
 
 describe "Retrieving images", ->
 
@@ -18,7 +19,7 @@ describe "Retrieving images", ->
   user = {}
   user2 = {}
 
-  createImage = (site, cb) -> Image.create {url: faker.image.image(), userId: user.id, divesiteId: site.id}, cb
+  createImage = (site, cb) -> DivesiteImage.create {url: faker.image.image(), userId: user.id, divesiteId: site.id}, cb
 
   before (done) -> async.parallel [
     (cb) -> async.series [
@@ -59,9 +60,9 @@ describe "Retrieving images", ->
           expect(res.body).to.be.empty
           done err
 
-    describe "when there are Images to retrieve", ->
+    describe "when there are images to retrieve", ->
       beforeEach (done) -> async.each sites, createImage, done
-      afterEach (done) -> Image.destroyAll done
+      afterEach (done) -> DivesiteImage.destroyAll done
 
       it "returns HTTP 200", (done) -> req.expect HTTP.OK, done
       it "returns JSON", (done) -> req.expect('Content-Type', /json/).end done
@@ -76,10 +77,10 @@ describe "Retrieving images", ->
           res.body.forEach (image) -> expect(image.divesiteId).to.equal sites[0].id
           done err
 
-  describe "GET /api/images", ->
+  describe "GET /api/divesiteimages", ->
 
     beforeEach ->
-      req = request(app).get '/api/images'
+      req = request(app).get '/api/divesiteimages'
 
     it "returns HTTP 200", (done) -> req.expect HTTP.OK, done
 
@@ -93,9 +94,9 @@ describe "Retrieving images", ->
         expect(res.body).to.be.empty
         done err
 
-    describe "when there are Images to retrieve", ->
+    describe "when there are images to retrieve", ->
       beforeEach (done) -> async.each sites, createImage, done
-      afterEach (done) -> Image.destroyAll done
+      afterEach (done) -> DivesiteImage.destroyAll done
 
       it "returns HTTP 200", (done) ->
         req.expect HTTP.OK, done

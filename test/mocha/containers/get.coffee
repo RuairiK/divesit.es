@@ -26,10 +26,10 @@ describe "GET /api/containers", ->
       done err
 
   describe "without authorization", ->
-    it "returns HTTP 401", (done) ->
+    it "returns HTTP 200", (done) ->
       request app
         .get "/api/containers"
-        .expect HTTP.UNAUTHORIZED, done
+        .expect HTTP.OK, done
 
   describe "with authorization", ->
     before utils.createUser
@@ -44,10 +44,10 @@ describe "GET /api/containers", ->
         userId = res.userId
         done err
 
-    it "returns HTTP 401", (done) ->
+    it "returns HTTP 200", (done) ->
       request app
         .get "/api/containers"
-        .expect HTTP.UNAUTHORIZED, done
+        .expect HTTP.OK, done
 
 describe "GET /api/containers/{name}", ->
   storageService = {}
@@ -63,10 +63,10 @@ describe "GET /api/containers/{name}", ->
 
   describe "without authorization", ->
 
-    it "returns HTTP 401", (done) ->
+    it "returns HTTP 200", (done) ->
       request app
         .get "/api/containers"
-        .expect HTTP.UNAUTHORIZED, done
+        .expect HTTP.OK, done
 
   describe "with authorization", ->
     before utils.createUser
@@ -81,8 +81,8 @@ describe "GET /api/containers/{name}", ->
         userId = res.userId
         done err
 
-    it "returns HTTP 401", (done) ->
+    it "returns HTTP 200", (done) ->
       request app
         .get "/api/containers"
         .set "Authorization", token
-        .expect HTTP.UNAUTHORIZED, done
+        .expect HTTP.OK, done

@@ -32,7 +32,7 @@ describe "POST /api/containers/{container}/", ->
     it "returns HTTP 401", (done) ->
       request app
         .post "/api/containers/c1/upload"
-        .attach 'image', path.join __dirname, '../../data/large-dive-flag.jpg'
+        .attach 'file', path.join __dirname, '../../data/large-dive-flag.jpg'
         .expect HTTP.UNAUTHORIZED, done
 
   describe "with authorization", ->
@@ -69,7 +69,7 @@ describe "POST /api/containers/{container}/", ->
           .post "/api/containers/c1/upload"
           .set "Authorization", token
           .set "divesite", site.id
-          .attach 'image', path.join __dirname, '../../data/large-dive-flag.jpg'
+          .attach 'file', path.join __dirname, '../../data/large-dive-flag.jpg'
           .expect HTTP.OK, done
 
       it "creates an associated DivesiteImage", (done) ->
@@ -77,7 +77,7 @@ describe "POST /api/containers/{container}/", ->
           .post "/api/containers/c1/upload"
           .set "Authorization", token
           .set "divesite", site.id
-          .attach "image", path.join __dirname, '../../data/large-dive-flag.jpg'
+          .attach 'file', path.join __dirname, '../../data/large-dive-flag.jpg'
           .end (err, res) ->
             DivesiteImage.find (err, images) ->
               expect(images).to.be.an.Array
@@ -92,7 +92,7 @@ describe "POST /api/containers/{container}/", ->
           .post "/api/containers/c1/upload"
           .set "Authorization", token
           .set "divesite", site.id
-          .attach "image", path.join __dirname, '../../data/large-dive-flag.jpg'
+          .attach 'file', path.join __dirname, '../../data/large-dive-flag.jpg'
           .end (err, res) ->
             Image.find (err, images) ->
               expect(images).to.be.an.Array
@@ -106,14 +106,14 @@ describe "POST /api/containers/{container}/", ->
         request app
           .post "/api/containers/c1/upload"
           .set "Authorization", token
-          .attach "image", path.join __dirname, "../../data/large-dive-flag.jpg"
+          .attach 'file', path.join __dirname, "../../data/large-dive-flag.jpg"
           .expect HTTP.OK, done
           
       it "creates an associated Image", (done) ->
         request app
           .post "/api/containers/c1/upload"
           .set "Authorization", token
-          .attach "image", path.join __dirname, "../../data/large-dive-flag.jpg"
+          .attach 'file', path.join __dirname, "../../data/large-dive-flag.jpg"
           .end (err, res) ->
             Image.find (err, images) ->
               expect(images).to.be.an.Array
@@ -126,7 +126,7 @@ describe "POST /api/containers/{container}/", ->
         request app
           .post "/api/containers/c1/upload"
           .set "Authorization", token
-          .attach "image", path.join __dirname, "../../data/large-dive-flag.jpg"
+          .attach 'file', path.join __dirname, "../../data/large-dive-flag.jpg"
           .end (err, res) ->
             DivesiteImage.find (err, images) ->
               expect(images).to.be.an.Array
