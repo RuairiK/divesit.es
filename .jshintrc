@@ -4,6 +4,8 @@
   "globals": {
     "angular": false,
     "google": false,
-    "$": false
+    "$": false,
+    "FileReader": false,
+    "Image": false
   }
 }
