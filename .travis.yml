@@ -4,10 +4,10 @@ node_js:
 services:
   - mongodb
 before_script:
-  - npm install -g bower less grunt-cli istanbul coffee-script
-  - bower install
   - mkdir /tmp/storage
   - mkdir public/img/c1
+  - npm install -g bower less grunt-cli istanbul coffee-script
+  - bower install
 after_success:
   - cat ./coverage/lcov.info ./coverage/jasmine/lcov.info | ./node_modules/coveralls/bin/coveralls.js
   - npm install -g codeclimate-test-reporter
