@@ -8,10 +8,22 @@ angular.module('divesitesApp')
   $scope.uploader = new FileUploader({
     scope: $scope,
     url: '/api/containers/container1/upload',
-    formData: [
-      {key: 'value'}
-    ]
+    headers: {
+      "Authorization": LoopBackAuth.accessTokenId
+    },
+    queueLimit: 1,
+    onAfterAddingFile: function (fileItem) {
+      console.info('onAfterAddingFile', fileItem);
+    }
   });
+
+  $scope.maybeCancelUpload = function () {
+    // Ask the user if they want to clear the queue
+    if (confirm("Are you sure you want to cancel uploading?")) {
+      // If so, then clear it
+      $scope.uploader.clearQueue();
+    }
+  };
 
   $scope.map = {
     center: $scope.$parent.map.center,
