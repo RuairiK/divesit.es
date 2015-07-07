@@ -1,6 +1,18 @@
 angular.module('divesitesApp')
-.controller('NewSiteModalController', function ($scope, $location, $auth, User, LoopBackAuth, $modalInstance, Divesite, uiGmapIsReady) {
+.controller('NewSiteModalController', function ($scope, $location, $auth, User, LoopBackAuth, $modalInstance, Divesite, uiGmapIsReady, FileUploader) {
+
+  // This is a first-run flag so that we can resize the Google map after the
+  // div containing it has loaded.
   $scope.rendered = false;
+
+  $scope.uploader = new FileUploader({
+    scope: $scope,
+    url: '/api/containers/container1/upload',
+    formData: [
+      {key: 'value'}
+    ]
+  });
+
   $scope.map = {
     center: $scope.$parent.map.center,
     zoom: $scope.$parent.map.zoom,
