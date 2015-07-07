@@ -12,11 +12,13 @@ User = app.models.User
 Image = app.models.Image
 
 describe "POST /api/images", ->
+
   beforeEach (done) -> async.parallel [
     (cb) -> utils.createSites cb
     (cb) -> utils.createUser cb
   ], done
   afterEach utils.tearDown
+
 
   describe "without authorization", ->
     it "returns HTTP 401", (done) ->
@@ -33,11 +35,13 @@ describe "POST /api/images", ->
             expect(images.length).to.equal 0
             done err
 
+
   describe "with authorization", ->
     token = {}
     userId = {}
     siteIds = []
     validSiteData = {}
+
     beforeEach (done) ->
       User.login {'email': 'user@example.com', 'password': 'pass'}, (err, accessToken) ->
         if (err)
@@ -45,6 +49,7 @@ describe "POST /api/images", ->
         token = accessToken.id
         userId = accessToken.userId
         done err
+
     beforeEach (done) ->
       Divesite.find (err, sites) ->
         siteIds = (site.id for site in sites).sort()
@@ -54,61 +59,19 @@ describe "POST /api/images", ->
         done err
 
     describe "and invalid data", ->
-      it "requires a site ID", (done) ->
+      it "returns HTTP 401", (done) ->
         data = JSON.parse JSON.stringify validSiteData
         delete data.divesiteId
         request app
           .post '/api/images'
           .set 'Authorization', token
           .send data
-          .expect 422, done
-      it "requires an image URL", (done) ->
-        data = JSON.parse JSON.stringify validSiteData
-        delete data.url
-        request app
-          .post '/api/images'
-          .set 'Authorization', token
-          .send data
-          .expect 422, done
-      it "checks that a divesite ID resolves to a Divesite", (done) ->
-        data = JSON.parse JSON.stringify validSiteData
-        data.divesiteId = siteIds.reverse()[0] + 1 # i.e., the highest ID + 1
-        request app
-          .post '/api/images'
-          .set 'Authorization', token
-          .send data
-          .expect 422, done
-
+          .expect HTTP.UNAUTHORIZED, done
 
     describe "and valid data", ->
-      it "returns HTTP 200", (done) ->
+      it "returns HTTP 401", (done) ->
         request app
           .post '/api/images'
           .set 'Authorization', token
           .send validSiteData
-          #.attach 'image', path.join __dirname, '../../data/large-dive-flag.jpg'
-          .expect HTTP.OK
-          .end (err, res) ->
-            if (err)
-              console.log err
-            done err
-
-      it "creates an Image instance", (done) ->
-        request app
-          .post '/api/images'
-          .set 'Authorization', token
-          .send validSiteData
-          .end (err, res) ->
-            Image.find (err, images) ->
-              expect(images.length).to.equal 1
-              done err
-
-      it "sets the requesting user as the owner of the Image", (done) ->
-        request app
-          .post '/api/images'
-          .set 'Authorization', token
-          .send validSiteData
-          .end (err, res) ->
-            Image.findOne (err, image) ->
-              expect(image.userId).to.equal userId
-              done err
+          .expect HTTP.UNAUTHORIZED, done

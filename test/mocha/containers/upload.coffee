@@ -11,6 +11,7 @@ Divesite = app.models.Divesite
 User = app.models.User
 Image = app.models.Image
 Container = app.models.Container
+DivesiteImage = app.models.DivesiteImage
 
 StorageService = require('loopback-component-storage').StorageService
 
@@ -39,47 +40,95 @@ describe "POST /api/containers/{container}/", ->
 
     token = {}
     userId = {}
-    site = {}
 
-    beforeEach (done) -> async.parallel [
-      (cb) -> User.login {email: "user@example.com", password: "pass"}, (err, res) ->
+    # Setup: log a user in and store the id and token
+    beforeEach (done) ->
+      User.login {email: 'user@example.com', password: 'pass'}, (err, res) ->
         token = res.id
         userId = res.userId
-        cb err
-      (cb) -> Divesite.findOne (err, res) ->
-        site = res
-        cb err
-    ], done
+        done err
 
+    # Teardown: Clear the db of images
     afterEach (done) -> Image.destroyAll done
 
-    it "requires a divesite in the header", (done) ->
-      request app
-        .post "/api/containers/c1/upload"
-        .set "Authorization", token
-        .attach 'image', path.join __dirname, '../../data/large-dive-flag.jpg'
-        .expect 422, done
+    describe "if attached to a Divesite", ->
 
-    it "returns HTTP 200", (done) ->
-      request app
-        .post "/api/containers/c1/upload"
-        .set "Authorization", token
-        .set "divesite", site.id
-        .attach 'image', path.join __dirname, '../../data/large-dive-flag.jpg'
-        .expect HTTP.OK, (err, res) ->
+      site = {}
+
+      # Setup: find a site
+      beforeEach (done) ->
+        Divesite.findOne (err, res) ->
+          site = res
           done err
 
-    it "creates an associated Image", (done) ->
-      request app
-        .post "/api/containers/c1/upload"
-        .set "Authorization", token
-        .set "divesite", site.id
-        .attach "image", path.join __dirname, '../../data/large-dive-flag.jpg'
-        .end (err, res) ->
-          Image.find (err, images) ->
-            expect(images).to.be.an.Array
-            expect(images).to.have.length 1
-            image = images[0]
-            expect(image.userId).to.equal userId
-            expect(image.divesiteId).to.equal site.id
-            done err
+      # Teardown: clear the db of divesite images
+      afterEach (done) -> DivesiteImage.destroyAll done
+
+      it "returns HTTP 200", (done) ->
+        request app
+          .post "/api/containers/c1/upload"
+          .set "Authorization", token
+          .set "divesite", site.id
+          .attach 'image', path.join __dirname, '../../data/large-dive-flag.jpg'
+          .expect HTTP.OK, done
+
+      it "creates an associated DivesiteImage", (done) ->
+        request app
+          .post "/api/containers/c1/upload"
+          .set "Authorization", token
+          .set "divesite", site.id
+          .attach "image", path.join __dirname, '../../data/large-dive-flag.jpg'
+          .end (err, res) ->
+            DivesiteImage.find (err, images) ->
+              expect(images).to.be.an.Array
+              expect(images).to.have.length 1
+              image = images[0]
+              expect(image.userId).to.equal userId
+              expect(image.divesiteId).to.equal site.id
+              done err
+
+      it "doesn't create an Image", (done) ->
+        request app
+          .post "/api/containers/c1/upload"
+          .set "Authorization", token
+          .set "divesite", site.id
+          .attach "image", path.join __dirname, '../../data/large-dive-flag.jpg'
+          .end (err, res) ->
+            Image.find (err, images) ->
+              expect(images).to.be.an.Array
+              expect(images).to.be.empty
+              done err
+
+
+    describe "if not attached to a Divesite", ->
+
+      it "returns HTTP 200", (done) ->
+        request app
+          .post "/api/containers/c1/upload"
+          .set "Authorization", token
+          .attach "image", path.join __dirname, "../../data/large-dive-flag.jpg"
+          .expect HTTP.OK, done
+          
+      it "creates an associated Image", (done) ->
+        request app
+          .post "/api/containers/c1/upload"
+          .set "Authorization", token
+          .attach "image", path.join __dirname, "../../data/large-dive-flag.jpg"
+          .end (err, res) ->
+            Image.find (err, images) ->
+              expect(images).to.be.an.Array
+              expect(images).to.have.length 1
+              image = images[0]
+              expect(image.userId).to.equal userId
+              done err
+
+      it "doesn't create a DivesiteImage", (done) ->
+        request app
+          .post "/api/containers/c1/upload"
+          .set "Authorization", token
+          .attach "image", path.join __dirname, "../../data/large-dive-flag.jpg"
+          .end (err, res) ->
+            DivesiteImage.find (err, images) ->
+              expect(images).to.be.an.Array
+              expect(images).to.be.empty
+              done err
