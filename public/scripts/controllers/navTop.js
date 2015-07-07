@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('divesitesApp')
-.controller('NavTopController', function ($scope, $modal, $auth, User, LoopBackAuth, $location) {
+.controller('NavTopController', function ($scope, $modal, $auth, User, LoopBackAuth, $location, localStorageService) {
   function summonModal() {
     $modal.open({
       animation: false,
@@ -28,7 +28,7 @@ angular.module('divesitesApp')
     .catch(function (err) {
       LoopBackAuth.clearUser();
       LoopBackAuth.save();
-      localStorage.clear();
+      localStorageService.clearAll();
       $location.path('/');
     });
   }
