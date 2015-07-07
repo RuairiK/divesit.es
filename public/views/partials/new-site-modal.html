@@ -1,15 +1,103 @@
 <div class="new-site-modal">
+  <div class="container-fluid">
+    <h2>New site</h2>
+    <div class="form-control">
+      <label>Site name</label>
+      <input type="text">
+    </div>
+    <div class="row">
+      <div class="col-xs-6">
+        <h3>Location</h3>
+        <span class="help">Drag the map under the marker.</span>
+        <ui-gmap-google-map
+        center='map.center'
+        zoom='map.zoom'
+        events='map.events'
+        >
+        </ui-gmap-google-map>
+        <div class="row">
+          <div class="col-xs-6">
+            <span class="coordinate">{{ map.center.latitude | truncateCoordinate }}° N</span>
+          </div>
+          <div class="col-xs-6">
+            <span class="coordinate">{{ map.center.longitude | truncateCoordinate }}° E</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <h3>Image</h3>
+        <span class="help">Drag and drop an image in here.</span>
+        <div class="thumbnail-container" nv-file-drop nv-file-over uploader="uploader">
+          <i href ng-if="!uploader.queue[0]" class="fa fa-5x fa-camera"></i>
+          <div ng-if="uploader.queue[0]" style="z-index: 2" ng-show="uploader.isHTML5"
+            ng-thumb="{file: uploader.queue[0]._file, height: 250}">
+          </div>
+          <a href
+            ng-click="maybeCancelUpload()"
+            ng-if="uploader.queue[0]"
+            class="cancel-upload"
+            ><i class="fa fa-times fa-5x"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-6">
+        <h3>Site difficulty</h3>
+        <div class="radio">
+          <label><input type="radio" value="0" ng-model="newSite.minimumLevel"> Beginner</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" value="1" ng-model="newSite.minimumLevel"> Intermediate</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" value="2" ng-model="newSite.minimumLevel"> Advanced</label>
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="row">
+          <h3>Maximum depth</h3>
+          <div class="form-control">
+          <label >
+            <input type="number">
+            m
+          </label>
+        </div>
+        </div>
+        <div class="row">
+          <h3>Entry types</h3>
+          <label><input type="checkbox" ng-model="newSite.boatEntry"> Boat</label>
+          <label><input type="checkbox" ng-model="newSite.shoreEntry"> Shore</label>
+        </div>
+      </div>
+    </div>
+    <div class="row button-row">
+      <a class="flat-dialog-button lightbg" href ng-click="close()">
+        CANCEL
+      </a>
+      <a class="flat-dialog-button lightbg" href ng-click="submit()">SAVE</a>
+    </div>
+  </div>
+  <!-- 
   <h2>Add a new site</h2>
   <form>
     <label>Site name</label>
     <input type="text" ng-model="newSite.name" placeholder="Site name">
-    <input type="file" nv-file-select uploader="uploader">
-    <ul>
-      <li ng-repeat="item in uploader.queue">
-      Name: <span ng-bind="item.file.name"></span><br />
-      <button ng-click="item.upload()">upload</button>
-      </li>
-    </ul>
+    <div class="container-fluid">
+      <div class="col-xs-6">
+        <input type="file" nv-file-select uploader="uploader">
+        <ul>
+          <li ng-repeat="item in uploader.queue">
+          Name: <span ng-bind="item.file.name"></span><br />
+          <button ng-click="item.upload()">upload</button>
+          </li>
+        </ul>
+      </div>
+      <div class="col-xs-6">
+        <div class="thumbnail-container">
+          <div ng-if="uploader.queue[0]" ng-show="uploader.isHTML5" ng-thumb="{file: uploader.queue[0]._file, height:225}"></div>
+        </div>
+      </div>
+    </div>
     <h3>
       Location
     </h3>
@@ -63,4 +151,5 @@
       <a class="flat-dialog-button lightbg" href ng-click="submit()">SAVE</a>
     </div>
   </form>
+  -->
 </div>
