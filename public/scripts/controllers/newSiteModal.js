@@ -58,11 +58,11 @@ angular.module('divesitesApp')
 
   $scope.newSite = {
     loc: $scope.map.center,
-    boatEntry: false,
-    shoreEntry: false,
-    minimumLevel: 2,
-    depth: 10,
-    description: "A decent training site but not much to see."
+    //boatEntry: false,
+    //shoreEntry: false,
+    //minimumLevel: 2,
+    //depth: 10,
+    //description: "A decent training site but not much to see."
   }
 
   $scope.close = function () {

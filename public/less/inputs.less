@@ -15,3 +15,31 @@ input[type="text"], input[type="email"], input[type="password"] {
   }
 }
 
+input[type=checkbox]:before {
+  content: "";
+  border: 2px solid #ccc;
+  display: block;
+  height: 16px;
+  width: 16px;
+  z-index: 2;
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+input[type=checkbox]:after {
+  background: @indigo-50;
+  height: 16px;
+  width: 16px;
+  content: "";
+  position: absolute;
+  display: block;
+}
+input[type=checkbox]:checked:before {
+  border-top-style: none;
+  border-right-style: none;
+  transform: rotate(-45deg);
+  border-color: @indigo-500;
+  height: 9px;
+}
+input[type=checkbox]:checked:after {
+}
