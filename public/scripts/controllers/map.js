@@ -78,6 +78,10 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     $scope.map.markers.forEach(function (m) {$scope.filterMarker(m, data)});
   };
 
+  $scope.onNewSiteCreated = function (event, data) {
+    console.log("map controller received new site event");
+  };
+
   $scope.retrieveDivesites = function () {
     Divesite.find(
       {},
@@ -154,6 +158,7 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
 
     $scope.events = {
       filterPreferences: $scope.filterPreferences, // fires on 'event:filter-preferences'
+      newSiteCreated: $scope.onNewSiteCreated,
       mapIsReady: $scope.retrieveDivesites // fires on 'event:map-is-ready'
     };
 
@@ -162,6 +167,8 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     $scope.$on('event:filter-preferences', $scope.events.filterPreferences);
     // Listen for map-ready events (to load divesites)
     $scope.$on('event:map-is-ready', $scope.events.mapIsReady);
+    // Listen for new-site-created events (coming from NewSiteModalController)
+    $scope.$on('event:new-site-created', $scope.events.newSiteCreated);
 
     uiGmapIsReady.promise().then($scope.uiGmapIsReady);
   };

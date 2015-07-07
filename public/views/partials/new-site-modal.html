@@ -3,7 +3,7 @@
     <h2>New site</h2>
     <div class="col-xs-12">
       <label>Site name</label>
-      <input class="form-control" type="text">
+      <input class="form-control" type="text" ng-model="newSite.name">
     </div>
     <div class="row">
       <div class="col-xs-6">
@@ -61,7 +61,7 @@
         <h3>Maximum depth</h3>
         <div class="form-group">
           <div class="col-xs-4">
-            <input class="form-control" type="number">
+            <input class="form-control" type="number" ng-model="newSite.depth">
           </div>
           <label class="col-xs-8 control-label">
             m
@@ -86,8 +86,9 @@
 
     <div class="row">
       <h3>Description <span class="help">(optional)</span></h3>
-      <textarea class="col-xs-12" rows="4"></textarea>
+      <textarea ng-model="newSite.description" class="col-xs-12" rows="4"></textarea>
     </div>
+
     <div class="row button-row">
       <a class="flat-dialog-button lightbg" href ng-click="close()">
         CANCEL

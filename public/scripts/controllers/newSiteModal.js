@@ -1,5 +1,5 @@
 angular.module('divesitesApp')
-.controller('NewSiteModalController', function ($scope, $location, $auth, User, LoopBackAuth, $modalInstance, Divesite, uiGmapIsReady, FileUploader) {
+.controller('NewSiteModalController', function ($scope, $location, $auth, User, LoopBackAuth, $modalInstance, Divesite, uiGmapIsReady, FileUploader, $rootScope) {
 
   // This is a first-run flag so that we can resize the Google map after the
   // div containing it has loaded.
@@ -58,11 +58,11 @@ angular.module('divesitesApp')
 
   $scope.newSite = {
     loc: $scope.map.center,
-    //boatEntry: false,
-    //shoreEntry: false,
     //minimumLevel: 2,
     //depth: 10,
-    //description: "A decent training site but not much to see."
+    //description: "A decent training site but not much to see.",
+    boatEntry: false,
+    shoreEntry: false
   }
 
   $scope.close = function () {
@@ -78,16 +78,21 @@ angular.module('divesitesApp')
       lng: Number($scope.map.center.longitude)
     }
     console.log($scope.newSite);
-    // FIXME: commenting out to test form validation
-    /*
     Divesite
     .create($scope.newSite)
     .$promise
-    .then(function (res) {
-      console.log(res);
-      $modalInstance.close();
-    });
-   */
+    .then(
+      function createSuccess(res) {
+        // Handle success
+        console.log(res);
+        $modalInstance.close();
+        $rootScope.$broadcast('event:new-site-created', res);
+      },
+      function createError(res) {
+        //Handle failure
+        console.log("woop woop");
+      }
+    );
   }
 
   $scope.mapControl = {};
