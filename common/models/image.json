@@ -1,5 +1,6 @@
 {
   "name": "Image",
+  "public": false,
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -39,13 +40,6 @@
       "principalType": "ROLE",
       "principalId": "$everyone",
       "permission": "DENY"
-    },
-    {
-      "accessType": "EXECUTE",
-      "principalType": "ROLE",
-      "principalId": "$authenticated",
-      "permission": "ALLOW",
-      "property": "create"
     },
     {
       "accessType": "READ",

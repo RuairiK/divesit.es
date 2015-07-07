@@ -47,5 +47,9 @@
   "Dive": {
     "dataSource": "divesites",
     "public": true
+  },
+  "DivesiteImage": {
+    "dataSource": "divesites",
+    "public": true
   }
 }
