@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('divesitesApp').
-  controller('InfoBoxController', function ($scope, $rootScope) {
+  controller('InfoBoxController', function ($scope, $rootScope, LoopBackAuth) {
 
   $scope.markerClickedEventHandler = function (event, data) {
     if (!!$scope.infoBox.site) {
@@ -20,6 +20,14 @@ angular.module('divesitesApp').
 
   $scope.dismissInfoBox = function () {
     $scope.infoBox.visible = false;
+  };
+
+  $scope.isOwner = function () {
+    console.log("isAuthenticated? " + $scope.isAuthenticated());
+    console.log("LoopBackAuth.currentUserId: " + LoopBackAuth.currentUserId);
+    console.log("site:");
+    console.log($scope.infoBox.site);
+    return $scope.isAuthenticated() && LoopBackAuth.currentUserId == $scope.infoBox.site.userId;
   };
 
   /////////////////////////////////////////////////////////////////////////////
