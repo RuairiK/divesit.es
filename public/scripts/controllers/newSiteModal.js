@@ -1,5 +1,5 @@
 angular.module('divesitesApp')
-.controller('NewSiteModalController', function ($scope, $location, $auth, User, LoopBackAuth, $modalInstance, Divesite, uiGmapIsReady, FileUploader, $rootScope) {
+.controller('NewSiteModalController', function ($scope, $location, $auth, User, LoopBackAuth, $modalInstance, Divesite, uiGmapIsReady, FileUploader, $rootScope, Container) {
 
   // This is a first-run flag so that we can resize the Google map after the
   // div containing it has loaded.
@@ -82,15 +82,19 @@ angular.module('divesitesApp')
     .create($scope.newSite)
     .$promise
     .then(
+      // Handle success
       function createSuccess(res) {
-        // Handle success
-        console.log(res);
-        $modalInstance.close();
-        $rootScope.$broadcast('event:new-site-created', res);
+        // Setting the headers on the uploader itself doesn't work because
+        // it's already set them on each item in the queue, so we have to
+        // do it ourselves here
+        $scope.uploader.queue[0].headers.divesite = res.id;
+        $scope.uploader.queue[0].upload();
+        // TODO: set up a callback for the uploader to close the modal
+        // and broadcast an event when the upload is successful
       },
+      //Handle failure
       function createError(res) {
-        //Handle failure
-        console.log("woop woop");
+        console.log("Failed to create the site");
       }
     );
   }

@@ -20,6 +20,12 @@
       "principalId": "$authenticated",
       "permission": "ALLOW",
       "property": "upload"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
     }
   ],
   "methods": []

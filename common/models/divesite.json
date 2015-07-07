@@ -53,7 +53,7 @@
     },
     "images": {
       "type": "hasMany",
-      "model": "Image",
+      "model": "DivesiteImage",
       "foreignKey": ""
     },
     "dives": {

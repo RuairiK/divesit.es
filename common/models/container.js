@@ -12,15 +12,15 @@ module.exports = function(Container) {
 
   Container.afterRemote('upload', function (ctx, instance, next) {
     // Retrieve the container and filename from the instance
-    var container = instance.result.files.image[0].container;
-    var filename = instance.result.files.image[0].name;
+    var container = instance.result.files.file[0].container;
+    var filename = instance.result.files.file[0].name;
     // FIXME: This probably doesn't need to be inside a call to
     // Container.getFile
     Container.getFile(container, filename, function (err, res) {
       var Image = Container.app.models.Image;
       var DivesiteImage = Container.app.models.DivesiteImage;
       // FIXME: This is unlikely to be consistent across storage providers
-      var url = "/api/storage/" + container + "/" + filename;
+      var url = "/api/containers/" + container + "/download/" + filename;
       // Create an associated Image or DivesiteImage object
       if (ctx.req.headers.divesite) {
         // If there's a Divesite ID in a header, make this a DivesiteImage
