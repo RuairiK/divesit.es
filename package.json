@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "main": "server/server.js",
   "scripts": {
-    "postinstall": "mkdir public/libs/lb-ng && ./regenerate-lbServices.sh",
+    "postinstall": "bower install && mkdir public/libs/lb-ng && ./regenerate-lbServices.sh",
     "test": "NODE_ENV='test' grunt test"
   },
   "dependencies": {
