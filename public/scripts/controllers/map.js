@@ -83,6 +83,8 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
 
   $scope.onNewSiteCreated = function (event, data) {
     console.log("map controller received new site event");
+    // Reload the list of divesites
+    $scope.retrieveDivesites();
   };
 
   $scope.retrieveDivesites = function () {
