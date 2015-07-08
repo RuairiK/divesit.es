@@ -1,4 +1,4 @@
-<div class="new-site-modal">
+<div class="site-details-modal">
   <div class="container-fluid">
     <h2>Edit site</h2>
   </div>
@@ -19,6 +19,7 @@
   <div class="row" ng-include="'views/partials/site-bits/description.html'"></div>
 
   <div class="row button-row">
+    <a class="flat-dialog-button lightbg delete" href ng-click="delete()">DELETE</a>
     <a class="flat-dialog-button lightbg cancel" href ng-click="close()">CANCEL</a>
     <a class="flat-dialog-button lightbg save" href ng-click="submit()">SAVE</a>
   </div>

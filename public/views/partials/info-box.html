@@ -27,7 +27,7 @@
       <div class="header-container">
         <h2>{{ infoBox.site.name }}</h2>
         <span ng-show="!infoBox.site.userId">Added by an anonymous Divesit.es user</span>
-        <span ng-show="!!infoBox.site.userId">Added by <a href="/api/users/{{infoBox.site.userId}}">{{ infoBox.site.user.displayName}}</a></span>
+        <span ng-show="!!infoBox.site.userId">Added by <a class="owner" href="/api/users/{{infoBox.site.userId}}">{{ infoBox.site.user.displayName}}</a></span>
         <a href
           tooltip="Edit this site's details"
           ng-show="isOwner()"
