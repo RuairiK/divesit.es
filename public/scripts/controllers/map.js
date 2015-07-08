@@ -164,7 +164,9 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     $scope.events = {
       filterPreferences: $scope.filterPreferences, // fires on 'event:filter-preferences'
       newSiteCreated: $scope.onNewSiteCreated,
-      mapIsReady: $scope.retrieveDivesites // fires on 'event:map-is-ready'
+      mapIsReady: $scope.retrieveDivesites, // fires on 'event:map-is-ready'
+      siteEdited: $scope.retrieveDivesites,
+      siteDeleted: $scope.retrieveDivesites
     };
 
 
@@ -174,6 +176,10 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     $scope.$on('event:map-is-ready', $scope.events.mapIsReady);
     // Listen for new-site-created events (coming from NewSiteModalController)
     $scope.$on('event:new-site-created', $scope.events.newSiteCreated);
+    // Listen for edit events
+    $scope.$on('event:site-edited', $scope.events.siteEdited);
+    // Listen for deletion events
+    $scope.$on('event:site-deleted', $scope.events.siteDeleted);
 
     uiGmapIsReady.promise().then($scope.uiGmapIsReady);
   };
