@@ -69,5 +69,18 @@ angular.module('divesitesApp')
 
   $scope.close = function () {
     $modalInstance.close();
+  };
+
+  $scope.delete = function () {
+    if (confirm("Are you sure you want to delete this site? This can't be undone.")) {
+      // FIXME: What do we want to do with the orphaned DivesiteImages?
+      // Convert them on the back-end to ordinary (unattached) Images?
+      Divesite.deleteById({id: $scope.site.id})
+      .$promise
+      .then(function (res) {
+        $modalInstance.close();
+        $rootScope.$broadcast('event:site-deleted', res);
+      });
+    }
   }
 });
