@@ -76,7 +76,7 @@ angular.module('divesitesApp')
     $scope.site.loc = {
       lat: Number($scope.map.center.latitude),
       lng: Number($scope.map.center.longitude)
-    }
+    };
     Divesite
     .create($scope.site)
     .$promise
@@ -91,6 +91,7 @@ angular.module('divesitesApp')
           $scope.uploader.queue[0].headers.divesite = res.id;
           $scope.uploader.queue[0].upload();
         }
+        // Close the modal and broadcast a new-site event
         $modalInstance.close();
         $rootScope.$broadcast('event:new-site-created', res);
       },
