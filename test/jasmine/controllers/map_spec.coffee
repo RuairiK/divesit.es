@@ -167,6 +167,14 @@ describe "MapController", ->
         data = {boatEntry: false, shoreEntry: false}
         expect(f marker, data).toBe false
 
+
+  describe "$scope.onNewSiteCreated", ->
+    beforeEach ->
+      spyOn $scope, 'retrieveDivesites'
+      $scope.onNewSiteCreated()
+    it "calls $scope.retrieveDivesites", ->
+      expect($scope.retrieveDivesites).toHaveBeenCalled()
+
   
   describe "$scope.retrieveDivesites", ->
     beforeEach ->
