@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('divesitesApp').
-  controller('InfoBoxController', function ($scope, $rootScope, LoopBackAuth) {
+  controller('InfoBoxController', function ($scope, $rootScope, LoopBackAuth, $modal) {
 
   $scope.markerClickedEventHandler = function (event, data) {
     if (!!$scope.infoBox.site) {
@@ -24,6 +24,17 @@ angular.module('divesitesApp').
 
   $scope.isOwner = function () {
     return $scope.isAuthenticated() && LoopBackAuth.currentUserId == $scope.infoBox.site.userId;
+  };
+
+  $scope.summonEditSiteModal = function () {
+    $modal.open({
+      animation: false,
+      templateUrl: 'views/partials/edit-site-modal.html',
+      controller: 'EditSiteModalController',
+      backdrop: 'static',
+      size: 'lg',
+      scope: $scope
+    });
   };
 
   /////////////////////////////////////////////////////////////////////////////
