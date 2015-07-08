@@ -21,7 +21,7 @@
 
   <div ng-if="!!infoBox.site" class="info">
     <div class="header">
-      <img ng-src="{{ infoBox.site.imgSrc }}"/>
+      <img height="225" ng-if="infoBox.site.imgSrc" ng-src="{{ infoBox.site.imgSrc }}"/>
       <div class="text-overlay">
       </div>
       <div class="header-container">
