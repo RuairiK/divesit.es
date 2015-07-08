@@ -28,10 +28,14 @@
         <h2>{{ infoBox.site.name }}</h2>
         <span ng-show="!infoBox.site.userId">Added by an anonymous Divesit.es user</span>
         <span ng-show="!!infoBox.site.userId">Added by <a href="/api/users/{{infoBox.site.userId}}">{{ infoBox.site.user.displayName}}</a></span>
-        <span class="fa-stack fa-lg" ng-show="isOwner()">
-          <a href class="fa fa-square fa-stack-2x"></a>
-          <a href class="fa fa-pencil-square fa-stack-2x"></a>
-        </span>
+        <a href
+          tooltip="Edit this site's details"
+          ng-show="isOwner()"
+          ng-click="summonEditSiteModal()"
+          class="fa-stack fa-lg" >
+          <i class="fa fa-square fa-stack-2x"></i>
+          <i class="fa fa-pencil-square fa-stack-2x"></i>
+        </a>
       </div>
     </div>
 
