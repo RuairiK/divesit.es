@@ -42,9 +42,12 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
     Divesite.findById(
       {id: id},
       function (site) {
-        // XXX: for development only!
-        //site.imgSrc = 'http://lorempixel.com/400/300/nature/' + (Math.floor(Math.random() * (20 - 1 + 1)) + 1);
-        site.imgSrc = 'http://lorempixel.com/400/300/nature/';
+        site.imgSrc = undefined;
+        if (site.images && site.images[0]) {
+          site.imgSrc = site.images[0].url;
+        }
+        console.log("site.imgSrc");
+        console.log(site.imgSrc);
         $rootScope.$broadcast("event:site-loaded", site);
       },
       function (error) {
