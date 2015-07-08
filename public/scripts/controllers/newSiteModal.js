@@ -56,7 +56,7 @@ angular.module('divesitesApp')
     }
   };
 
-  $scope.newSite = {
+  $scope.site = {
     loc: $scope.map.center,
     //minimumLevel: 2,
     //depth: 10,
@@ -71,26 +71,28 @@ angular.module('divesitesApp')
   }
 
   $scope.submit = function () {
-    console.log("Data to send:");
+    //console.log("Data to send:");
     // Re-format the loc property so that LoopBack will understand it as a geopoint
-    $scope.newSite.loc = {
+    $scope.site.loc = {
       lat: Number($scope.map.center.latitude),
       lng: Number($scope.map.center.longitude)
     }
-    console.log($scope.newSite);
     Divesite
-    .create($scope.newSite)
+    .create($scope.site)
     .$promise
     .then(
       // Handle success
       function createSuccess(res) {
+        console.log(res);
         // Setting the headers on the uploader itself doesn't work because
         // it's already set them on each item in the queue, so we have to
         // do it ourselves here
-        $scope.uploader.queue[0].headers.divesite = res.id;
-        $scope.uploader.queue[0].upload();
-        // TODO: set up a callback for the uploader to close the modal
-        // and broadcast an event when the upload is successful
+        if ($scope.uploader.queue[0]) {
+          $scope.uploader.queue[0].headers.divesite = res.id;
+          $scope.uploader.queue[0].upload();
+        }
+        $modalInstance.close();
+        $rootScope.$broadcast('event:new-site-created', res);
       },
       //Handle failure
       function createError(res) {
