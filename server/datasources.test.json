@@ -2,5 +2,11 @@
   "divesites": {
     "name": "divesites",
     "connector": "memory"
+  },
+  "myfile": {
+    "name": "myfile",
+    "connector": "loopback-component-storage",
+    "root": "/tmp/test-storage",
+    "provider": "filesystem"
   }
 }
