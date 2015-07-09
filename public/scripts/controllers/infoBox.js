@@ -5,17 +5,19 @@ angular.module('divesitesApp').
 
   $scope.markerClickedEventHandler = function (event, data) {
     if (!!$scope.infoBox.site) {
-      $scope.infoBox.site.imgSrc = "";
+      $scope.infoBox.site.imgSrc = null;
     }
   };
 
   $scope.siteLoadedEventHandler = function (event, data) {
     $scope.showInfoBox();
     $scope.infoBox.site = data;
-    var numDives = $scope.infoBox.site.dives.length;
-    $scope.infoBox.site.numDivesString = numDives + " dive" + (numDives === 1 ? "" : "s");
-    console.log(numDives);
-    console.log($scope.infoBox.site.numDivesString);
+    if ($scope.infoBox.dives) {
+      var numDives = $scope.infoBox.site.dives.length;
+      $scope.infoBox.site.numDivesString = numDives + " dive" + (numDives === 1 ? "" : "s");
+      console.log(numDives);
+      console.log($scope.infoBox.site.numDivesString);
+    }
   };
 
   $scope.showInfoBox = function () {
