@@ -4,8 +4,7 @@ node_js:
 services:
   - mongodb
 before_install:
-  - mkdir /tmp/test-storage
-  - mkdir public/img/c1
+  - mkdir /tmp/test-storage /tmp/storage 
 before_script:
   - npm install -g bower less grunt-cli istanbul coffee-script
 after_success:
