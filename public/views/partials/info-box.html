@@ -40,8 +40,13 @@
     </div>
 
     <div class="content">
+      <div>
+        Divesit.es users have logged {{ infoBox.site.numDivesString }} here.
+      </div>
       <div ng-show="isAuthenticated()">
-        LOG A DIVE
+        <a href ng-click="summonLogDiveModal()">
+          LOG A DIVE
+        </a>
       </div>
       <div class="info-grid">
         <div class="info-row">

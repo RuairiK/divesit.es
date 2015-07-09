@@ -1,0 +1,14 @@
+<label class="col-sm-3 control-label"> Date </label>
+<div class="col-sm-4">
+  <input type="text" class="form-control"
+  datepicker-popup="{{datepicker.format}}"
+  ng-model="dive.date"
+  is-open="datepicker.opened"
+  datepicker-options="datepicker.options"
+  max-date="datepicker.maxDate"
+  nq-required="true"
+  >
+</div>
+<label class="col-sm-2 control-label label-right">
+  <button ng-click="datepicker.open($event)" type="button"><i class="fa fa-calendar"></i></button>
+</label>
