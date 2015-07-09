@@ -17,7 +17,8 @@
     "jqueryui": "~1.11.4",
     "angular-resource": "latest",
     "angular-ui-slider": "https://github.com/sdob/ui-slider.git#83c2dd2cd0bf505dc2e90a525fa5a27329adef0a",
-    "angular-file-upload": "~1.1.5"
+    "angular-file-upload": "~1.1.5",
+    "moment": "~2.10.3"
   },
   "devDependencies": {
     "angular-mocks": "latest"
