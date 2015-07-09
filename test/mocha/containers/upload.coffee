@@ -19,7 +19,7 @@ describe "POST /api/containers/{container}/", ->
   storageService = {}
   container = {}
   before (done) ->
-    storageService = new StorageService {root: '/tmp/storage', provider: 'filesystem'}
+    storageService = new StorageService {root: '/tmp/test-storage', provider: 'filesystem'}
     storageService.createContainer {name: 'c1'}, (err, res) ->
       container = res
       done err
@@ -37,6 +37,7 @@ describe "POST /api/containers/{container}/", ->
 
   describe "with authorization", ->
     before (done) -> utils.createOwnedSite done
+    after utils.tearDown
 
     token = {}
     userId = {}

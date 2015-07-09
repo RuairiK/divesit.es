@@ -17,7 +17,7 @@ describe "POST /api/containers", ->
   storageService = {}
 
   before (done) ->
-    storageService = new StorageService {root: '/tmp/storage', provider: 'filesystem'}
+    storageService = new StorageService {root: '/tmp/test-storage', provider: 'filesystem'}
     storageService.createContainer {name: 'c1'}, (err, res) ->
       container = res
       done err
