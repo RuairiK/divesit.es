@@ -73,13 +73,3 @@ describe "POST /api/divesites/{id}/dives", ->
           Dive.find (err, res) ->
             expect(res.length).to.equal 1
             done err
-    it "assigns the requesting user's ID to the dive", (done) ->
-      request app
-        .post "/api/divesites/#{site.id}/dives"
-        .set "Authorization", token
-        .send diveData
-        .end (err, res) ->
-          Dive.findOne (err, res) ->
-            console.log res
-            expect(res.userId).to.equal userId
-            done err

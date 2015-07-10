@@ -7,7 +7,7 @@ Image = app.models.Image
 Dive = app.models.Dive
 
 createUser = (done) ->
-  User.create {email: 'user@example.com', password: 'pass'}, done
+  User.create {email: 'user@example.com', password: 'pass', displayName: 'Test User'}, done
 
 createSites = (done) ->
   async.parallel [
