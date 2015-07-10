@@ -5,6 +5,7 @@ angular.module('divesitesApp').
 
   $scope.markerClickedEventHandler = function (event, data) {
     if (!!$scope.infoBox.site) {
+      console.log("computing numdives");
       $scope.infoBox.site.imgSrc = null;
     }
   };
@@ -12,11 +13,9 @@ angular.module('divesitesApp').
   $scope.siteLoadedEventHandler = function (event, data) {
     $scope.showInfoBox();
     $scope.infoBox.site = data;
-    if ($scope.infoBox.dives) {
+    if ($scope.infoBox.site.dives !== undefined) {
       var numDives = $scope.infoBox.site.dives.length;
       $scope.infoBox.site.numDivesString = numDives + " dive" + (numDives === 1 ? "" : "s");
-      console.log(numDives);
-      console.log($scope.infoBox.site.numDivesString);
     }
   };
 
@@ -67,6 +66,18 @@ angular.module('divesitesApp').
       controller: 'LogDiveModalController',
       backdrop: 'static',
       size: 'lg',
+      scope: $scope
+    });
+  };
+
+  $scope.summonAddPhotoModal = function () {
+    $modal.open({
+      animation: false,
+      templateUrl: 'views/partials/add-divesite-image-modal.html',
+      controller: "AddDivesiteImageModalController",
+      backdrop: 'static',
+      size: 'sm',
+      windowClass: 'add-photo-modal',
       scope: $scope
     });
   };

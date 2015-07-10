@@ -1,10 +1,12 @@
 <div>
+  <!-- 
   <a ng-show="!infoBox.visible" href ng-click="showInfoBox()" class="info-button fab">
     <span class="fa-stack fa-lg">
       <i class="fa fa-stack-2x fa-circle"></i>
       <i class="fa fa-stack-2x fa-info-circle"></i>
     </span>
   </a>
+  -->
   <a ng-show="infoBox.visible" href ng-click="dismissInfoBox()" class="dismiss-button fab">
     <span class="fa-stack fa-lg">
       <i class="fa fa-circle fa-stack-2x"></i>
@@ -22,6 +24,12 @@
   <div ng-if="!!infoBox.site" class="info">
     <div class="header">
       <img height="225" ng-if="infoBox.site.imgSrc" ng-src="{{ infoBox.site.imgSrc }}"/>
+      <div class="add-photo-container" ng-if="isAuthenticated() && !infoBox.site.imgSrc">
+        <a href ng-click="summonAddPhotoModal()">
+            <i class="fa fa-3x fa-picture-o"></i>
+        <p>Add a photo for this site!</p>
+        </a>
+      </div>
       <div class="text-overlay">
       </div>
       <div class="header-container">
@@ -32,7 +40,7 @@
           tooltip="Edit this site's details"
           ng-show="isOwner()"
           ng-click="summonEditSiteModal()"
-          class="fa-stack fa-lg" >
+          class="fa-stack fa-lg edit-button" >
           <i class="fa fa-square fa-stack-2x"></i>
           <i class="fa fa-pencil-square fa-stack-2x"></i>
         </a>
@@ -40,14 +48,6 @@
     </div>
 
     <div class="content">
-      <div>
-        Divesit.es users have logged {{ infoBox.site.numDivesString }} here.
-      </div>
-      <div ng-show="isAuthenticated()">
-        <a href ng-click="summonLogDiveModal()">
-          LOG A DIVE
-        </a>
-      </div>
       <div class="info-grid">
         <div class="info-row">
           <div class="key">
@@ -92,6 +92,25 @@
       <div class="description">
         <a ng-if="false" href class="fa fa-edit start-editing"></a>
         {{ infoBox.site.description }}
+      </div>
+      <div ng-if="infoBox.site.dives !== undefined">
+        Divesit.es users have logged {{ infoBox.site.numDivesString }} here.
+      </div>
+      <div ng-show="isAuthenticated()">
+        <a href ng-click="summonLogDiveModal()">
+          LOG A DIVE
+        </a>
+      </div>
+      <div ng-if="infoBox.site.dives && infoBox.site.dives.length > 0" class="dive-notes">
+        <ol class="list-unstyled">
+          <li ng-repeat="dive in infoBox.site.dives" class="dive">
+          <p class="name-date"><a href="/api/users/{{dive.user.id}}">{{ dive.user.displayName }}</a> on {{ dive.date | date : 'd MMMM yyyy' }}</p>
+          <p class="stats">{{ dive.maxDepth }} m | {{ dive.duration }} minutes</p>
+          <p ng-if="dive.comment" class="comment">
+          {{ dive.comment }}
+          </p>
+          </li>
+        </ol>
       </div>
     </div>
   </div>

@@ -46,8 +46,6 @@ angular.module('divesitesApp').controller('MapController', function ($scope, $ro
         if (site.images && site.images[0]) {
           site.imgSrc = site.images[0].url;
         }
-        console.log("site.imgSrc");
-        console.log(site.imgSrc);
         $rootScope.$broadcast("event:site-loaded", site);
       },
       function (error) {

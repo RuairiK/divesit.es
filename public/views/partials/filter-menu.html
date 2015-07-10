@@ -29,7 +29,7 @@
     <li id="filterMinimumLevel" class="container-fluid">
     <h3>
       Site difficulty:
-      <span>{{ filterPreferences.maximumLevel | stringifyExperienceLevel }}</span>
+      <span class="site-difficulty">{{ filterPreferences.maximumLevel | stringifyExperienceLevel }}</span>
     </h3>
     <div class="slider-container col-xs-10 col-xs-offset-1">
       <div
@@ -62,7 +62,15 @@
   <div ng-if="!isAuthenticated()">
     Sign in to add new dive sites, log dives, and more.
   </div>
+  <!--
   <div ng-if="isAuthenticated()">
     <a href ng-click="summonNewSiteModal()">Add a new site</a>
   </div>
+  -->
+  <a href ng-click="summonNewSiteModal()" class="fab accent" ng-if="isAuthenticated()" tooltip="Add a dive site">
+    <span class="fa-stack fa-lg">
+      <i class="fa fa-stack-2x fa-circle"></i>
+      <i class="fa fa-stack-2x fa-plus-circle"></i>
+    </span>
+  </a>
 </div>
