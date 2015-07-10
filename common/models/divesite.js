@@ -10,8 +10,12 @@ module.exports = function(Divesite) {
   Divesite.beforeRemote('**', function (ctx, inst, next) {
     /* If there is a requesting user, then add their userId to the request body */
     //console.log('Divesite::' + context.methodString);
+    console.info('DIVESITE REMOTEMETHOD: Divesite::' + ctx.methodString);
     if (ctx.req.accessToken) {
       ctx.req.body.userId = ctx.req.accessToken.userId;
+      console.info('  Added user ID ' + ctx.req.body.userId);
+    } else {
+      console.info('  No accessToken');
     }
     next();
   });

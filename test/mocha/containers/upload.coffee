@@ -18,12 +18,14 @@ StorageService = require('loopback-component-storage').StorageService
 describe "POST /api/containers/{container}/", ->
   storageService = {}
   container = {}
+  # Suite setup: create a storage service and a container
   before (done) ->
     storageService = new StorageService {root: '/tmp/test-storage', provider: 'filesystem'}
     storageService.createContainer {name: 'c1'}, (err, res) ->
       container = res
       done err
 
+  # Suite teardown: get rid of the container
   after (done) ->
     storageService.destroyContainer 'c1', (err, res) ->
       done err

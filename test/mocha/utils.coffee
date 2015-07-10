@@ -2,6 +2,7 @@ async = require 'async'
 app = require '../../server/server'
 Divesite = app.models.Divesite
 User = app.models.User
+DivesiteImage = app.models.DivesiteImage
 Image = app.models.Image
 Dive = app.models.Dive
 
@@ -60,6 +61,7 @@ tearDown = (done) -> async.parallel [
   (cb) -> Divesite.destroyAll cb
   (cb) -> Image.destroyAll cb
   (cb) -> Dive.destroyAll cb
+  (cb) -> DivesiteImage.destroyAll cb
 ], done
 
 module.exports =
