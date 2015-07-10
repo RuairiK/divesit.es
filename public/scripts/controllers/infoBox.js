@@ -3,22 +3,6 @@
 angular.module('divesitesApp').
   controller('InfoBoxController', function ($scope, $rootScope, LoopBackAuth, $modal) {
 
-  $scope.markerClickedEventHandler = function (event, data) {
-    if (!!$scope.infoBox.site) {
-      console.log("computing numdives");
-      $scope.infoBox.site.imgSrc = null;
-    }
-  };
-
-  $scope.siteLoadedEventHandler = function (event, data) {
-    $scope.showInfoBox();
-    $scope.infoBox.site = data;
-    if ($scope.infoBox.site.dives !== undefined) {
-      var numDives = $scope.infoBox.site.dives.length;
-      $scope.infoBox.site.numDivesString = numDives + " dive" + (numDives === 1 ? "" : "s");
-    }
-  };
-
   $scope.showInfoBox = function () {
     $scope.infoBox.visible = true;
   };
@@ -44,6 +28,20 @@ angular.module('divesitesApp').
         // the link to log a dive comes from the info box.
         // 
         // TODO: re-load the dive site info
+
+      }
+    },
+    siteLoaded: function (event, data) {
+      $scope.showInfoBox();
+      $scope.infoBox.site = data;
+      if ($scope.infoBox.site.dives !== undefined) {
+        var numDives = $scope.infoBox.site.dives.length;
+        $scope.infoBox.site.numDivesString = numDives + " dive" + (numDives === 1 ? "" : "s");
+      }
+    },
+    markerClicked: function (event, data) {
+      if (!!$scope.infoBox.site) {
+        $scope.infoBox.site.imgSrc = null;
       }
     }
   };
@@ -91,8 +89,8 @@ angular.module('divesitesApp').
       visible: false,
       site: null
     };
-    $scope.$on('event:site-loaded', $scope.siteLoadedEventHandler);
-    $scope.$on('event:marker-clicked', $scope.markerClickedEventHandler);
+    $scope.$on('event:site-loaded', $scope.events.siteLoaded);
+    $scope.$on('event:marker-clicked', $scope.events.markerClicked);
     $scope.$on('event:dive-created', $scope.events.diveCreated);
   };
 

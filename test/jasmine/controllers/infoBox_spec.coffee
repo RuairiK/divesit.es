@@ -22,12 +22,12 @@ describe "InfoBoxController", ->
       spyOn $scope, '$on'
       $scope.initialize()
     it "listens for 'event:site-loaded' events", ->
-      expect($scope.$on).toHaveBeenCalledWith 'event:site-loaded', $scope.siteLoadedEventHandler
+      expect($scope.$on).toHaveBeenCalledWith 'event:site-loaded', $scope.events.siteLoaded
 
-  describe "$scope.siteLoadedEventHandler()", ->
+  describe "$scope.events.siteLoaded()", ->
     beforeEach ->
       spyOn $scope, 'showInfoBox'
-      $scope.siteLoadedEventHandler('event:site-loaded', {})
+      $scope.events.siteLoaded('event:site-loaded', {})
     it "calls $scope.showInfoBox()", ->
       expect($scope.showInfoBox).toHaveBeenCalled()
 
