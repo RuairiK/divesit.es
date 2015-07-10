@@ -27,7 +27,6 @@
     "loopback-connector-mongodb": "^1.11.0",
     "loopback-datasource-juggler": "^2.29.2",
     "loopback-satellizer": "^0.1.0",
-    "mmmagic": "^0.3.14",
     "moment": "^2.10.2",
     "morgan": "~1.5.1",
     "passport-facebook": "^2.0.0",
