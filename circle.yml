@@ -1,2 +1,3 @@
 dependencies:
-  pre: mkdir /tmp/test-storage/ /tmp/storage/
+  pre:
+    - mkdir /tmp/test-storage/ /tmp/storage/
