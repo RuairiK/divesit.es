@@ -80,5 +80,6 @@ describe "POST /api/divesites/{id}/dives", ->
         .send diveData
         .end (err, res) ->
           Dive.findOne (err, res) ->
+            console.log res
             expect(res.userId).to.equal userId
             done err
