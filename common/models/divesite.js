@@ -7,6 +7,15 @@ module.exports = function(Divesite) {
     next();
   });
 
+  Divesite.beforeRemote('**', function (ctx, inst, next) {
+    /* If there is a requesting user, then add their userId to the request body */
+    //console.log('Divesite::' + context.methodString);
+    if (ctx.req.accessToken) {
+      ctx.req.body.userId = ctx.req.accessToken.userId;
+    }
+    next();
+  });
+
   // Only update allowed fields
   Divesite.beforeRemote('prototype.updateAttributes', function (context, user, next) {
     // These are the names of the allowed fields; everything else gets deleted

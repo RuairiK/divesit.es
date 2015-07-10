@@ -6,7 +6,11 @@
     "validateUpsert": true
   },
   "scope": {
-    "include": ["user", "images", "dives"]
+    "include": [
+      "user",
+      "images",
+      "dives"
+    ]
   },
   "properties": {
     "name": {
