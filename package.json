@@ -7,6 +7,9 @@
     "postinstall": "bower install && mkdir public/libs/lb-ng && ./regenerate-lbServices.sh",
     "test": "NODE_ENV='test' grunt test"
   },
+  "engines": {
+    "node": "0.10.x"
+  },
   "dependencies": {
     "async": "^0.9.0",
     "bcryptjs": "^2.1.0",
