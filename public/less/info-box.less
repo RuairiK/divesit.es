@@ -1,25 +1,5 @@
 .info-box {
 
-  .fab {
-    span.fa-stack {
-      width: 48px;
-      height: 48px;
-    }
-    .fa-stack-2x {
-      font-size: 48px;
-      color: @pink-500;
-      &:hover {
-        color: @pink-600;
-      }
-      &:active {
-        color: @pink-700;
-      }
-    }
-    .fa-circle {
-      color: @pink-50;
-      .TextShadowHelper(2);
-    }
-  }
 
   .info-button, .dismiss-button {
     /* Positionining */
@@ -52,7 +32,7 @@
         font-size: 24px;
       }
       .body {
-        color: @lightbg-secondary;
+        color: @lightbg-text-secondary;
       }
     }
 
@@ -67,13 +47,26 @@
       overflow: hidden;
       /* Colour */
       background-color: @indigo-500;
-      color: @darkbg-text;
+      color: @darkbg-text-primary;
       /* Border */
       border-top-left-radius: 2px;
       border-top-right-radius: 2px;
       img {
         min-width: 400px;
         min-height: 225px;
+      }
+      .add-photo-container {
+        position: absolute;
+        top: 32px;
+        width: 100%;
+        text-align: center;
+        z-index: 1;
+        a {
+          color: @darkbg-text-secondary;
+          .fa-ban {
+            color: @darkbg-text-primary;
+          }
+        }
       }
       .text-overlay {
         position: absolute;
@@ -97,33 +90,44 @@
           margin: 0;
           /* Typography */
           font-size: 24px;
-          color: @darkbg-text;
+          color: @darkbg-text-primary;
         }
         span {
           font-size: 12px;
-          color: @darkbg-text;
+          color: @darkbg-text-primary;
         }
         a.owner {
           color: @indigo-200;
         }
-        a.fa-stack {
-          position: absolute;
-          bottom: 16px;
-          right: 16px;
-          height: 36px;
-          width: 36px;
-        }
-        i.fa {
-          text-decoration: none;
-          font-size: 36px;
-          color: @darkbg-text;
-        }
-        i.fa.fa-square {
-          color: @lightbg-text;
+        a.edit-button {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            height: 36px;
+            width: 36px;
+            i.fa {
+              text-decoration: none;
+              font-size: 36px;
+            }
+            i.fa-pencil-square {
+              color: @darkbg-text-primary;
+            }
+            i.fa.fa-square {
+              color: @lightbg-text-primary;
+            }
+            &:hover {
+              i.fa.pencil-square {
+                color: rgba(153, 153, 153, 0.2);
+              }
+            }
+            &:active {
+              i.fa.pencil-square {
+                color: rgba(153, 153, 153, 0.4);
+              }
+            }
         }
       }
     }
-
     .content {
       /* Size and positioning */
       /* Margins and padding */
@@ -141,7 +145,7 @@
         div {
           width: 50%;
           &.key {
-            color: @lightbg-text;
+            color: @lightbg-text-primary;
             a.help-hover {
               position: relative;
               float: right;
@@ -153,9 +157,29 @@
             position: absolute;
             top: 0;
             left: 50%;
-            color: @lightbg-secondary;
+            color: @lightbg-text-secondary;
           }
         }
+      }
+    }
+  }
+  .dive-notes {
+    li {
+      padding-bottom: 16px;
+    }
+    font-size: 12px;
+    p {
+      margin: 0;
+    }
+    .dive {
+      .name-date {
+        .lightbg-text-secondary;
+      }
+      .stats {
+        .lightbg-text-secondary;
+      }
+      .stats, .comment {
+        padding-left: 8px;
       }
     }
   }

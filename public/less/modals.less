@@ -13,8 +13,10 @@
   box-shadow: none;
   .BoxShadowHelper(2);
 
-  /* Margins and padding */
-  padding: 16px;
+  /* Margins, border and padding */
+  border-width: 0;
+  /* padding: 16px; */
+  padding: 0;
 
   /* Colours */
   background-color: #fff;
@@ -22,12 +24,21 @@
     background-color: #fff;
   }
 
+  /* Typography */
+  font-size: 16px;
+
   h2 {
-    margin: 0 0 16px 0;
+    margin: 0;
     font-size: 24px;
+    padding: 16px;
   }
   h3 {
     font-size: 16px;
+  }
+  /* Fix padding for modal Bootstrappy stuff */
+  .row {
+    margin-left: 0;
+    margin-right: 0;
   }
   .content {
     padding-bottom: 8px;
@@ -51,6 +62,24 @@
     text-align: right;
     a.delete {
       float: left;
+    }
+  }
+}
+/* New image modal */
+.add-photo-modal .modal-sm {
+  @media (min-width: 768px) {
+    width: 400px;
+    p {
+      padding: 16px;
+      font-size: 14px;
+    }
+  }
+  .add-photo-container {
+    span.fa-stack.fa-2x {
+      color: rgba(0, 0, 0, 0);
+      &:hover {
+        color: @darkbg-text-hint;
+      }
     }
   }
 }

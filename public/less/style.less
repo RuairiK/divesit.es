@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'typography';
 @import 'indigo-swatch';
 @import 'pink-swatch';
 @import 'box-shadow-helper';
@@ -7,6 +8,8 @@
 @import 'buttons';
 @import 'modals';
 @import 'inputs';
+@import 'slider';
+@import 'image-uploader';
 
 @import 'info-box';
 @import 'filter-menu';
@@ -22,20 +25,6 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-.nav-top {
-  color: @darkbg-text;
-  background-color: @indigo-500;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 48px;
-  width: 100%;
-  z-index: 1;
-  span {
-    font-size: 30px;
-  }
-  .BoxShadowHelper(2);
-}
 
 a.start-editing {
   text-decoration: none;
@@ -51,46 +40,8 @@ a.start-editing {
   border-width: 0;
 }
 
-.ui-slider-horizontal  {
-  height: 16px;
-  color: rgba(0, 0, 0, 0.26);
-  /* This is the invisible slider track (but it responds to clicks) */
-  background-color: rgba(0, 0, 0, 0);
-  border-width: 0;
-  cursor: pointer;
-  .ui-slider-handle {
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    top: 0;
-    background-color: @indigo-500;
-    border-color: @indigo-500;
-    cursor: pointer;
-  }
-  .ui-slider-range {
-    background-color: @indigo-500;
-    height: 2px;
-    top: 7px;
-  }
+.container-fluid {
+  padding-left: 0;
+  padding-right: 0;
 }
-.ui-slider-track {
-  height: 2px;
-  background-color: rgba(0, 0, 0, 0.26);
-  position: relative;
-  top: 7px;
-  width: 100%;
-}
-.ui-slider-track-on {
-  height: 2px;
-  background-color: @indigo-500;
-  position: absolute;
-  top: 7px;
-  width: 0;
-}
-.ui-slider-tick {
-  position: absolute;
-  top: 7px;
-  height: 2px;
-  width: 2px;
-  background-color: @lightbg-text;
-}
+

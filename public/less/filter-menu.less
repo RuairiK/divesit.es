@@ -12,7 +12,7 @@
   /* Margins and padding */
   padding-bottom: 24px;
   /* Colour and typography */
-  color: @lightbg-text;
+  color: @lightbg-text-primary;
   background-color: @indigo-50;
   font-size: 16px;
   .header {
@@ -28,7 +28,7 @@
   }
   h3 {
     margin: 0;
-    color: @lightbg-secondary;
+    color: @lightbg-text-secondary;
     font-size: 16px;
     font-weight: normal;
     margin-bottom: 8px;
@@ -44,6 +44,9 @@
     & > li {
       margin: 0px 16px 16px 16px;
     }
+    span.site-difficulty {
+      color: @lightbg-text-primary;
+    }
   }
   .slider-container {
     margin-bottom: 16px;
@@ -54,9 +57,14 @@
   .lower-bound, .upper-bound {
     font-weight: bold;
     text-align: right;
-    color: @lightbg-secondary;
+    color: @lightbg-text-secondary;
   }
   .lower-bound {
     padding-right: 8px;
+  }
+  .fab {
+    position: absolute;
+    bottom: -24px;
+    right: 16px;
   }
 }
