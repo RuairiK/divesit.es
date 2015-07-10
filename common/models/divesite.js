@@ -7,13 +7,14 @@ module.exports = function(Divesite) {
     next();
   });
 
-  Divesite.beforeRemote('**', function (ctx, inst, next) {
+  Divesite.beforeRemote('*.__create__dives', function (ctx, inst, next) {
     /* If there is a requesting user, then add their userId to the request body */
     //console.log('Divesite::' + context.methodString);
     console.info('DIVESITE REMOTEMETHOD: Divesite::' + ctx.methodString);
     if (ctx.req.accessToken) {
       ctx.req.body.userId = ctx.req.accessToken.userId;
       console.info('  Added user ID ' + ctx.req.body.userId);
+      console.info(ctx.req.body);
     } else {
       console.info('  No accessToken');
     }
