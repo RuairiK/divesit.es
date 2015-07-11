@@ -1,0 +1,29 @@
+<div class="site-details-modal">
+  <div class="container-fluid">
+    <h2>Edit site</h2>
+  </div>
+  <div class="row" ng-include="'views/partials/site-details/name.html'">
+  </div> 
+
+  <div class="row">
+    <div class="col-xs-6" ng-include="'views/partials/site-details/location.html'"></div>
+    <div class="col-xs-6">
+      <h3>Image (optional)</h3>
+      <span class="help">Drag and drop an image in here.</span>
+      <div ng-include="'views/partials/site-details/image-uploader.html'"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-4" ng-include="'views/partials/site-details/site-difficulty.html'"></div>
+    <div class="col-sm-4" ng-include="'views/partials/site-details/maximum-depth.html'"></div>
+    <div class="col-sm-4" ng-include="'views/partials/site-details/entry-types.html'"></div>
+  </div>
+
+  <div class="row" ng-include="'views/partials/site-details/description.html'"></div>
+
+  <div class="row button-row">
+    <a class="flat-dialog-button lightbg delete" href ng-click="delete()">DELETE</a>
+    <a class="flat-dialog-button lightbg cancel" href ng-click="close()">CANCEL</a>
+    <a class="flat-dialog-button lightbg save" href ng-click="submit()">SAVE</a>
+  </div>
+</div>

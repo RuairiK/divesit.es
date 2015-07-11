@@ -1,0 +1,16 @@
+<h3>Location</h3>
+<span class="help">Drag the map under the marker.</span>
+<ui-gmap-google-map
+center='map.center'
+zoom='map.zoom'
+events='map.events'
+>
+</ui-gmap-google-map>
+<div class="row">
+  <div class="col-xs-6">
+    <span class="coordinate">{{ map.center.latitude | truncateCoordinate }}° N</span>
+  </div>
+  <div class="col-xs-6">
+    <span class="coordinate">{{ map.center.longitude | truncateCoordinate }}° E</span>
+  </div>
+</div>

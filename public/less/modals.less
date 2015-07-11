@@ -1,0 +1,85 @@
+/* Hacks to make the Bootstrap modal behave more the way we want it to */
+.modal.in .modal.dialog {
+  transform: none !important; /* no translate */
+}
+.modal.fade .modal-dialog {
+  transition: none !important;
+  transform: none !important;
+}
+
+.modal-content {
+  /* Material properties */
+  border-radius: 2px !important;
+  box-shadow: none;
+  .BoxShadowHelper(2);
+
+  /* Margins, border and padding */
+  border-width: 0;
+  /* padding: 16px; */
+  padding: 0;
+
+  /* Colours */
+  background-color: #fff;
+  input[type="checkbox"]:after {
+    background-color: #fff;
+  }
+
+  /* Typography */
+  font-size: 16px;
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    padding: 16px;
+  }
+  h3 {
+    font-size: 16px;
+  }
+  /* Fix padding for modal Bootstrappy stuff */
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .content {
+    padding-bottom: 8px;
+  }
+  .btn.material {
+    /* Positioning */
+    position: relative;
+    /* Margins, border, padding */
+    border-radius: 0;
+    border: 0;
+    margin-bottom: 8px;
+    padding-left: 44px;
+    /* Material properties */
+    .BoxShadowHelper(1);
+    /* Font properties */
+    font-size: 16px;
+
+  }
+  .button-row {
+    padding: 16px;
+    text-align: right;
+    a.delete {
+      float: left;
+    }
+  }
+}
+/* New image modal */
+.add-photo-modal .modal-sm {
+  @media (min-width: 768px) {
+    width: 400px;
+    p {
+      padding: 16px;
+      font-size: 14px;
+    }
+  }
+  .add-photo-container {
+    span.fa-stack.fa-2x {
+      color: rgba(0, 0, 0, 0);
+      &:hover {
+        color: @darkbg-text-hint;
+      }
+    }
+  }
+}

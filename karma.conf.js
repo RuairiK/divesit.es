@@ -20,16 +20,15 @@ module.exports = function(config) {
       'public/libs/angular/angular.js',
       'public/libs/angular-mocks/angular-mocks.js',
       'public/libs/angular-route/angular-route.js',
+      'public/libs/angular-resource/angular-resource.js',
       {pattern: 'public/libs/angular-google-maps/dist/*.js', included: true},
       'public/libs/angular-local-storage/dist/angular-local-storage.js',
       'public/libs/angular-ui-slider/src/slider.js',
-      //'public/libs/jquery/dist/jquery.min.js',
-      //'public/libs/jqueryui/jquery-ui.js',
-      //'public/libs/angular-bootstrap-slider/slider.js',
-      //'public/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
-      //'public/libs/angular-cookies/angular-cookies.js',
-      //'public/libs/satellizer/satellizer.min.js',
       'public/libs/underscore/underscore.js',
+      'public/libs/angular-bootstrap/ui-bootstrap-tpls.js',
+      'public/libs/lb-ng/lb-services.js',
+      'public/libs/satellizer/satellizer.js',
+      'public/libs/angular-file-upload/angular-file-upload.js',
       {pattern: 'public/scripts/**/*.js', included: true},
       {pattern: 'public/scripts/*.js', included: true},
       'test/jasmine/**/*.coffee'
@@ -44,8 +43,9 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        "public/scripts/**/*.js": 'coverage',
-        "**/*.coffee": "coffee"
+      // Exclude lb-services.js from coverage checking, since it doesn't belong to us
+      "public/scripts/**/*.js": 'coverage',
+      "**/*.coffee": "coffee"
     },
 
     // test results reporter to use

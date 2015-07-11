@@ -1,0 +1,12 @@
+<div class="thumbnail-container" nv-file-drop nv-file-over uploader="uploader">
+  <i href ng-if="!uploader.queue[0]" class="fa fa-5x fa-camera"></i>
+  <div ng-if="uploader.queue[0]" style="z-index: 2" ng-show="uploader.isHTML5"
+    ng-thumb="{file: uploader.queue[0]._file, height: 250}">
+  </div>
+  <a href
+    ng-click="maybeCancelUpload()"
+    ng-if="uploader.queue[0]"
+    class="cancel-upload"
+    ><i class="fa fa-times fa-5x"></i>
+  </a>
+</div>

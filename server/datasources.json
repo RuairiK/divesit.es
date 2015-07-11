@@ -1,0 +1,13 @@
+{
+  "divesites": {
+    "database": "divesites",
+    "name": "divesites",
+    "connector": "mongodb"
+  },
+  "myfile": {
+    "name": "myfile",
+    "connector": "loopback-component-storage",
+    "root": "server/uploads",
+    "provider": "filesystem"
+  }
+}

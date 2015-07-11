@@ -1,0 +1,70 @@
+.filter-menu {
+  /* Size and positioning */
+  position: absolute;
+  top: 84px;
+  left: 32px;
+  width: 400px;
+  max-width: ~"calc(50% - 48px)";
+  /* Z-index and material properties */
+  z-index: 1; /* higher than map */
+  .BoxShadowHelper(2);
+  .card-border;
+  /* Margins and padding */
+  padding-bottom: 24px;
+  /* Colour and typography */
+  color: @lightbg-text-primary;
+  background-color: @indigo-50;
+  font-size: 16px;
+  .header {
+    padding: 24px 16px 16px;
+    h2 {
+      font-size: 24px;
+      margin: 0;
+      font-weight: normal;
+    }
+  }
+  ul {
+    margin: 0;
+  }
+  h3 {
+    margin: 0;
+    color: @lightbg-text-secondary;
+    font-size: 16px;
+    font-weight: normal;
+    margin-bottom: 8px;
+  }
+  #filterList {
+    li {
+      margin: 0;
+      &.container-fluid {
+        padding: 0;
+        margin-bottom: 0;
+      }
+    }
+    & > li {
+      margin: 0px 16px 16px 16px;
+    }
+    span.site-difficulty {
+      color: @lightbg-text-primary;
+    }
+  }
+  .slider-container {
+    margin-bottom: 16px;
+  }
+  .col-xs-1 {
+    padding: 0;
+  }
+  .lower-bound, .upper-bound {
+    font-weight: bold;
+    text-align: right;
+    color: @lightbg-text-secondary;
+  }
+  .lower-bound {
+    padding-right: 8px;
+  }
+  .fab {
+    position: absolute;
+    bottom: -24px;
+    right: 16px;
+  }
+}

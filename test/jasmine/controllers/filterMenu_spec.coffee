@@ -27,30 +27,6 @@ describe "FilterMenuController", ->
     it "listens for 'event:divesites-loaded' events", ->
       expect($scope.$on).toHaveBeenCalledWith 'event:divesites-loaded', $scope.updateAndSendFilterPreferences
 
-  describe "$scope.filterValidators", ->
-    describe "entryType", ->
-      entryType = {}
-      beforeEach -> entryType = $scope.filterValidators.entryType
-      it "returns true if passed 'true'", -> expect(entryType 'true').toBe true
-      it "returns true if passed true (boolean)", -> expect(entryType true).toBe true
-      it "returns true if passed 'false'", -> expect(entryType 'false').toBe true
-      it "returns true if passed false (boolean)", -> expect(entryType false).toBe true
-      it "returns false if passed an empty string", -> expect(entryType "").toBe false
-      it "returns false if passed an Array", -> expect(entryType [1,2,3]).toBe false
-      it "return false if passed an object", -> expect(entryType {false: true}).toBe false
-    describe "depthRange", ->
-      depthRange = {}
-      beforeEach -> depthRange = $scope.filterValidators.depthRange
-      it "returns true if passed [0, 100]", -> expect(depthRange [0, 100]).toBe true
-      it "returns false if passed [-1, 100]", -> expect(depthRange [-1, 100]).toBe false
-      it "returns false if passed [0, 101]", -> expect(depthRange [0, 101]).toBe false
-    describe "minimumLevel", ->
-      maximumLevel = {}
-      beforeEach -> maximumLevel = $scope.filterValidators.maximumLevel
-      it "returns true if passed 0", -> expect(maximumLevel 0).toBe true
-      it "returns true if passed 1", -> expect(maximumLevel 1).toBe true
-      it "returns true if passed 2", -> expect(maximumLevel 2).toBe true
-
   describe "$scope.storeFilterPreferences", ->
     $scope.filterPreferences = {}
     beforeEach ->
@@ -82,18 +58,16 @@ describe "FilterMenuController", ->
         shoreEntry: false
         depthRange: [0, 50]
         maximumLevel: 0
-      spyOn $rootScope, '$broadcast'
+      spyOn $scope, 'storeFilterPreferences'
       $scope.updateAndSendFilterPreferences()
-      it "broadcasts an 'event:filter-preferences' event", ->
-        expect($rootScope.$broadcast).toHaveBeenCalledWith $scope.filterPreferences
+    it "broadcasts an 'event:filter-preferences' event", ->
+      expect($rootScope.$broadcast).toHaveBeenCalledWith 'event:filter-preferences', $scope.filterPreferences
+    it "calls $scope.storeFilterPreferences", ->
+      expect($scope.storeFilterPreferences).toHaveBeenCalled()
 
   describe "$scope.retrieveFilterPreferences", ->
     beforeEach ->
       localStorageService.clearAll()
-      #localStorageService.set('filterPreferences.boatEntry', true)
-      #localStorageService.set('filterPreferences.shoreEntry', false)
-      #localStorageService.set('filterPreferences.depthRange', [0, 50])
-      #localStorageService.set('filterPreferences.maximumLevel', 1)
 
     describe "with valid stored preferences", ->
       beforeEach ->

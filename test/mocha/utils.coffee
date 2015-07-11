@@ -1,56 +1,71 @@
 async = require 'async'
+app = require '../../server/server'
+Divesite = app.models.Divesite
+User = app.models.User
+DivesiteImage = app.models.DivesiteImage
+Image = app.models.Image
+Dive = app.models.Dive
 
-Divesite = require '../../models/Divesite'
-User = require '../../models/User'
-Comment = require '../../models/Comment'
+createUser = (done) ->
+  User.create {email: 'user@example.com', password: 'pass', displayName: 'Test User'}, done
 
-USERNAME = 'TEST_USER'
+createSites = (done) ->
+  async.parallel [
+    (cb) -> Divesite.create {
+      name: 'SITE_1',
+      boatEntry: true,
+      shoreEntry: false,
+      depth: 10,
+      loc: [1, 1],
+      minimumLevel: 0
+      description: 'SITE_1 DESCRIPTION'
+    }, cb
+    (cb) -> Divesite.create {
+      name: 'SITE_2',
+      boatEntry: false,
+      shoreEntry: true,
+      depth: 20,
+      loc: [2, 2]
+      minimumLevel: 1
+      description: 'SITE_2 DESCRIPTION'
+    }, cb
+    (cb) -> Divesite.create {
+      name: 'SITE_3',
+      boatEntry: true,
+      shoreEntry: true,
+      depth: 30,
+      loc: [3, 3]
+      minimumLevel: 2
+      description: 'SITE_3 DESCRIPTION'
+    }, cb
+  ], done
+
+
+createOwnedSite = (done) ->
+  async.waterfall [
+    (cb) -> User.create {email: 'user@example.com', password: 'pass', displayName: 'Test User'}, cb
+    (user, cb) -> Divesite.create {
+      name: "Test Divesite",
+      boatEntry: true,
+      shoreEntry: true,
+      depth: 10,
+      minimumLevel: 0
+      description: "A dive site"
+      loc: [0, 0],
+      userId: user.id
+    }, cb
+  ], done
 
 tearDown = (done) -> async.parallel [
-  (cb) -> User.find().remove cb
-  (cb) -> Divesite.find().remove cb
-  (cb) -> Comment.find().remove cb
+  (cb) -> User.destroyAll cb
+  (cb) -> Divesite.destroyAll cb
+  (cb) -> Image.destroyAll cb
+  (cb) -> Dive.destroyAll cb
+  (cb) -> DivesiteImage.destroyAll cb
 ], done
-
-
-createUser = (done) -> User.create {
-  displayName: USERNAME, picture: 'http://example.com/example.png'
-}, done
-
-createSite = (done) -> Divesite.create {
-  name: "TEST_DIVESITE"
-  boat_entry: true
-  shore_entry: true
-  depth: 100
-  loc: [0, 0]
-  boatEntry: true
-  shoreEntry: true
-  description: 'TEST_DIVESITE DESCRIPTION'
-}, done
-
-createSiteAndUser = (done) -> async.parallel [
-  (cb) -> createSite cb
-  (cb) -> createUser cb
-], done
-
-createComment = (done) -> async.waterfall [
-  (cb) -> Divesite.findOne cb
-  (site, cb) -> User.findOne (e, user) -> cb(e, site, user)
-  (site, user, cb) ->
-    comment =
-      divesite_id: site._id
-      user: {_id: user._id, picture: user.picture, displayName: user.displayName}
-      text: "blah blah blah"
-    Comment.create comment, cb
-], done
-
-destroyAllComments = (done) -> Comment.find().remove done
 
 module.exports =
-  tearDown: tearDown
-  createSite: createSite
+  createSites: createSites
   createUser: createUser
-  createSiteAndUser: createSiteAndUser
-  createComment: createComment
-  destroyAllComments: destroyAllComments
-  USERNAME: USERNAME
+  tearDown: tearDown
+  createOwnedSite: createOwnedSite

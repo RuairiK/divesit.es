@@ -1,0 +1,28 @@
+<div class="log-dive-modal">
+  <div class="container-fluid">
+    <h2>Log a dive at {{ site.name }}</h2>
+
+    <div class="row">
+
+      <div class="col-md-6 form-horizontal">
+        <div class="form-group row datepicker-container" ng-include="'views/partials/log-partials/datepicker-control.html'"></div>
+        <div class="form-group row timepicker-container" ng-include="'views/partials/log-partials/timepicker-control.html'"></div>
+        <div class="form-group row" ng-include="'views/partials/log-partials/duration-control.html'"></div>
+        <div class="form-group" ng-include="'views/partials/log-partials/max-depth-control.html'"></div>
+      </div>
+
+      <div class="col-md-6 form-horizontal">
+        <div class="row form-group" ng-include="'views/partials/log-partials/average-depth-control.html'"></div>
+        <div class="row form-group" ng-include="'views/partials/log-partials/water-temp-control.html'"></div>
+        <div class="row form-group" ng-include="'views/partials/log-partials/air-temp-control.html'"></div>
+      </div>
+    </div>
+
+    <div class="row" ng-include="'views/partials/log-partials/comment.html'"></div>
+
+    <div class="row button-row">
+      <a class="flat-dialog-button lightbg cancel" href ng-click="close()">CANCEL</a>
+      <a class="flat-dialog-button lightbg save" href ng-click="submit()">SAVE</a>
+    </div>
+  </div>
+</div>

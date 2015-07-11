@@ -4,32 +4,55 @@
 <title>divesit.es</title>
 <!-- External CSS -->
 <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Cardo:400italic' type="text/css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css">
 <!-- JS -->
-<script src="libs/jquery/dist/jquery.min.js"></script>
+<script src="libs/jquery/dist/jquery.js"></script>
 <script src="libs/jqueryui/jquery-ui.js"></script>
 <!-- CSS -->
-<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.css">
 <link rel="stylesheet" href="libs/jqueryui/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="styles/style.css">
+</head>
+<body ng-app="divesitesApp" controller="MainController">
+<div ng-view>
+</div>
 <!-- Angular dependencies -->
 <script src="libs/angular/angular.js"></script>
-<script src='libs/angular-google-maps/dist/angular-google-maps.min.js'></script>
+<script src='libs/angular-google-maps/dist/angular-google-maps.js'></script>
 <script src="libs/angular-route/angular-route.js"></script>
+<script src="libs/angular-resource/angular-resource.js"></script>
 <script src="libs/angular-local-storage/dist/angular-local-storage.js"></script>
 <script src="libs/angular-ui-slider/src/slider.js"></script>
+<script src="libs/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="libs/lb-ng/lb-services.js"></script>
+<script src="libs/angular-file-upload/angular-file-upload.js"></script>
+<script src="libs/satellizer/satellizer.js"></script>
 <!-- Main app -->
 <script src="scripts/app.js"></script>
 <!-- Controllers -->
 <script src="scripts/controllers/main.js"></script>
 <script src="scripts/controllers/map.js"></script>
 <script src="scripts/controllers/filterMenu.js"></script>
+<script src="scripts/controllers/infoBox.js"></script>
+<script src="scripts/controllers/navTop.js"></script>
+<script src="scripts/controllers/signInModal.js"></script>
+<script src="scripts/controllers/newSiteModal.js"></script>
+<script src="scripts/controllers/editSiteModal.js"></script>
+<script src="scripts/controllers/logDiveModal.js"></script>
+<script src="scripts/controllers/addDivesiteImageModal.js"></script>
 <!-- Directives -->
 <script src="scripts/directives/filter-menu.js"></script>
-<!-- Angular custom -->
-<script src="libs/lodash/lodash.min.js"></script>
-</head>
-<body ng-app="divesitesApp" controller="MainController" class="container-fluid">
-<div ng-view>
-</div>
+<script src="scripts/directives/info-box.js"></script>
+<script src="scripts/directives/nav-top.js"></script>
+<script src="scripts/directives/ng-thumb.js"></script>
+<!-- Services -->
+<script src="scripts/services/filterPreferenceRetrieval.js"></script>
+<!-- Filters -->
+<script src="scripts/filters/truncate-coordinate.js"></script>
+<script src="scripts/filters/stringify-experience-level.js"></script>
+<!-- Other deps -->
+<script src="libs/lodash/lodash.js"></script>
+<script src="libs/moment/moment.js"></script>
 </body>
 </html>

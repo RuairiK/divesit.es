@@ -1,0 +1,76 @@
+{
+  "name": "Dive",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "scope": {
+    "include": [
+      "user"
+    ]
+  },
+  "properties": {
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "maxDepth": {
+      "type": "number",
+      "required": true
+    },
+    "averageDepth": {
+      "type": "number"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "airTemp": {
+      "type": "number"
+    },
+    "waterTemp": {
+      "type": "number"
+    },
+    "duration": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "User",
+      "foreignKey": ""
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "create"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW",
+      "property": "create"
+    }
+  ],
+  "methods": []
+}

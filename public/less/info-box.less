@@ -1,0 +1,186 @@
+.info-box {
+
+
+  .info-button, .dismiss-button {
+    /* Positionining */
+    position: absolute;
+    top: @dismiss-button-top;
+    right: 64px;
+    /* Z-index and material properties */
+    z-index: 2;
+  }
+
+  .main {
+    /* Size and positioning */
+    position: absolute;
+    top: @infobox-top;
+    bottom: 32px; 
+    right: 32px;
+    width: 400px;
+    max-width: ~"calc(50% - 48px)";
+    background-color: @indigo-50;
+    /* Z-index and material properties */
+    z-index: 1; // higher than map
+    .BoxShadowHelper(2);
+    .card-border;
+    /* Scrolling properties */
+    overflow-y: auto;
+
+    .no-site {
+      margin: 24px 16px 16px;
+      h2 {
+        font-size: 24px;
+      }
+      .body {
+        color: @lightbg-text-secondary;
+      }
+    }
+
+
+    .header {
+      /* Size and positioning */
+      position: relative;
+      height: 225px;
+      top: 0;
+      width: 100%;
+      /* Overflow */
+      overflow: hidden;
+      /* Colour */
+      background-color: @indigo-500;
+      color: @darkbg-text-primary;
+      /* Border */
+      border-top-left-radius: 2px;
+      border-top-right-radius: 2px;
+      img {
+        min-width: 400px;
+        min-height: 225px;
+      }
+      .add-photo-container {
+        position: absolute;
+        top: 32px;
+        width: 100%;
+        text-align: center;
+        z-index: 1;
+        a {
+          color: @darkbg-text-secondary;
+          .fa-ban {
+            color: @darkbg-text-primary;
+          }
+        }
+      }
+      .text-overlay {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        .floor-fade;
+      }
+      .header-container {
+        /* Positioning */
+        position: absolute;
+        bottom: 0;
+        /* Sizing */
+        width: 100%;
+        /* Margins and padding */
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-bottom: 16px;
+        h2 {
+          /* Margins and padding */
+          margin: 0;
+          /* Typography */
+          font-size: 24px;
+          color: @darkbg-text-primary;
+        }
+        span {
+          font-size: 12px;
+          color: @darkbg-text-primary;
+        }
+        a.owner {
+          color: @indigo-200;
+        }
+        a.edit-button {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            height: 36px;
+            width: 36px;
+            i.fa {
+              text-decoration: none;
+              font-size: 36px;
+            }
+            i.fa-pencil-square {
+              color: @darkbg-text-primary;
+            }
+            i.fa.fa-square {
+              color: @lightbg-text-primary;
+            }
+            &:hover {
+              i.fa.pencil-square {
+                color: rgba(153, 153, 153, 0.2);
+              }
+            }
+            &:active {
+              i.fa.pencil-square {
+                color: rgba(153, 153, 153, 0.4);
+              }
+            }
+        }
+      }
+    }
+    .content {
+      /* Size and positioning */
+      /* Margins and padding */
+      padding: 16px;
+      .info-grid {
+        /* Margins and padding */
+        padding-bottom: 16px;
+      }
+
+      .info-row {
+        /* Positioning */
+        position: relative;
+        /* Typography */
+        font-size: 12px;
+        div {
+          width: 50%;
+          &.key {
+            color: @lightbg-text-primary;
+            a.help-hover {
+              position: relative;
+              float: right;
+              right: 48px;
+              text-decoration: none;
+            }
+          }
+          &.value {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            color: @lightbg-text-secondary;
+          }
+        }
+      }
+    }
+  }
+  .dive-notes {
+    li {
+      padding-bottom: 16px;
+    }
+    font-size: 12px;
+    p {
+      margin: 0;
+    }
+    .dive {
+      .name-date {
+        .lightbg-text-secondary;
+      }
+      .stats {
+        .lightbg-text-secondary;
+      }
+      .stats, .comment {
+        padding-left: 8px;
+      }
+    }
+  }
+}

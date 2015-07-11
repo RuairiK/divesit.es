@@ -1,7 +1,6 @@
-<div class="logo">
-  <span>divesit.es</span>
-</div>
+<nav-top></nav-top>
 <filter-menu class="filter-menu"></filter-menu>
+<info-box class="info-box"></info-box>
 <div>
   <div ng-controller="MapController">
     <ui-gmap-google-map
@@ -17,9 +16,7 @@
     events="map.markerEvents"
     options="'options'"
     coords="'loc'"
-    icons="'icon'"
-    doCluster="true"
-    doRebuildAll="true"
+    icon="'icon'"
     >
     </ui-gmap-markers>
     </ui-gmap-google-map>

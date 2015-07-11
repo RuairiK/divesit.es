@@ -1,54 +1,76 @@
 <div>
-  <h1 class="header">SHOW SITES</h1>
-  <ul class="list-unstyled">
-    <li>
-    <div class="fluid-container">
-      <div class="col-xs-6">
-        <label class="checkbox-inline">
-          <input type="checkbox" ng-model="filterPreferences.boatEntry"
-          ng-change="updateAndSendFilterPreferences()" >
-          <span class="checkbox-material">
-            Boat
-          </span>
-        </label>
-      </div>
-      <div class="col-xs-6">
-        <label class="checkbox-inline">
-          <input type="checkbox" ng-model="filterPreferences.shoreEntry"
-          ng-change="updateAndSendFilterPreferences()">
-          <span class="checkbox-material">
-            Shore
-          </span>
-        </label>
+  <div class="header">
+    <h2>Show dive sites</h2>
+  </div>
+  <ul class="list-unstyled" id="filterList">
+    <li id="filterEntryTypes">
+    <h3>Show entry types</h3>
+    <ul class="list-unstyled">
+      <li>
+      <input type="checkbox" ng-model="filterPreferences.boatEntry"
+      ng-change="updateAndSendFilterPreferences()" >
+      <label class="checkbox-inline">
+        <span class="checkbox-material">
+          Boat
+        </span>
+      </label>
+      </li>
+      <li>
+      <input type="checkbox" ng-model="filterPreferences.shoreEntry"
+      ng-change="updateAndSendFilterPreferences()">
+      <label class="checkbox-inline">
+        <span class="checkbox-material">
+          Shore
+        </span>
+      </label>
+      </li>
+    </ul>
+    </li>
+    <li id="filterMinimumLevel" class="container-fluid">
+    <h3>
+      Site difficulty:
+      <span class="site-difficulty">{{ filterPreferences.maximumLevel | stringifyExperienceLevel }}</span>
+    </h3>
+    <div class="slider-container col-xs-10 col-xs-offset-1">
+      <div
+        ui-slider="maximumLevelSlider"
+        id="maximumLevelSlider"
+        min="0" max="2"
+        step="1"
+        tick="1"
+        ng-change="updateAndSendFilterPreferences()"
+        ng-model="filterPreferences.maximumLevel">
       </div>
     </div>
     </li>
-    <li id="filterMinimumLevel">
-    <h2>Maximum level<h2>
-        <div class="slider-container">
-          <div ui-slider="maximumLevelSlider"
-            id="maximumLevelSlider"
-            min="0" max="2"
-            step="1"
-            tick="1"
-            ng-change="updateAndSendFilterPreferences()"
-            ng-model="filterPreferences.maximumLevel"></div>
+    <li>
+    <h3>Depth range</h3>
+    <div class="container-fluid">
+      <div class="col-xs-1 lower-bound">{{ filterPreferences.depthRange[0]  }}</div>
+      <div class="col-xs-10 slider-container">
+        <div ui-slider="depthRangeSlider"
+          id="depthRangeSlider"
+          min="0" max="100"
+          ng-change="updateAndSendFilterPreferences()"
+          ng-model="filterPreferences.depthRange">
         </div>
-        </li>
-        <li>
-        <h2>Depth range</h2>
-        <div class="fluid-container">
-          <div class="col-xs-1 lower-bound">{{ filterPreferences.depthRange[0]  }}</div>
-          <div class="col-xs-10 slider-container">
-            <div ui-slider="depthRangeSlider"
-              id="depthRangeSlider"
-              min="0" max="100"
-              ng-change="updateAndSendFilterPreferences()"
-              ng-model="filterPreferences.depthRange">
-            </div>
-          </div>
-          <div class="col-xs-1 upper-bound">{{ filterPreferences.depthRange[1]  }}</div>
-        </div>
-        </li>
-      </ul>
+      </div>
+      <div class="col-xs-1 upper-bound">{{ filterPreferences.depthRange[1]  }}</div>
     </div>
+    </li>
+  </ul>
+  <div ng-if="!isAuthenticated()">
+    Sign in to add new dive sites, log dives, and more.
+  </div>
+  <!--
+  <div ng-if="isAuthenticated()">
+    <a href ng-click="summonNewSiteModal()">Add a new site</a>
+  </div>
+  -->
+  <a href ng-click="summonNewSiteModal()" class="fab accent" ng-if="isAuthenticated()" tooltip="Add a dive site">
+    <span class="fa-stack fa-lg">
+      <i class="fa fa-stack-2x fa-circle"></i>
+      <i class="fa fa-stack-2x fa-plus-circle"></i>
+    </span>
+  </a>
+</div>

@@ -1,0 +1,71 @@
+input[type="text"], input[type="email"], input[type="password"] {
+  border-radius: 0;
+  border: 0;
+  border-bottom: solid 2px @indigo-50 !important;
+  box-shadow: none !important;
+  padding-left: 0;
+  padding-bottom: none;
+  font-size: 16px;
+  &:focus, &:active {
+    box-shadow: none;
+    border: 0;
+    border-bottom: solid 2px @pink-200;
+    -webkit-appearance: none;
+    outline: none;
+  }
+}
+
+input[type=checkbox]:before {
+  content: "";
+  border: 2px solid #ccc;
+  display: block;
+  height: 16px;
+  width: 16px;
+  z-index: 2;
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+input[type=checkbox]:after {
+  background: @indigo-50;
+  height: 16px;
+  width: 16px;
+  content: "";
+  position: absolute;
+  display: block;
+}
+input[type=checkbox]:checked:before {
+  border-top-style: none;
+  border-right-style: none;
+  transform: rotate(-45deg);
+  border-color: @indigo-500;
+  height: 9px;
+}
+input[type=checkbox]:checked:after {
+}
+input[type=numeric] {
+  border-radius: 0;
+}
+label.control-label.label-right {
+  text-align: left;
+  padding-left: 0;
+}
+.datepicker-container, .timepicker-container {
+  font-weight: bold;
+  input[type="text"] {
+    padding-left: 12px;
+    padding-bottom: 0;
+  }
+}
+.timepicker-container {
+  label {
+    /*
+     * Pushing this down by 34px is intended to vertically 
+     * align it with the numbers in the timepicker, since
+     * the buttons have a {height: 34px} property set on
+     * them by Bootstrap. VERY FRAGILE though!
+     */
+    position: relative;
+    top: 34px;
+  }
+}
